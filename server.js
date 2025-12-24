@@ -46,6 +46,20 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Static files middleware - serve the frontend app
+const path = require('path');
+app.use('/app', express.static(path.join(__dirname, 'public', 'app')));
+
+// Root redirect to app
+app.get('/', (req, res) => {
+  res.redirect('/app/');
+});
+
+// Serve index.html for /app/ root
+app.get('/app/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'app', 'index.html'));
+});
+
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

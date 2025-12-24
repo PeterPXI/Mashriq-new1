@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    
+    <title>تفاصيل الخدمة | مشرق</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+    <link rel="stylesheet" href="/app/assets/css/pages/service.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header id="navbar"></header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-8">
+            
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" id="breadcrumb" aria-label="مسار التنقل">
+                <a href="/app/">الرئيسية</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="/app/explore.html">الخدمات</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current" id="breadcrumbTitle">جاري التحميل...</span>
+            </nav>
+            
+            <!-- Service Detail Layout -->
+            <div class="service-detail-layout" id="serviceContent">
+                
+                <!-- Main Column -->
+                <div class="service-main">
+                    
+                    <!-- Gallery -->
+                    <div class="service-gallery" id="serviceGallery">
+                        <div class="skeleton skeleton-image" style="aspect-ratio: 16/9;"></div>
+                    </div>
+                    
+                    <!-- Seller Info (Mobile) -->
+                    <div class="service-seller-mobile" id="sellerInfoMobile"></div>
+                    
+                    <!-- Title & Meta -->
+                    <div class="service-header" id="serviceHeader">
+                        <div class="skeleton skeleton-text" style="height: 2rem; width: 80%;"></div>
+                        <div class="skeleton skeleton-text" style="height: 1rem; width: 40%; margin-top: 1rem;"></div>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="service-section" id="serviceDescription">
+                        <h2 class="service-section-title">وصف الخدمة</h2>
+                        <div class="service-description-content">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Features -->
+                    <div class="service-section" id="serviceFeatures" style="display: none;">
+                        <h2 class="service-section-title">مميزات الخدمة</h2>
+                        <ul class="service-features-list" id="featuresList"></ul>
+                    </div>
+                    
+                    <!-- Requirements -->
+                    <div class="service-section" id="serviceRequirements" style="display: none;">
+                        <h2 class="service-section-title">متطلبات العميل</h2>
+                        <div class="service-requirements-content" id="requirementsContent"></div>
+                    </div>
+                    
+                    <!-- Seller Info (Desktop) -->
+                    <div class="service-section service-seller-section" id="sellerSection">
+                        <h2 class="service-section-title">عن البائع</h2>
+                        <div class="seller-card" id="sellerCard">
+                            <div class="flex items-center gap-4">
+                                <div class="skeleton skeleton-avatar avatar-xl"></div>
+                                <div class="flex-1">
+                                    <div class="skeleton skeleton-text" style="width: 120px;"></div>
+                                    <div class="skeleton skeleton-text" style="width: 80px; margin-top: 0.5rem;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews -->
+                    <div class="service-section" id="reviewsSection">
+                        <div class="section-header-inline">
+                            <h2 class="service-section-title">التقييمات</h2>
+                            <span class="reviews-count" id="reviewsCount"></span>
+                        </div>
+                        <div id="reviewsList">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Sidebar (Order Card) -->
+                <aside class="service-sidebar">
+                    <div class="service-order-card" id="orderCard">
+                        <div class="service-order-header">
+                            <div class="skeleton skeleton-text" style="width: 80px; height: 2rem;"></div>
+                        </div>
+                        <div class="service-order-body">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </aside>
+                
+            </div>
+            
+            <!-- Related Services -->
+            <section class="related-services-section" id="relatedSection" style="display: none;">
+                <h2 class="section-title">خدمات مشابهة</h2>
+                <div class="services-grid" id="relatedServicesGrid"></div>
+            </section>
+            
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer"></div>
+    
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/components/service-card.js"></script>
+    <script src="/app/js/pages/service.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="تفاصيل الطلب على منصة مشرق">
+    
+    <title>تفاصيل الطلب | مشرق</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+    <link rel="stylesheet" href="/app/assets/css/pages/order.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header id="navbar"></header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-8">
+            
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="التنقل">
+                <a href="/app/">الرئيسية</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="#" id="ordersLink">طلباتي</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current" id="orderNumber">جاري التحميل...</span>
+            </nav>
+            
+            <!-- Order Content -->
+            <div class="order-layout" id="orderContent">
+                
+                <!-- Order Main -->
+                <div class="order-main">
+                    
+                    <!-- Order Header -->
+                    <div class="order-header" id="orderHeader">
+                        <div class="order-header-skeleton">
+                            <div class="skeleton skeleton-text" style="width: 60%; height: 32px;"></div>
+                            <div class="skeleton skeleton-text mt-2" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Section -->
+                    <div class="order-section">
+                        <h2 class="order-section-title">مسار الطلب</h2>
+                        <div class="timeline" id="orderTimeline">
+                            <div class="timeline-item">
+                                <div class="skeleton skeleton-circle" style="width: 40px; height: 40px;"></div>
+                                <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service Info -->
+                    <div class="order-section">
+                        <h2 class="order-section-title">تفاصيل الخدمة</h2>
+                        <div class="service-info-card" id="serviceInfo">
+                            <div class="skeleton skeleton-image" style="width: 120px; height: 90px;"></div>
+                            <div style="flex: 1;">
+                                <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                                <div class="skeleton skeleton-text mt-2" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Requirements (if buyer) -->
+                    <div class="order-section" id="requirementsSection" style="display: none;">
+                        <h2 class="order-section-title">متطلبات العميل</h2>
+                        <div class="requirements-content" id="requirementsContent"></div>
+                    </div>
+                    
+                    <!-- Delivery (if delivered) -->
+                    <div class="order-section" id="deliverySection" style="display: none;">
+                        <h2 class="order-section-title">التسليم</h2>
+                        <div class="delivery-content" id="deliveryContent"></div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="order-actions" id="orderActions">
+                        <!-- Dynamic actions based on order status and user role -->
+                    </div>
+                    
+                </div>
+                
+                <!-- Order Sidebar -->
+                <div class="order-sidebar">
+                    
+                    <!-- Order Summary -->
+                    <div class="order-summary-card" id="orderSummary">
+                        <h3 class="order-summary-title">ملخص الطلب</h3>
+                        <div class="order-summary-body">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text mt-2"></div>
+                            <div class="skeleton skeleton-text mt-2"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seller/Buyer Card -->
+                    <div class="user-card" id="userCard">
+                        <div class="skeleton skeleton-circle" style="width: 48px; height: 48px;"></div>
+                        <div style="flex: 1;">
+                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                            <div class="skeleton skeleton-text mt-2" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="sidebar-actions" id="sidebarActions">
+                        <a href="#" class="btn btn-outline-secondary btn-block" id="chatBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            </svg>
+                            التواصل
+                        </a>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer"></div>
+    
+    <!-- Modals -->
+    <div class="modal-overlay" id="deliveryModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">تسليم الطلب</h3>
+                <button class="modal-close" id="closeDeliveryModal">&times;</button>
+            </div>
+            <form id="deliveryForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="deliveryMessage" class="form-label">رسالة التسليم</label>
+                        <textarea 
+                            id="deliveryMessage" 
+                            class="form-control" 
+                            rows="4"
+                            placeholder="اشرح ما تم تسليمه وأضف أي تعليمات..."
+                            required
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryFiles" class="form-label">روابط الملفات (اختياري)</label>
+                        <input 
+                            type="text" 
+                            id="deliveryFiles" 
+                            class="form-control" 
+                            placeholder="أضف روابط الملفات مفصولة بفاصلة"
+                        >
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelDelivery">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" id="submitDelivery">تسليم الطلب</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="reviewModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">تقييم الخدمة</h3>
+                <button class="modal-close" id="closeReviewModal">&times;</button>
+            </div>
+            <form id="reviewForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">التقييم</label>
+                        <div class="rating-input" id="ratingInput">
+                            <button type="button" class="rating-star-btn" data-rating="1">★</button>
+                            <button type="button" class="rating-star-btn" data-rating="2">★</button>
+                            <button type="button" class="rating-star-btn" data-rating="3">★</button>
+                            <button type="button" class="rating-star-btn" data-rating="4">★</button>
+                            <button type="button" class="rating-star-btn" data-rating="5">★</button>
+                        </div>
+                        <input type="hidden" id="ratingValue" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewComment" class="form-label">تعليقك (اختياري)</label>
+                        <textarea 
+                            id="reviewComment" 
+                            class="form-control" 
+                            rows="3"
+                            placeholder="شاركنا تجربتك مع هذه الخدمة..."
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelReview">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" id="submitReview">إرسال التقييم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/order.js"></script>
+</body>
+</html>

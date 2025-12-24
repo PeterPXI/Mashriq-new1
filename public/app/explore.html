@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="استكشف آلاف الخدمات الرقمية الاحترافية على منصة مشرق - تصميم، برمجة، كتابة، ترجمة والمزيد">
+    
+    <title>استكشف الخدمات | مشرق</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+    <link rel="stylesheet" href="/app/assets/css/pages/explore.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header id="navbar"></header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             PAGE HEADER
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="explore-header">
+            <div class="container">
+                <div class="explore-header-content">
+                    <h1 class="explore-title">استكشف الخدمات</h1>
+                    <p class="explore-subtitle">اكتشف آلاف الخدمات الاحترافية من بائعين موثوقين</p>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="explore-search">
+                    <form class="search-form" id="searchForm">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="searchInput"
+                            placeholder="ابحث عن خدمة..."
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="search-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                            بحث
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             FILTERS & RESULTS
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="explore-content section-sm">
+            <div class="container">
+                
+                <!-- Filters Bar -->
+                <div class="filters-bar" id="filtersBar">
+                    <div class="filters-group">
+                        <!-- Category Filter -->
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">جميع التخصصات</option>
+                        </select>
+                        
+                        <!-- Sort Filter -->
+                        <select class="filter-select" id="sortFilter">
+                            <option value="-createdAt">الأحدث</option>
+                            <option value="-rating">الأعلى تقييمًا</option>
+                            <option value="price">السعر: من الأقل</option>
+                            <option value="-price">السعر: من الأعلى</option>
+                            <option value="-ordersCount">الأكثر مبيعًا</option>
+                        </select>
+                        
+                        <!-- Delivery Time Filter -->
+                        <select class="filter-select" id="deliveryFilter">
+                            <option value="">مدة التسليم</option>
+                            <option value="1">خلال يوم</option>
+                            <option value="3">حتى 3 أيام</option>
+                            <option value="7">حتى أسبوع</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Results Count -->
+                    <div class="results-info">
+                        <span class="results-count" id="resultsCount">جاري التحميل...</span>
+                        
+                        <!-- View Toggle -->
+                        <div class="view-toggle" id="viewToggle">
+                            <button type="button" class="view-btn active" data-view="grid" aria-label="عرض شبكي">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7"/>
+                                    <rect x="14" y="3" width="7" height="7"/>
+                                    <rect x="14" y="14" width="7" height="7"/>
+                                    <rect x="3" y="14" width="7" height="7"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="view-btn" data-view="list" aria-label="عرض قائمة">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="8" y1="6" x2="21" y2="6"/>
+                                    <line x1="8" y1="12" x2="21" y2="12"/>
+                                    <line x1="8" y1="18" x2="21" y2="18"/>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Filters -->
+                <div class="active-filters" id="activeFilters" style="display: none;">
+                    <span class="active-filters-label">الفلاتر النشطة:</span>
+                    <div class="active-filters-list" id="activeFiltersList"></div>
+                    <button type="button" class="clear-filters-btn" id="clearFiltersBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        مسح الكل
+                    </button>
+                </div>
+                
+                <!-- Services Grid -->
+                <div class="services-grid" id="servicesGrid">
+                    <!-- Services will be loaded here -->
+                </div>
+                
+                <!-- Pagination -->
+                <nav class="pagination" id="pagination" aria-label="التنقل بين الصفحات">
+                    <!-- Pagination will be rendered here -->
+                </nav>
+                
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer"></div>
+    
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/components/service-card.js"></script>
+    <script src="/app/js/pages/explore.js"></script>
+</body>
+</html>

@@ -3,56 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="مشرق - منصة عربية موثوقة لبيع وشراء الخدمات الرقمية. اكتشف آلاف الخدمات الاحترافية من مصممين ومبرمجين وكتّاب محترفين.">
+    <meta name="keywords" content="خدمات رقمية, فريلانس, تصميم, برمجة, كتابة محتوى, ترجمة, عربي">
+    <meta name="author" content="Mashriq">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="مشرق - منصة الخدمات الرقمية">
+    <meta property="og:description" content="منصة عربية موثوقة لبيع وشراء الخدمات الرقمية">
+    <meta property="og:type" content="website">
+    
     <title>مشرق | منصة الخدمات الرقمية العربية</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    
     <!-- Styles -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <!-- Meta -->
-    <meta name="description" content="مشرق هي منصة عربية رائدة لبيع وشراء الخدمات الرقمية، تجمع بين المبدعين العرب والشركات.">
 </head>
 <body>
-
-    <header>
-        <div class="logo">مشرق</div>
-    </header>
-
-    <main>
-        <section class="hero">
-            <h1>منصة عربية لبيع وشراء الخدمات الرقمية</h1>
-            <p>اكتشف آلاف الخدمات الإبداعية أو ابدأ بجني المال من مهاراتك الخاصة في أكبر تجمع للمستقلين العرب.</p>
-
-            <div class="stats-container" id="statsContainer">
-                <!-- Users Stat -->
-                <div class="stat-card">
-                    <span class="stat-value skeleton" id="usersCount">00</span>
-                    <span class="stat-label">عدد المستخدمين</span>
-                </div>
-
-                <!-- Services Stat -->
-                <div class="stat-card">
-                    <span class="stat-value skeleton" id="servicesCount">00</span>
-                    <span class="stat-label">عدد الخدمات</span>
-                </div>
-
-                <!-- Orders Stat -->
-                <div class="stat-card">
-                    <span class="stat-value skeleton" id="ordersCount">00</span>
-                    <span class="stat-label">عدد الطلبات</span>
-                </div>
-
-                <!-- Error Message Container -->
-                <div id="errorMessage" class="error-msg">
-                    عذراً، تعذر جلب البيانات حالياً. يرجى المحاولة لاحقاً.
+    <!-- Navbar -->
+    <header id="navbar"></header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             HERO SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title animate-fade-in-up">
+                        اعثر على <span class="highlight">الخدمة المثالية</span><br>
+                        لمشروعك القادم
+                    </h1>
+                    <p class="hero-subtitle animate-fade-in-up" style="animation-delay: 0.1s;">
+                        آلاف الخدمات الاحترافية من مصممين ومبرمجين وكتّاب محترفين. 
+                        ابدأ مشروعك اليوم مع ضمان الجودة والأمان.
+                    </p>
+                    
+                    <!-- Search Bar -->
+                    <div class="search-bar animate-fade-in-up" style="animation-delay: 0.2s;">
+                        <form class="search-form" id="heroSearchForm">
+                            <input 
+                                type="text" 
+                                class="search-input" 
+                                id="heroSearchInput"
+                                placeholder="ابحث عن خدمة... مثال: تصميم شعار، كتابة مقال، برمجة موقع"
+                                autocomplete="off"
+                            >
+                            <button type="submit" class="search-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                                بحث
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Popular Searches -->
+                    <div class="search-suggestions animate-fade-in-up" style="animation-delay: 0.3s;">
+                        <span class="text-muted text-sm">الأكثر بحثًا:</span>
+                        <button type="button" class="search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
+                        <button type="button" class="search-suggestion" data-search="كتابة محتوى">كتابة محتوى</button>
+                        <button type="button" class="search-suggestion" data-search="برمجة موقع">برمجة موقع</button>
+                        <button type="button" class="search-suggestion" data-search="مونتاج فيديو">مونتاج فيديو</button>
+                    </div>
+                    
+                    <!-- Hero Stats -->
+                    <div class="hero-stats animate-fade-in-up" style="animation-delay: 0.4s;">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value" id="statServices">+500</div>
+                            <div class="hero-stat-label">خدمة متاحة</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value" id="statSellers">+200</div>
+                            <div class="hero-stat-label">بائع محترف</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value" id="statOrders">+1000</div>
+                            <div class="hero-stat-label">طلب مكتمل</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             CATEGORIES SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="section bg-white" id="categories">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">استكشف</span>
+                    <h2 class="section-title">تصفح حسب التخصص</h2>
+                    <p class="section-subtitle">اختر التخصص المناسب لمشروعك من بين أفضل الفئات</p>
+                </div>
+                
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be rendered by JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             FEATURED SERVICES SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="section" id="featuredServices">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">خدمات مميزة</span>
+                    <h2 class="section-title">خدمات يوصي بها العملاء</h2>
+                    <p class="section-subtitle">اكتشف أفضل الخدمات الأعلى تقييمًا من بائعين موثوقين</p>
+                </div>
+                
+                <div class="services-grid" id="featuredServicesGrid">
+                    <!-- Services will be loaded from API -->
+                </div>
+                
+                <div class="text-center mt-10">
+                    <a href="/app/explore.html" class="btn btn-outline-primary btn-lg">
+                        استكشف المزيد من الخدمات
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             HOW IT WORKS SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="section bg-white" id="howItWorks">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">كيف تعمل المنصة</span>
+                    <h2 class="section-title">ثلاث خطوات بسيطة</h2>
+                    <p class="section-subtitle">احصل على خدمتك في دقائق معدودة</p>
+                </div>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">ابحث واختر</h3>
+                        <p class="step-description">
+                            تصفح آلاف الخدمات واختر ما يناسب احتياجاتك. 
+                            استخدم الفلاتر للوصول لما تريد بسرعة.
+                        </p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">اطلب بأمان</h3>
+                        <p class="step-description">
+                            اطلب الخدمة وادفع بأمان. أموالك محمية حتى تستلم 
+                            عملك كاملاً وتوافق عليه.
+                        </p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">استلم وقيّم</h3>
+                        <p class="step-description">
+                            استلم عملك في الموعد المحدد. راجعه واطلب تعديلات 
+                            إن لزم، ثم قيّم تجربتك.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             TRUST SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="section" id="trust">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">لماذا مشرق؟</span>
+                    <h2 class="section-title">منصة مبنية على الثقة</h2>
+                    <p class="section-subtitle">نضمن لك تجربة آمنة وموثوقة في كل خطوة</p>
+                </div>
+                
+                <div class="trust-features">
+                    <div class="trust-feature">
+                        <div class="trust-feature-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <h4 class="trust-feature-title">ضمان الأموال</h4>
+                        <p class="trust-feature-description">
+                            أموالك محمية 100% حتى تستلم العمل وتوافق عليه
+                        </p>
+                    </div>
+                    
+                    <div class="trust-feature">
+                        <div class="trust-feature-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <h4 class="trust-feature-title">التزام بالمواعيد</h4>
+                        <p class="trust-feature-description">
+                            تسليم مضمون في الوقت المحدد أو استرداد كامل
+                        </p>
+                    </div>
+                    
+                    <div class="trust-feature">
+                        <div class="trust-feature-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                        </div>
+                        <h4 class="trust-feature-title">بائعون موثوقون</h4>
+                        <p class="trust-feature-description">
+                            جميع البائعين تم التحقق منهم ومراجعة أعمالهم
+                        </p>
+                    </div>
+                    
+                    <div class="trust-feature">
+                        <div class="trust-feature-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="trust-feature-title">دعم على مدار الساعة</h4>
+                        <p class="trust-feature-description">
+                            فريق دعم متخصص جاهز لمساعدتك في أي وقت
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             CTA SECTION
+             ═══════════════════════════════════════════════════════════════ -->
+        <section class="cta-section" id="cta">
+            <div class="container">
+                <h2 class="cta-title">مستعد لبدء مشروعك؟</h2>
+                <p class="cta-subtitle">
+                    انضم لآلاف العملاء الراضين واحصل على خدمات احترافية اليوم.
+                    التسجيل مجاني ويستغرق دقيقة واحدة فقط.
+                </p>
+                <a href="/app/register.html" class="cta-btn" id="ctaButton">
+                    أنشئ حسابك الآن
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+        
     </main>
-
-    <footer>
-        <p>&copy; 2025 مشرق. جميع الحقوق محفوظة.</p>
-    </footer>
-
+    
+    <!-- Footer -->
+    <div id="footer"></div>
+    
     <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/components/service-card.js"></script>
     <script src="/app/js/pages/landing.js"></script>
-
 </body>
 </html>
