@@ -175,6 +175,24 @@ const serviceSchema = new mongoose.Schema({
         max: [90, 'مدة التسليم يجب أن تكون أقل من 90 يوم']
     },
     
+    /**
+     * Number of revisions included in the service.
+     */
+    revisions: {
+        type: Number,
+        default: 0,
+        min: [0, 'عدد التعديلات لا يمكن أن يكون سالباً']
+    },
+    
+    /**
+     * Instructions/Requirements for the buyer.
+     */
+    requirements: {
+        type: String,
+        default: '',
+        maxlength: [1000, 'المتطلبات يجب أن تكون أقل من 1000 حرف']
+    },
+    
     // ============================================================
     // OPTIONAL EXTRAS
     // Constitution: Optional extras only, no packages

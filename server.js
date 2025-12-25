@@ -379,7 +379,8 @@ app.get('/api/services', async (req, res) => {
     const { category, search, sellerId, limit } = req.query;
     let query = { status: 'active' };
     
-    if (category) query.category = category;
+    // Fix: category -> categoryId
+    if (category) query.categoryId = category;
     if (sellerId) query.sellerId = sellerId;
     if (search) {
       const regex = new RegExp(search, 'i');
@@ -440,14 +441,13 @@ app.post('/api/services', authenticateToken, requireSeller, async (req, res) => 
     const service = await Service.create({
       title,
       description,
-      price: parseFloat(price),
-      category,
-      image: image || 'https://via.placeholder.com/600x400?text=صورة+الخدمة',
-      deliveryTime: deliveryTime || 3,
-      revisions: revisions || 1,
+      basePrice: parseFloat(price),
+      categoryId: category,
+      imageUrls: image ? [image] : [],
+      deliveryDays: deliveryTime || 3,
+      revisions: revisions || 0,
       requirements: requirements || '',
       sellerId: req.user.id,
-      sellerName: req.user.fullName
     });
     
     console.log(`✅ New service added: "${service.title}" by ${req.user.fullName}`);
@@ -476,12 +476,14 @@ app.put('/api/services/:id', authenticateToken, async (req, res) => {
     }
     
     const { title, description, price, category, image, deliveryTime, revisions, requirements, status } = req.body;
+    
+    // Fix: Map fields to correct Model names
     if (title) service.title = title;
     if (description) service.description = description;
-    if (price) service.price = parseFloat(price);
-    if (category) service.category = category;
-    if (image) service.image = image;
-    if (deliveryTime) service.deliveryTime = deliveryTime;
+    if (price) service.basePrice = parseFloat(price);
+    if (category) service.categoryId = category;
+    if (image) service.imageUrls = [image];
+    if (deliveryTime) service.deliveryDays = deliveryTime;
     if (revisions !== undefined) service.revisions = revisions;
     if (requirements !== undefined) service.requirements = requirements;
     if (status && ['active', 'paused'].includes(status)) service.status = status;
