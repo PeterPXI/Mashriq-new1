@@ -64,13 +64,11 @@ const CONFIG = {
         // Services
         SERVICES: '/services',
         SERVICE_BY_ID: (id) => `/services/${id}`,
-        MY_SERVICES: '/services/my-services',
+        MY_SERVICES: '/my-services',
         
         // Orders
         ORDERS: '/orders',
         ORDER_BY_ID: (id) => `/orders/${id}`,
-        MY_ORDERS: '/orders/my-orders',
-        SELLER_ORDERS: '/orders/seller-orders',
         
         // Reviews
         REVIEWS: '/reviews',

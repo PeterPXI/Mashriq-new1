@@ -176,11 +176,11 @@ const API = {
         },
         
         getMyOrders(params = {}) {
-            return API.get(CONFIG.ENDPOINTS.MY_ORDERS, params);
+            return API.get(CONFIG.ENDPOINTS.ORDERS, { role: 'buyer', ...params });
         },
         
         getSellerOrders(params = {}) {
-            return API.get(CONFIG.ENDPOINTS.SELLER_ORDERS, params);
+            return API.get(CONFIG.ENDPOINTS.ORDERS, { role: 'seller', ...params });
         },
         
         create(orderData) {
@@ -192,15 +192,15 @@ const API = {
         },
         
         deliver(id, deliveryData) {
-            return API.post(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/deliver`, deliveryData);
+            return API.put(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/deliver`, deliveryData);
         },
         
         accept(id) {
-            return API.post(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/accept`);
+            return API.put(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/complete`);
         },
         
         cancel(id, reason) {
-            return API.post(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/cancel`, { reason });
+            return API.put(`${CONFIG.ENDPOINTS.ORDER_BY_ID(id)}/cancel`, { reason });
         },
     },
     
