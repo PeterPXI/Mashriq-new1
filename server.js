@@ -377,7 +377,7 @@ app.post('/api/auth/activate-seller', authenticateToken, async (req, res) => {
 app.get('/api/services', async (req, res) => {
   try {
     const { category, search, sellerId, limit } = req.query;
-    let query = { status: 'active' };
+    let query = { isActive: true, isPaused: false };
     
     // Fix: category -> categoryId
     if (category) query.categoryId = category;
@@ -531,7 +531,7 @@ app.get('/api/my-services', authenticateToken, async (req, res) => {
   try {
     const services = await Service.find({ 
       sellerId: req.user.id,
-      status: { $ne: 'deleted' }  
+      isActive: true
     }).sort({ createdAt: -1 });
     
     return success(res, 'تم جلب خدماتي بنجاح', { 
