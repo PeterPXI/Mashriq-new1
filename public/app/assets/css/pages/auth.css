@@ -408,6 +408,92 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   ACCOUNT TYPE SELECTOR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.account-type-selector {
+    display: flex;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-2);
+}
+
+.account-type-option {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+}
+
+.account-type-option input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--color-secondary-200);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-3);
+    transition: all var(--transition-fast);
+    text-align: center;
+    height: 100%;
+    background: var(--color-background);
+}
+
+.type-icon {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-2);
+    transition: color var(--transition-fast);
+}
+
+.type-name {
+    display: block;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-1);
+    font-size: var(--font-size-base);
+}
+
+.type-desc {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.check-icon {
+    position: absolute;
+    top: var(--spacing-2);
+    left: var(--spacing-2);
+    color: var(--color-primary-600);
+    opacity: 0;
+    transform: scale(0);
+    transition: all var(--transition-fast);
+}
+
+/* Selected State */
+.account-type-option input:checked + .type-card {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-primary-50);
+    box-shadow: 0 0 0 1px var(--color-primary-500);
+}
+
+.account-type-option input:checked + .type-card .type-icon {
+    color: var(--color-primary-600);
+}
+
+.account-type-option input:checked + .type-card .check-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.account-type-option:hover .type-card {
+    border-color: var(--color-primary-300);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════════ */
 

@@ -111,6 +111,7 @@
                 username,
                 email,
                 password,
+                role: document.querySelector('input[name="role"]:checked')?.value || 'buyer'
             });
             
             // Show success
