@@ -110,7 +110,7 @@
         showLoading();
         
         try {
-            const response = await API.services.getMine();
+            const response = await API.services.getMyServices();
             const data = response.data || response;
             state.services = data.services || data || [];
             

@@ -121,8 +121,8 @@ const API = {
         
         async getProfile() {
             const response = await API.get(CONFIG.ENDPOINTS.ME);
-            if (response.data) {
-                Auth.setUser(response.data);
+            if (response.data?.user) {
+                Auth.setUser(response.data.user);
             }
             return response;
         },

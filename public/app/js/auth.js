@@ -58,7 +58,7 @@ const Auth = {
     
     isBuyer() {
         const user = this.getUser();
-        return user?.role === 'buyer' || !user?.isSeller;
+        return user?.role === 'buyer';
     },
     
     getUserId() {
@@ -163,6 +163,9 @@ const Auth = {
             }
             return null;
         }
+    },
+    getUserName() {
+      return this.getUsername();
     },
 };
 
