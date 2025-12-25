@@ -73,7 +73,7 @@
         
         try {
             // Fetch buyer orders
-            const response = await API.orders.getBuyerOrders();
+            const response = await API.orders.getMyOrders();
             const data = response.data || response;
             state.orders = data.orders || data || [];
             
