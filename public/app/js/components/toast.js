@@ -116,4 +116,4 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Make Toast object immutable
-Object.freeze(Toast);
+
