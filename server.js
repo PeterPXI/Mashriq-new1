@@ -149,7 +149,7 @@ app.get('/api/stats/overview', async (req, res) => {
 // Register
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { fullName, username, email, password } = req.body;
+    const { fullName, username, email, password, role } = req.body;
     
     if (!fullName || !username || !email || !password) {
       return error(res, 'جميع الحقول المطلوبة يجب ملؤها', 'MISSING_FIELDS', 400);
@@ -167,11 +167,15 @@ app.post('/api/auth/register', async (req, res) => {
         return error(res, 'البريد الإلكتروني أو اسم المستخدم مستخدم بالفعل', 'USER_ALREADY_EXISTS', 400);
     }
 
+    // Determine role (default to BUYER if invalid or not provided)
+    const userRole = role === USER_ROLES.SELLER ? USER_ROLES.SELLER : USER_ROLES.BUYER;
+
     const user = await User.create({
         fullName,
         username: username.toLowerCase(),
         email: email.toLowerCase(),
-        passwordHash: password  
+        passwordHash: password,
+        role: userRole
     });
 
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
