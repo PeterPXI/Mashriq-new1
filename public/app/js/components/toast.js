@@ -12,12 +12,11 @@ const Toast = {
      * Initialize toast container
      */
     init() {
-        if (this.container) return;
-        
-        this.container = document.createElement('div');
-        this.container.className = 'toast-container';
-        this.container.id = 'toast-container';
-        document.body.appendChild(this.container);
+        this.container = document.getElementById("toast-container");
+        if (!this.container) {
+            console.warn("Toast container not found");
+            return;
+        }
     },
     
     /**
