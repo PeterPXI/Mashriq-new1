@@ -10,21 +10,23 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/profile.css">
 </head>
-<body class="profile-page">
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Profile Hero Section -->
-    <section class="profile-hero">
+    <section class="relative">
         <!-- Cover Image -->
-        <div class="profile-cover" id="profileCover">
-            <div class="profile-cover-overlay"></div>
-            <div class="profile-cover-pattern"></div>
-            <button class="cover-edit-btn" id="editCoverBtn" title="تغيير صورة الغلاف" style="display: none;">
+        <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 relative" id="profileCover">
+            <div class="absolute inset-0 bg-black/10"></div>
+            <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 80 80\"><circle cx=\"40\" cy=\"40\" r=\"2\" fill=\"white\" opacity=\"0.3\"/></svg>'); background-size: 40px 40px;"></div>
+            <button class="absolute top-4 left-4 p-2 bg-white/20 hover:bg-white/30 rounded-lg text-white transition-colors hidden" id="editCoverBtn" title="تغيير صورة الغلاف">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                     <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -34,22 +36,22 @@
         </div>
         
         <!-- Profile Info Card -->
-        <div class="container">
-            <div class="profile-card">
-                <div class="profile-card-header">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 relative z-10">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex flex-col sm:flex-row gap-6">
                     <!-- Avatar -->
-                    <div class="profile-avatar-wrapper">
-                        <div class="profile-avatar" id="profileAvatar">
-                            <span class="avatar-initials" id="avatarInitials">--</span>
-                            <img id="avatarImg" src="" alt="" style="display: none;">
+                    <div class="relative flex-shrink-0 mx-auto sm:mx-0">
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg" id="profileAvatar">
+                            <span id="avatarInitials">--</span>
+                            <img id="avatarImg" src="" alt="" class="absolute inset-0 w-full h-full rounded-2xl object-cover hidden">
                         </div>
-                        <button class="avatar-edit-btn" id="editAvatarBtn" title="تغيير الصورة الشخصية" style="display: none;">
+                        <button class="absolute -bottom-2 -left-2 w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-gray-600 hover:text-primary-600 transition-colors hidden" id="editAvatarBtn" title="تغيير الصورة الشخصية">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                                 <circle cx="12" cy="13" r="4"/>
                             </svg>
                         </button>
-                        <div class="avatar-badge" id="avatarBadge" title="بائع موثوق" style="display: none;">
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white shadow-md hidden" id="avatarBadge" title="بائع موثوق">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                             </svg>
@@ -57,19 +59,19 @@
                     </div>
                     
                     <!-- User Info -->
-                    <div class="profile-info">
-                        <div class="profile-name-row">
-                            <h1 class="profile-name" id="profileName">
-                                <span class="skeleton skeleton-text" style="width: 150px; height: 28px;"></span>
+                    <div class="flex-1 text-center sm:text-right">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900" id="profileName">
+                                <span class="inline-block h-7 w-40 bg-gray-200 rounded animate-pulse"></span>
                             </h1>
-                            <div class="profile-badges" id="profileBadges"></div>
+                            <div class="flex justify-center sm:justify-start gap-2" id="profileBadges"></div>
                         </div>
-                        <p class="profile-username" id="profileUsername">@---</p>
-                        <p class="profile-bio" id="profileBio">جاري التحميل...</p>
+                        <p class="text-gray-500 mb-2" id="profileUsername">@---</p>
+                        <p class="text-gray-600 mb-4 max-w-xl" id="profileBio">جاري التحميل...</p>
                         
                         <!-- Profile Meta -->
-                        <div class="profile-meta" id="profileMeta">
-                            <span class="profile-meta-item">
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-4 text-sm text-gray-500" id="profileMeta">
+                            <span class="flex items-center gap-1.5">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                                     <line x1="16" y1="2" x2="16" y2="6"/>
@@ -78,7 +80,7 @@
                                 </svg>
                                 <span id="memberSince">---</span>
                             </span>
-                            <span class="profile-meta-item" id="locationMeta" style="display: none;">
+                            <span class="flex items-center gap-1.5 hidden" id="locationMeta">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
                                     <circle cx="12" cy="10" r="3"/>
@@ -89,35 +91,35 @@
                     </div>
                     
                     <!-- Actions -->
-                    <div class="profile-actions" id="profileActions">
+                    <div class="flex justify-center sm:justify-end gap-3" id="profileActions">
                         <!-- Will be populated by JS based on owner/visitor -->
                     </div>
                 </div>
                 
                 <!-- Stats Grid -->
-                <div class="profile-stats" id="profileStats">
-                    <div class="profile-stat">
-                        <div class="profile-stat-value" id="statOrders">
-                            <span class="skeleton skeleton-text" style="width: 40px; height: 24px;"></span>
+                <div class="grid grid-cols-3 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100" id="profileStats">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-900" id="statOrders">
+                            <span class="inline-block h-6 w-10 bg-gray-200 rounded animate-pulse"></span>
                         </div>
-                        <div class="profile-stat-label">الطلبات</div>
+                        <div class="text-sm text-gray-500">الطلبات</div>
                     </div>
-                    <div class="profile-stat" id="statServicesWrapper">
-                        <div class="profile-stat-value" id="statServices">0</div>
-                        <div class="profile-stat-label">الخدمات</div>
+                    <div class="text-center" id="statServicesWrapper">
+                        <div class="text-2xl font-bold text-gray-900" id="statServices">0</div>
+                        <div class="text-sm text-gray-500">الخدمات</div>
                     </div>
-                    <div class="profile-stat">
-                        <div class="profile-stat-value rating-value">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-amber-400">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                             </svg>
                             <span id="statRating">0.0</span>
                         </div>
-                        <div class="profile-stat-label">التقييم</div>
+                        <div class="text-sm text-gray-500">التقييم</div>
                     </div>
-                    <div class="profile-stat" id="statEarningsWrapper" style="display: none;">
-                        <div class="profile-stat-value earnings-value" id="statEarnings">$0</div>
-                        <div class="profile-stat-label">الأرباح</div>
+                    <div class="text-center hidden" id="statEarningsWrapper">
+                        <div class="text-2xl font-bold text-green-600" id="statEarnings">$0</div>
+                        <div class="text-sm text-gray-500">الأرباح</div>
                     </div>
                 </div>
             </div>
@@ -125,13 +127,13 @@
     </section>
     
     <!-- Main Content -->
-    <main class="main-content profile-content">
-        <div class="container">
+    <main class="py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Profile Tabs -->
-            <div class="profile-tabs-wrapper">
-                <nav class="profile-tabs" id="profileTabs">
-                    <button class="profile-tab active" data-tab="overview">
+            <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-x-auto">
+                <nav class="flex min-w-max" id="profileTabs">
+                    <button class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab active" data-tab="overview">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="7" height="7"/>
                             <rect x="14" y="3" width="7" height="7"/>
@@ -140,29 +142,29 @@
                         </svg>
                         نظرة عامة
                     </button>
-                    <button class="profile-tab" data-tab="services" id="servicesTabBtn">
+                    <button class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab" data-tab="services" id="servicesTabBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                             <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
                         </svg>
                         الخدمات
-                        <span class="tab-count" id="servicesCount">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full" id="servicesCount">0</span>
                     </button>
-                    <button class="profile-tab" data-tab="reviews">
+                    <button class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab" data-tab="reviews">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
                         التقييمات
-                        <span class="tab-count" id="reviewsCount">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full" id="reviewsCount">0</span>
                     </button>
-                    <button class="profile-tab" data-tab="achievements" id="achievementsTabBtn">
+                    <button class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab" data-tab="achievements" id="achievementsTabBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="8" r="7"/>
                             <polyline points="8.21,13.89 7,23 12,20 17,23 15.79,13.88"/>
                         </svg>
                         الإنجازات
                     </button>
-                    <button class="profile-tab" data-tab="settings" id="settingsTabBtn" style="display: none;">
+                    <button class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab hidden" data-tab="settings" id="settingsTabBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"/>
                             <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
@@ -177,76 +179,76 @@
                 
                 <!-- Overview Tab -->
                 <div class="tab-panel active" id="overviewPanel">
-                    <div class="overview-grid">
+                    <div class="grid lg:grid-cols-2 gap-6">
                         
                         <!-- Quick Stats Cards -->
-                        <div class="overview-section overview-stats-section">
-                            <h2 class="section-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="bg-white rounded-2xl shadow-sm p-6">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
                                 </svg>
                                 الإحصائيات
                             </h2>
-                            <div class="quick-stats-grid" id="quickStatsGrid">
+                            <div class="grid grid-cols-2 gap-4" id="quickStatsGrid">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
                         
                         <!-- Recent Activity -->
-                        <div class="overview-section activity-section">
-                            <h2 class="section-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="bg-white rounded-2xl shadow-sm p-6">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <circle cx="12" cy="12" r="10"/>
                                     <polyline points="12,6 12,12 16,14"/>
                                 </svg>
                                 النشاط الأخير
                             </h2>
-                            <div class="activity-timeline" id="activityTimeline">
+                            <div class="space-y-4" id="activityTimeline">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
                         
                         <!-- Skills/Expertise (Seller only) -->
-                        <div class="overview-section skills-section" id="skillsSection" style="display: none;">
-                            <h2 class="section-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="skillsSection">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/>
                                 </svg>
                                 المهارات والخبرات
                             </h2>
-                            <div class="skills-grid" id="skillsGrid">
+                            <div class="flex flex-wrap gap-2" id="skillsGrid">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
                         
                         <!-- Top Services Preview (Seller only) -->
-                        <div class="overview-section top-services-section" id="topServicesSection" style="display: none;">
-                            <div class="section-header">
-                                <h2 class="section-title">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="topServicesSection">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/>
                                     </svg>
                                     أفضل الخدمات
                                 </h2>
-                                <a href="#" class="see-all-link" data-tab="services">عرض الكل</a>
+                                <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-medium see-all-link" data-tab="services">عرض الكل</a>
                             </div>
-                            <div class="services-preview-grid" id="topServicesGrid">
+                            <div class="space-y-3" id="topServicesGrid">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
                         
                         <!-- Latest Reviews -->
-                        <div class="overview-section latest-reviews-section">
-                            <div class="section-header">
-                                <h2 class="section-title">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="bg-white rounded-2xl shadow-sm p-6 lg:col-span-2">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
                                     </svg>
                                     أحدث التقييمات
                                 </h2>
-                                <a href="#" class="see-all-link" data-tab="reviews">عرض الكل</a>
+                                <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-medium see-all-link" data-tab="reviews">عرض الكل</a>
                             </div>
-                            <div class="reviews-preview" id="latestReviews">
+                            <div class="space-y-4" id="latestReviews">
                                 <!-- Populated by JS -->
                             </div>
                         </div>
@@ -255,138 +257,136 @@
                 </div>
                 
                 <!-- Services Tab -->
-                <div class="tab-panel" id="servicesPanel">
+                <div class="tab-panel hidden" id="servicesPanel">
                     <div class="services-grid" id="servicesGrid">
                         <!-- Populated by JS -->
                     </div>
-                    <div class="empty-state" id="servicesEmpty" style="display: none;">
-                        <div class="empty-state-icon">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="servicesEmpty">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                                 <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
                             </svg>
                         </div>
-                        <h3 class="empty-state-title">لا توجد خدمات</h3>
-                        <p class="empty-state-text">لم يتم نشر أي خدمات بعد</p>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد خدمات</h3>
+                        <p class="text-gray-500">لم يتم نشر أي خدمات بعد</p>
                     </div>
                 </div>
                 
                 <!-- Reviews Tab -->
-                <div class="tab-panel" id="reviewsPanel">
+                <div class="tab-panel hidden" id="reviewsPanel">
                     <!-- Rating Summary -->
-                    <div class="rating-summary" id="ratingSummary">
+                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" id="ratingSummary">
                         <!-- Populated by JS -->
                     </div>
                     
                     <!-- Reviews List -->
-                    <div class="reviews-list" id="reviewsList">
+                    <div class="space-y-4" id="reviewsList">
                         <!-- Populated by JS -->
                     </div>
                     
-                    <div class="empty-state" id="reviewsEmpty" style="display: none;">
-                        <div class="empty-state-icon">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="reviewsEmpty">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                             </svg>
                         </div>
-                        <h3 class="empty-state-title">لا توجد تقييمات</h3>
-                        <p class="empty-state-text">لم يتم استلام أي تقييمات بعد</p>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد تقييمات</h3>
+                        <p class="text-gray-500">لم يتم استلام أي تقييمات بعد</p>
                     </div>
                 </div>
                 
                 <!-- Achievements Tab -->
-                <div class="tab-panel" id="achievementsPanel">
-                    <div class="achievements-grid" id="achievementsGrid">
+                <div class="tab-panel hidden" id="achievementsPanel">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" id="achievementsGrid">
                         <!-- Populated by JS -->
                     </div>
                 </div>
                 
                 <!-- Settings Tab (Owner only) -->
-                <div class="tab-panel" id="settingsPanel">
-                    <div class="settings-container">
+                <div class="tab-panel hidden" id="settingsPanel">
+                    <div class="max-w-2xl space-y-6">
                         
                         <!-- Profile Settings -->
-                        <div class="settings-section">
-                            <h2 class="settings-section-title">
+                        <div class="bg-white rounded-2xl shadow-sm p-6">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-6">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
                                     <circle cx="12" cy="7" r="4"/>
                                 </svg>
                                 معلومات الملف الشخصي
                             </h2>
-                            <form id="profileForm" class="settings-form">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="settingsFullName" class="form-label">الاسم الكامل</label>
-                                        <input type="text" id="settingsFullName" class="form-control" placeholder="أدخل اسمك الكامل">
+                            <form id="profileForm" class="space-y-4">
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="settingsFullName" class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
+                                        <input type="text" id="settingsFullName" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="أدخل اسمك الكامل">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="settingsUsername" class="form-label">اسم المستخدم</label>
-                                        <div class="input-prefix">
-                                            <span>@</span>
-                                            <input type="text" id="settingsUsername" class="form-control" placeholder="username" disabled>
+                                    <div>
+                                        <label for="settingsUsername" class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
+                                        <div class="relative">
+                                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">@</span>
+                                            <input type="text" id="settingsUsername" class="w-full pr-8 pl-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500" placeholder="username" disabled>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="settingsBio" class="form-label">النبذة التعريفية</label>
-                                    <textarea id="settingsBio" class="form-control" rows="4" placeholder="اكتب نبذة قصيرة عنك..."></textarea>
-                                    <span class="form-hint">اكتب وصفاً جذاباً يوضح خبراتك ومهاراتك (150 حرف كحد أقصى)</span>
+                                <div>
+                                    <label for="settingsBio" class="block text-sm font-medium text-gray-700 mb-1">النبذة التعريفية</label>
+                                    <textarea id="settingsBio" rows="4" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none" placeholder="اكتب نبذة قصيرة عنك..."></textarea>
+                                    <p class="text-xs text-gray-500 mt-1">اكتب وصفاً جذاباً يوضح خبراتك ومهاراتك (150 حرف كحد أقصى)</p>
                                 </div>
-                                <div class="form-group">
-                                    <label for="settingsAvatar" class="form-label">رابط الصورة الشخصية</label>
-                                    <input type="url" id="settingsAvatar" class="form-control" placeholder="https://example.com/avatar.jpg">
+                                <div>
+                                    <label for="settingsAvatar" class="block text-sm font-medium text-gray-700 mb-1">رابط الصورة الشخصية</label>
+                                    <input type="url" id="settingsAvatar" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="https://example.com/avatar.jpg">
                                 </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary" id="saveProfileBtn">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-                                            <polyline points="17,21 17,13 7,13 7,21"/>
-                                            <polyline points="7,3 7,8 15,8"/>
-                                        </svg>
-                                        حفظ التغييرات
-                                    </button>
-                                </div>
+                                <button type="submit" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors" id="saveProfileBtn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                                        <polyline points="17,21 17,13 7,13 7,21"/>
+                                        <polyline points="7,3 7,8 15,8"/>
+                                    </svg>
+                                    حفظ التغييرات
+                                </button>
                             </form>
                         </div>
                         
                         <!-- Account Settings -->
-                        <div class="settings-section">
-                            <h2 class="settings-section-title">
+                        <div class="bg-white rounded-2xl shadow-sm p-6">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-6">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                     <path d="M7 11V7a5 5 0 0110 0v4"/>
                                 </svg>
                                 إعدادات الحساب
                             </h2>
-                            <div class="settings-options">
-                                <div class="setting-option">
-                                    <div class="setting-option-info">
-                                        <h3>البريد الإلكتروني</h3>
-                                        <p id="settingsEmail">---</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">البريد الإلكتروني</h3>
+                                        <p class="text-sm text-gray-500" id="settingsEmail">---</p>
                                     </div>
-                                    <button class="btn btn-sm btn-ghost" disabled>تغيير</button>
+                                    <button class="text-sm text-gray-400 px-4 py-2 rounded-lg" disabled>تغيير</button>
                                 </div>
-                                <div class="setting-option">
-                                    <div class="setting-option-info">
-                                        <h3>كلمة المرور</h3>
-                                        <p>••••••••</p>
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">كلمة المرور</h3>
+                                        <p class="text-sm text-gray-500">••••••••</p>
                                     </div>
-                                    <button class="btn btn-sm btn-ghost" disabled>تغيير</button>
+                                    <button class="text-sm text-gray-400 px-4 py-2 rounded-lg" disabled>تغيير</button>
                                 </div>
-                                <div class="setting-option seller-option" id="sellerModeOption">
-                                    <div class="setting-option-info">
-                                        <h3>وضع البائع</h3>
-                                        <p id="sellerModeStatus">غير مفعل</p>
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl" id="sellerModeOption">
+                                    <div>
+                                        <h3 class="font-medium text-gray-900">وضع البائع</h3>
+                                        <p class="text-sm text-gray-500" id="sellerModeStatus">غير مفعل</p>
                                     </div>
-                                    <button class="btn btn-sm btn-primary" id="activateSellerBtn">تفعيل</button>
+                                    <button class="text-sm bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors" id="activateSellerBtn">تفعيل</button>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Danger Zone -->
-                        <div class="settings-section danger-zone">
-                            <h2 class="settings-section-title">
+                        <div class="bg-white rounded-2xl shadow-sm p-6 border border-red-100">
+                            <h2 class="flex items-center gap-2 text-lg font-bold text-red-600 mb-6">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                                     <line x1="12" y1="9" x2="12" y2="13"/>
@@ -394,14 +394,12 @@
                                 </svg>
                                 منطقة الخطر
                             </h2>
-                            <div class="settings-options">
-                                <div class="setting-option">
-                                    <div class="setting-option-info">
-                                        <h3>تسجيل الخروج</h3>
-                                        <p>سيتم تسجيل خروجك من جميع الأجهزة</p>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-error" id="logoutBtn">تسجيل الخروج</button>
+                            <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+                                <div>
+                                    <h3 class="font-medium text-gray-900">تسجيل الخروج</h3>
+                                    <p class="text-sm text-gray-500">سيتم تسجيل خروجك من جميع الأجهزة</p>
                                 </div>
+                                <button class="text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors" id="logoutBtn">تسجيل الخروج</button>
                             </div>
                         </div>
                         
@@ -417,25 +415,25 @@
     <div id="footer"></div>
     
     <!-- Edit Avatar Modal -->
-    <div class="modal-overlay" id="avatarModal" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">تغيير الصورة الشخصية</h3>
-                <button type="button" class="modal-close" data-close-modal>&times;</button>
+    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="avatarModal">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900">تغيير الصورة الشخصية</h3>
+                <button type="button" class="text-gray-400 hover:text-gray-600 text-2xl" data-close-modal>&times;</button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="avatarUrlInput" class="form-label">رابط الصورة</label>
-                    <input type="url" id="avatarUrlInput" class="form-control" placeholder="https://example.com/avatar.jpg">
-                    <span class="form-hint">استخدم رابط صورة مباشر (PNG, JPG, WEBP)</span>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label for="avatarUrlInput" class="block text-sm font-medium text-gray-700 mb-1">رابط الصورة</label>
+                    <input type="url" id="avatarUrlInput" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="https://example.com/avatar.jpg">
+                    <p class="text-xs text-gray-500 mt-1">استخدم رابط صورة مباشر (PNG, JPG, WEBP)</p>
                 </div>
-                <div class="avatar-preview-large" id="avatarPreviewLarge" style="display: none;">
-                    <img id="avatarPreviewImg" src="" alt="معاينة">
+                <div class="hidden w-32 h-32 mx-auto rounded-xl overflow-hidden" id="avatarPreviewLarge">
+                    <img id="avatarPreviewImg" src="" alt="معاينة" class="w-full h-full object-cover">
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-close-modal>إلغاء</button>
-                <button class="btn btn-primary" id="saveAvatarBtn">حفظ</button>
+            <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
+                <button class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" data-close-modal>إلغاء</button>
+                <button class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors" id="saveAvatarBtn">حفظ</button>
             </div>
         </div>
     </div>
