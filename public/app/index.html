@@ -46,28 +46,28 @@
                 </svg>
             </div>
             
-            <div class="container relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
                 <div class="text-center text-white">
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 leading-tight px-2">
                         اعثر على <span class="text-yellow-300">الخدمة المثالية</span><br>
                         لمشروعك القادم
                     </h1>
-                    <p class="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10">
+                    <p class="text-base sm:text-lg lg:text-xl text-white/80 max-w-2xl mx-auto mb-8 px-2">
                         آلاف الخدمات الاحترافية من مصممين ومبرمجين وكتّاب محترفين. 
                         ابدأ مشروعك اليوم مع ضمان الجودة والأمان.
                     </p>
                     
                     <!-- Search Bar -->
-                    <div class="max-w-2xl mx-auto mb-6">
-                        <form class="flex bg-white rounded-2xl shadow-xl overflow-hidden" id="heroSearchForm">
+                    <div class="w-full max-w-2xl mx-auto mb-6 px-2">
+                        <form class="flex flex-col sm:flex-row bg-white rounded-2xl shadow-xl overflow-hidden" id="heroSearchForm">
                             <input 
                                 type="text" 
-                                class="flex-1 px-6 py-4 text-gray-700 placeholder-gray-400 focus:outline-none" 
+                                class="flex-1 px-4 sm:px-6 py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-sm sm:text-base" 
                                 id="heroSearchInput"
-                                placeholder="ابحث عن خدمة... مثال: تصميم شعار، كتابة مقال"
+                                placeholder="ابحث عن خدمة..."
                                 autocomplete="off"
                             >
-                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 font-semibold flex items-center gap-2 transition-colors">
+                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white px-6 sm:px-8 py-3 sm:py-4 font-semibold flex items-center justify-center gap-2 transition-colors">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="M21 21l-4.35-4.35"/>
@@ -78,27 +78,26 @@
                     </div>
                     
                     <!-- Popular Searches -->
-                    <div class="flex flex-wrap items-center justify-center gap-2 mb-12">
-                        <span class="text-white/60 text-sm">الأكثر بحثًا:</span>
-                        <button type="button" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-colors search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
-                        <button type="button" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-colors search-suggestion" data-search="كتابة محتوى">كتابة محتوى</button>
-                        <button type="button" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-colors search-suggestion" data-search="برمجة موقع">برمجة موقع</button>
-                        <button type="button" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-colors hidden sm:inline-block search-suggestion" data-search="مونتاج فيديو">مونتاج فيديو</button>
+                    <div class="flex flex-wrap items-center justify-center gap-2 mb-10 px-2">
+                        <span class="text-white/60 text-xs sm:text-sm">الأكثر بحثًا:</span>
+                        <button type="button" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-xs sm:text-sm text-white transition-colors search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
+                        <button type="button" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-xs sm:text-sm text-white transition-colors search-suggestion" data-search="كتابة محتوى">كتابة محتوى</button>
+                        <button type="button" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-xs sm:text-sm text-white transition-colors search-suggestion" data-search="برمجة موقع">برمجة موقع</button>
                     </div>
                     
                     <!-- Hero Stats -->
-                    <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto">
+                    <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-md mx-auto px-2">
                         <div class="text-center">
-                            <div class="text-3xl sm:text-4xl font-bold" id="statServices">+500</div>
-                            <div class="text-white/70 text-sm">خدمة متاحة</div>
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-bold" id="statServices">+500</div>
+                            <div class="text-white/70 text-xs sm:text-sm">خدمة متاحة</div>
                         </div>
                         <div class="text-center border-x border-white/20">
-                            <div class="text-3xl sm:text-4xl font-bold" id="statSellers">+200</div>
-                            <div class="text-white/70 text-sm">بائع محترف</div>
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-bold" id="statSellers">+200</div>
+                            <div class="text-white/70 text-xs sm:text-sm">بائع محترف</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl sm:text-4xl font-bold" id="statOrders">+1000</div>
-                            <div class="text-white/70 text-sm">طلب مكتمل</div>
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-bold" id="statOrders">+1000</div>
+                            <div class="text-white/70 text-xs sm:text-sm">طلب مكتمل</div>
                         </div>
                     </div>
                 </div>
