@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="إدارة طلباتي على منصة مشرق">
+    
+    <title>طلباتي | مشرق</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+    <link rel="stylesheet" href="/app/assets/css/pages/orders.css">
+</head>
+<body class="orders-page">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-8">
+            
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="مسار التنقل">
+                <a href="/app/">الرئيسية</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="/app/buyer/dashboard.html">لوحة التحكم</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">طلباتي</span>
+            </nav>
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1 class="page-title">طلباتي</h1>
+                    <p class="page-subtitle">إدارة ومتابعة جميع طلباتك</p>
+                </div>
+                <div class="page-header-actions">
+                    <a href="/app/explore.html" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        تصفح الخدمات
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Stats Mini Grid -->
+            <div class="stats-mini-grid" id="statsGrid">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-value" id="totalOrders">-</div>
+                    <div class="stat-mini-label">إجمالي الطلبات</div>
+                </div>
+                <div class="stat-mini-card active">
+                    <div class="stat-mini-value" id="activeOrders">-</div>
+                    <div class="stat-mini-label">طلبات نشطة</div>
+                </div>
+                <div class="stat-mini-card completed">
+                    <div class="stat-mini-value" id="completedOrders">-</div>
+                    <div class="stat-mini-label">مكتملة</div>
+                </div>
+                <div class="stat-mini-card">
+                    <div class="stat-mini-value" id="totalSpent">-</div>
+                    <div class="stat-mini-label">إجمالي المصروفات</div>
+                </div>
+            </div>
+            
+            <!-- Filter Toolbar -->
+            <div class="filter-toolbar">
+                <div class="filter-tabs" id="statusTabs">
+                    <button class="filter-tab active" data-status="all">
+                        الكل
+                        <span class="filter-tab-count" id="countAll">0</span>
+                    </button>
+                    <button class="filter-tab" data-status="active">
+                        نشط
+                        <span class="filter-tab-count" id="countActive">0</span>
+                    </button>
+                    <button class="filter-tab" data-status="delivered">
+                        تم التسليم
+                        <span class="filter-tab-count" id="countDelivered">0</span>
+                    </button>
+                    <button class="filter-tab" data-status="completed">
+                        مكتمل
+                        <span class="filter-tab-count" id="countCompleted">0</span>
+                    </button>
+                    <button class="filter-tab" data-status="cancelled">
+                        ملغي
+                        <span class="filter-tab-count" id="countCancelled">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Orders List -->
+            <div class="orders-list" id="ordersList">
+                <!-- Loading skeleton -->
+                <div class="order-card skeleton-card">
+                    <div class="skeleton skeleton-image"></div>
+                    <div class="order-card-body">
+                        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                        <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                    </div>
+                </div>
+                <div class="order-card skeleton-card">
+                    <div class="skeleton skeleton-image"></div>
+                    <div class="order-card-body">
+                        <div class="skeleton skeleton-text" style="width: 70%;"></div>
+                        <div class="skeleton skeleton-text" style="width: 30%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                        <rect x="9" y="3" width="6" height="4" rx="1"/>
+                    </svg>
+                </div>
+                <h3 class="empty-state-title">لا توجد طلبات</h3>
+                <p class="empty-state-text">ابدأ بتصفح الخدمات وقم بطلب أول خدمة لك</p>
+                <a href="/app/explore.html" class="btn btn-primary">تصفح الخدمات</a>
+            </div>
+            
+            <!-- No Results State -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <div class="no-results-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                </div>
+                <p class="no-results-text">لا توجد طلبات بهذه الحالة</p>
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div id="footer"></div>
+    
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/buyer-orders.js"></script>
+</body>
+</html>
