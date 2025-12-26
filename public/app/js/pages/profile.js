@@ -198,24 +198,38 @@
         state.isLoading = true;
         
         try {
-            // Load user data
+            // Load user data - ALWAYS refresh from API if owner
             if (state.isOwner) {
-                // Get profile from auth
-                const response = await API.auth.getProfile();
-                state.user = response.data?.user || Auth.getUser();
+                try {
+                    const response = await API.auth.getProfile();
+                    state.user = response.data?.user || Auth.getUser();
+                    // Update local storage with fresh data
+                    Auth.setUser(state.user);
+                } catch (e) {
+                    console.warn('Could not refresh profile, using cached data');
+                    state.user = Auth.getUser();
+                }
             } else {
-                // Get public profile (would need backend endpoint)
-                // For now, just use mock data
-                state.user = { fullName: 'مستخدم', username: 'user' };
+                // For now use cached data
+                state.user = Auth.getUser();
             }
+            
+            if (!state.user) {
+                Toast.error('خطأ', 'يرجى تسجيل الدخول أولاً');
+                window.location.href = CONFIG.ROUTES.LOGIN;
+                return;
+            }
+            
+            console.log('Profile loaded:', state.user);
             
             // Render profile
             renderProfile();
             
-            // Load additional data
+            // Load additional data in parallel
             await Promise.all([
                 loadServices(),
                 loadReviews(),
+                loadMyStats(),
             ]);
             
             // Render tabs content
@@ -232,6 +246,30 @@
             Toast.error('خطأ', 'تعذر تحميل الملف الشخصي');
         } finally {
             state.isLoading = false;
+        }
+    }
+    
+    // Load user stats from API
+    async function loadMyStats() {
+        try {
+            if (state.user?.role === 'seller') {
+                const response = await API.stats.getMyStats();
+                const stats = response.data || {};
+                
+                // Update stats display
+                if (elements.statOrders) {
+                    elements.statOrders.textContent = stats.completedOrders || 0;
+                }
+                if (elements.statRating) {
+                    const rating = stats.averageRating || 0;
+                    elements.statRating.textContent = rating.toFixed(1);
+                }
+                
+                // Store for achievements
+                state.myStats = stats;
+            }
+        } catch (error) {
+            console.warn('Could not load stats:', error);
         }
     }
     
@@ -436,9 +474,14 @@
     
     async function loadReviews() {
         try {
-            // This would need a backend endpoint to get reviews for a user
-            // For now, use mock data
-            state.reviews = [];
+            // Get reviews for this seller
+            if (state.user?.role === 'seller') {
+                const sellerId = state.user.id || state.user._id;
+                const response = await API.get(CONFIG.ENDPOINTS.SELLER_REVIEWS(sellerId));
+                state.reviews = response.data?.reviews || [];
+            } else {
+                state.reviews = [];
+            }
             
             if (elements.reviewsCount) {
                 elements.reviewsCount.textContent = state.reviews.length;
@@ -448,7 +491,8 @@
             renderLatestReviews();
             
         } catch (error) {
-            console.error('Failed to load reviews:', error);
+            console.warn('Could not load reviews:', error);
+            state.reviews = [];
         }
     }
     
