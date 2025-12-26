@@ -164,12 +164,18 @@
         
         if (state.orders.length === 0) {
             if (elements.ordersTableWrapper) elements.ordersTableWrapper.style.display = 'none';
-            if (elements.ordersEmpty) elements.ordersEmpty.style.display = 'flex';
+            if (elements.ordersEmpty) {
+                elements.ordersEmpty.classList.remove('hidden');
+                elements.ordersEmpty.style.display = 'block';
+            }
             return;
         }
         
         if (elements.ordersTableWrapper) elements.ordersTableWrapper.style.display = 'block';
-        if (elements.ordersEmpty) elements.ordersEmpty.style.display = 'none';
+        if (elements.ordersEmpty) {
+            elements.ordersEmpty.classList.add('hidden');
+            elements.ordersEmpty.style.display = 'none';
+        }
         
         const recentOrders = state.orders.slice(0, 5);
         
@@ -229,12 +235,18 @@
         
         if (state.services.length === 0) {
             if (elements.servicesTableWrapper) elements.servicesTableWrapper.style.display = 'none';
-            if (elements.servicesEmpty) elements.servicesEmpty.style.display = 'flex';
+            if (elements.servicesEmpty) {
+                elements.servicesEmpty.classList.remove('hidden');
+                elements.servicesEmpty.style.display = 'block';
+            }
             return;
         }
         
         if (elements.servicesTableWrapper) elements.servicesTableWrapper.style.display = 'block';
-        if (elements.servicesEmpty) elements.servicesEmpty.style.display = 'none';
+        if (elements.servicesEmpty) {
+            elements.servicesEmpty.classList.add('hidden');
+            elements.servicesEmpty.style.display = 'none';
+        }
         
         const recentServices = state.services.slice(0, 5);
         
