@@ -62,6 +62,9 @@ const CONFIG = {
         LOGIN: '/auth/login',
         REGISTER: '/auth/register',
         ME: '/auth/me',
+        PROFILE: '/auth/profile',              // ← Added: for profile updates
+        PASSWORD: '/auth/password',             // ← Added: for password changes
+        ACTIVATE_SELLER: '/auth/activate-seller', // ← Added: for seller activation
         
         // Services
         SERVICES: '/services',
@@ -75,14 +78,15 @@ const CONFIG = {
         // Reviews
         REVIEWS: '/reviews',
         SERVICE_REVIEWS: (serviceId) => `/reviews/service/${serviceId}`,
+        SELLER_REVIEWS: (sellerId) => `/reviews/seller/${sellerId}`, // ← Added
         
         // Chat
         CHATS: '/chats',
         CHAT_BY_ID: (id) => `/chats/${id}`,
         
-        // User
-        USERS: '/users',
-        USER_BY_ID: (id) => `/users/${id}`,
+        // Stats
+        STATS_OVERVIEW: '/stats/overview',      // ← Added
+        MY_STATS: '/my-stats',                  // ← Added
     },
     
     // ─────────────────────────────────────────────────────────────────────────

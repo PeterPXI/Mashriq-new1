@@ -237,16 +237,34 @@ const API = {
     },
     
     // ─────────────────────────────────────────────────────────────────────────
-    // Users Endpoints
+    // Users & Profile Endpoints
     // ─────────────────────────────────────────────────────────────────────────
     
     users: {
-        getById(id) {
-            return API.get(CONFIG.ENDPOINTS.USER_BY_ID(id));
+        updateProfile(userData) {
+            return API.put(CONFIG.ENDPOINTS.PROFILE, userData);
         },
         
-        updateProfile(userData) {
-            return API.put(CONFIG.ENDPOINTS.ME, userData);
+        changePassword(currentPassword, newPassword) {
+            return API.put(CONFIG.ENDPOINTS.PASSWORD, { currentPassword, newPassword });
+        },
+        
+        activateSeller() {
+            return API.post(CONFIG.ENDPOINTS.ACTIVATE_SELLER);
+        },
+    },
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Stats Endpoints
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    stats: {
+        getOverview() {
+            return API.get(CONFIG.ENDPOINTS.STATS_OVERVIEW);
+        },
+        
+        getMyStats() {
+            return API.get(CONFIG.ENDPOINTS.MY_STATS);
         },
     },
 };
@@ -271,3 +289,4 @@ Object.freeze(API.orders);
 Object.freeze(API.reviews);
 Object.freeze(API.chats);
 Object.freeze(API.users);
+Object.freeze(API.stats);

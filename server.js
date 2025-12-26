@@ -617,15 +617,50 @@ app.get('/api/my-stats', authenticateToken, async (req, res) => {
 
 // ============ ERROR HANDLING & CATCH-ALL ============
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err);
+// Global Error Handler (for API routes only)
+app.use('/api', (err, req, res, next) => {
+  console.error('API Error:', err);
   return error(res, 'Internal Server Error', 'INTERNAL_SERVER_ERROR', 500);
 });
 
-// Catch-all: API 404
-app.use((req, res) => {
+// API 404 Handler - JSON response for API routes ONLY
+app.use('/api/*', (req, res) => {
   return error(res, 'API endpoint not found', 'ENDPOINT_NOT_FOUND', 404);
+});
+
+// ============ FRONTEND CATCH-ALL (SPA SUPPORT) ============
+// This MUST come AFTER all API routes
+// Serves index.html for any non-API, non-file request
+
+app.get('/app/*', (req, res) => {
+  // Check if file exists first
+  const filePath = path.join(__dirname, 'public', req.path);
+  const fs = require('fs');
+  
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    // File exists, let static middleware handle it (shouldn't reach here)
+    return res.sendFile(filePath);
+  }
+  
+  // Check if it's a directory with index.html
+  const indexPath = path.join(filePath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  
+  // Check if .html extension is missing
+  const htmlPath = filePath.endsWith('.html') ? filePath : filePath + '.html';
+  if (fs.existsSync(htmlPath)) {
+    return res.sendFile(htmlPath);
+  }
+  
+  // Fall back to main index.html for SPA routing
+  res.sendFile(path.join(__dirname, 'public', 'app', 'index.html'));
+});
+
+// Ultimate fallback - redirect to app
+app.use((req, res) => {
+  res.redirect('/app/');
 });
 
 // ============ START SERVER ============
