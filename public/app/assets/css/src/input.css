@@ -15,11 +15,18 @@
   html {
     direction: rtl;
     text-align: right;
+    overflow-x: hidden;
   }
   
   body {
     @apply font-sans antialiased bg-gray-50 text-gray-900;
     min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Reset box-sizing */
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
   
   /* Arabic Font Import */
