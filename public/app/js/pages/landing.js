@@ -230,6 +230,11 @@
     // ─────────────────────────────────────────────────────────────────────────
     
     function setupScrollAnimations() {
+        // Skip if browser doesn't support IntersectionObserver
+        if (!('IntersectionObserver' in window)) {
+            return;
+        }
+        
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -238,16 +243,24 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in-up');
+                    entry.target.classList.add('animated');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
         
-        // Observe sections
-        document.querySelectorAll('.section-header, .step-card, .trust-feature, .service-card').forEach(el => {
-            el.style.opacity = '0';
-            observer.observe(el);
+        // Observe sections - but only hide elements that are NOT already visible
+        document.querySelectorAll('.section-header, .step-card, .trust-feature').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            // Only animate elements that are below the fold (not yet visible)
+            if (rect.top > window.innerHeight) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            }
         });
     }
     
