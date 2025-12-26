@@ -22,6 +22,7 @@ const Navbar = {
         container.innerHTML = `
             <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Main Row -->
                     <div class="flex items-center justify-between h-16">
                         <!-- Logo -->
                         <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-2 font-bold text-xl text-gray-900 hover:text-primary-600 transition-colors">
@@ -61,31 +62,54 @@ const Navbar = {
                             ${isLoggedIn ? this.renderLoggedIn(user, isSeller) : this.renderLoggedOut()}
                             
                             <!-- Mobile Toggle -->
-                            <button class="md:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-gray-100 transition-colors" id="navbarToggle" aria-label="فتح القائمة">
-                                <span class="w-5 h-0.5 bg-gray-600 rounded-full transition-transform"></span>
-                                <span class="w-5 h-0.5 bg-gray-600 rounded-full transition-opacity"></span>
-                                <span class="w-5 h-0.5 bg-gray-600 rounded-full transition-transform"></span>
+                            <button class="md:hidden flex flex-col justify-center items-center gap-1 w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors" id="navbarToggle" aria-label="فتح القائمة">
+                                <span class="block w-5 h-0.5 bg-gray-600 rounded-full transition-all duration-300" id="hamburger1"></span>
+                                <span class="block w-5 h-0.5 bg-gray-600 rounded-full transition-all duration-300" id="hamburger2"></span>
+                                <span class="block w-5 h-0.5 bg-gray-600 rounded-full transition-all duration-300" id="hamburger3"></span>
                             </button>
                         </div>
                     </div>
-                    
-                    <!-- Mobile Menu -->
-                    <div class="hidden md:hidden pb-4" id="mobileMenu">
-                        <div class="flex flex-col gap-1 pt-2 border-t border-gray-100">
-                            <a href="${CONFIG.ROUTES.EXPLORE}" class="px-4 py-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors ${this.isActive('/explore') ? 'text-primary-600 bg-primary-50' : ''}">
+                </div>
+                
+                <!-- Mobile Menu (Outside the flex container) -->
+                <div class="hidden md:hidden border-t border-gray-100 bg-white" id="mobileMenu">
+                    <div class="max-w-7xl mx-auto px-4 py-4">
+                        <div class="flex flex-col gap-2">
+                            <a href="${CONFIG.ROUTES.EXPLORE}" class="px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-xl font-medium transition-colors ${this.isActive('/explore') ? 'text-primary-600 bg-primary-50' : ''}">
                                 استكشف الخدمات
                             </a>
                             ${isSeller ? `
-                                <a href="${CONFIG.ROUTES.SELLER_SERVICES}" class="px-4 py-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors ${this.isActive('/seller/services') ? 'text-primary-600 bg-primary-50' : ''}">
+                                <a href="${CONFIG.ROUTES.SELLER_SERVICES}" class="px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-xl font-medium transition-colors ${this.isActive('/seller/services') ? 'text-primary-600 bg-primary-50' : ''}">
                                     خدماتي
                                 </a>
                             ` : ''}
-                            ${!isLoggedIn ? `
+                            ${isLoggedIn ? `
+                                <div class="border-t border-gray-100 pt-3 mt-2">
+                                    <a href="${isSeller ? CONFIG.ROUTES.SELLER_DASHBOARD : CONFIG.ROUTES.BUYER_DASHBOARD}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
+                                            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                                        </svg>
+                                        لوحة التحكم
+                                    </a>
+                                    <a href="${CONFIG.ROUTES.PROFILE}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
+                                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                        </svg>
+                                        الملف الشخصي
+                                    </a>
+                                    <button class="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors" id="mobileLogoutBtn">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                                        </svg>
+                                        تسجيل الخروج
+                                    </button>
+                                </div>
+                            ` : `
                                 <div class="flex flex-col gap-2 pt-3 mt-2 border-t border-gray-100">
                                     <a href="${CONFIG.ROUTES.LOGIN}" class="px-4 py-3 text-center text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-colors">تسجيل الدخول</a>
                                     <a href="${CONFIG.ROUTES.REGISTER}" class="px-4 py-3 text-center text-white bg-primary-500 hover:bg-primary-600 rounded-xl font-medium transition-colors">إنشاء حساب</a>
                                 </div>
-                            ` : ''}
+                            `}
                         </div>
                     </div>
                 </div>
@@ -111,7 +135,7 @@ const Navbar = {
                         : `<span class="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">${initials}</span>`
                     }
                     <span class="hidden lg:block text-sm font-medium text-gray-700">${Auth.getUsername()}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 hidden sm:block">
                         <path d="M6 9l6 6 6-6"/>
                     </svg>
                 </button>
@@ -188,21 +212,30 @@ const Navbar = {
         // Mobile toggle
         const toggle = container.querySelector('#navbarToggle');
         const mobileMenu = container.querySelector('#mobileMenu');
+        const hamburger1 = container.querySelector('#hamburger1');
+        const hamburger2 = container.querySelector('#hamburger2');
+        const hamburger3 = container.querySelector('#hamburger3');
         
-        toggle?.addEventListener('click', () => {
-            mobileMenu?.classList.toggle('hidden');
-            // Animate hamburger
-            const spans = toggle.querySelectorAll('span');
-            if (mobileMenu?.classList.contains('hidden')) {
-                spans[0]?.classList.remove('rotate-45', 'translate-y-2');
-                spans[1]?.classList.remove('opacity-0');
-                spans[2]?.classList.remove('-rotate-45', '-translate-y-2');
-            } else {
-                spans[0]?.classList.add('rotate-45', 'translate-y-2');
-                spans[1]?.classList.add('opacity-0');
-                spans[2]?.classList.add('-rotate-45', '-translate-y-2');
-            }
-        });
+        if (toggle && mobileMenu) {
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                
+                if (isOpen) {
+                    // Close menu
+                    mobileMenu.classList.add('hidden');
+                    hamburger1?.classList.remove('rotate-45', 'translate-y-1.5');
+                    hamburger2?.classList.remove('opacity-0');
+                    hamburger3?.classList.remove('-rotate-45', '-translate-y-1.5');
+                } else {
+                    // Open menu
+                    mobileMenu.classList.remove('hidden');
+                    hamburger1?.classList.add('rotate-45', 'translate-y-1.5');
+                    hamburger2?.classList.add('opacity-0');
+                    hamburger3?.classList.add('-rotate-45', '-translate-y-1.5');
+                }
+            });
+        }
         
         // User dropdown
         const dropdown = container.querySelector('#userDropdown');
@@ -218,9 +251,17 @@ const Navbar = {
             dropdownMenu?.classList.add('hidden');
         });
         
-        // Logout button
+        // Logout button (desktop)
         const logoutBtn = container.querySelector('#logoutBtn');
         logoutBtn?.addEventListener('click', () => {
+            Auth.logout();
+            Toast.success('تم تسجيل الخروج', 'نراك قريباً!');
+            window.location.href = CONFIG.ROUTES.HOME;
+        });
+        
+        // Logout button (mobile)
+        const mobileLogoutBtn = container.querySelector('#mobileLogoutBtn');
+        mobileLogoutBtn?.addEventListener('click', () => {
             Auth.logout();
             Toast.success('تم تسجيل الخروج', 'نراك قريباً!');
             window.location.href = CONFIG.ROUTES.HOME;
