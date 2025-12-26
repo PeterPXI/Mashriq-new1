@@ -628,34 +628,20 @@ app.use('/api/*', (req, res) => {
   return error(res, 'API endpoint not found', 'ENDPOINT_NOT_FOUND', 404);
 });
 
-// ============ FRONTEND CATCH-ALL (SPA SUPPORT) ============
-// This MUST come AFTER all API routes
-// Serves index.html for any non-API, non-file request
+// ============ FRONTEND 404 HANDLING ============
+// This handles requests to /app/* that weren't served by static middleware
+// i.e., the file doesn't exist
 
-app.get('/app/*', (req, res) => {
-  // Check if file exists first
-  const filePath = path.join(__dirname, 'public', req.path);
-  const fs = require('fs');
+app.use('/app/*', (req, res) => {
+  // If we reached here, the file doesn't exist
+  // Return 404 page or redirect to home
+  console.log(`[404] Frontend file not found: ${req.path}`);
   
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    // File exists, let static middleware handle it (shouldn't reach here)
-    return res.sendFile(filePath);
-  }
+  // Option 1: Redirect to home
+  res.redirect('/app/');
   
-  // Check if it's a directory with index.html
-  const indexPath = path.join(filePath, 'index.html');
-  if (fs.existsSync(indexPath)) {
-    return res.sendFile(indexPath);
-  }
-  
-  // Check if .html extension is missing
-  const htmlPath = filePath.endsWith('.html') ? filePath : filePath + '.html';
-  if (fs.existsSync(htmlPath)) {
-    return res.sendFile(htmlPath);
-  }
-  
-  // Fall back to main index.html for SPA routing
-  res.sendFile(path.join(__dirname, 'public', 'app', 'index.html'));
+  // Option 2: Could also send a custom 404 page
+  // res.status(404).sendFile(path.join(__dirname, 'public', 'app', '404.html'));
 });
 
 // Ultimate fallback - redirect to app
