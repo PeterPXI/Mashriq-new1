@@ -38,6 +38,8 @@ const CONFIG = {
         EXPLORE: '/app/explore.html',
         SERVICE: '/app/service.html',
         CHECKOUT: '/app/checkout.html',
+        ORDER: '/app/order.html',
+        PROFILE: '/app/profile.html',
         
         // Buyer Routes
         BUYER_DASHBOARD: '/app/buyer/dashboard.html',
