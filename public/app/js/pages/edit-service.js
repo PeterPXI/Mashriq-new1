@@ -169,9 +169,11 @@
     function populateForm() {
         const service = state.service;
         
-        // Status
+        // Status (active = isActive && !isPaused)
         if (elements.serviceStatus) {
-            elements.serviceStatus.checked = service.status === 'active';
+            const isActive = service.isActive !== false;
+            const isPaused = service.isPaused === true;
+            elements.serviceStatus.checked = isActive && !isPaused;
         }
         
         // Basic info

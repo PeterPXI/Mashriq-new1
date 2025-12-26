@@ -300,6 +300,20 @@ const serviceSchema = new mongoose.Schema({
 });
 
 // ============================================================
+// INSTANCE METHODS
+// ============================================================
+
+/**
+ * Check if a user is the owner of this service.
+ * @param {string|ObjectId} userId - The user ID to check
+ * @returns {boolean} True if the user owns this service
+ */
+serviceSchema.methods.isOwner = function(userId) {
+    if (!userId) return false;
+    return this.sellerId.toString() === userId.toString();
+};
+
+// ============================================================
 // INDEXES
 // Optimize database queries for common access patterns.
 // ============================================================

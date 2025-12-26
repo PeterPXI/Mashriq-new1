@@ -486,7 +486,16 @@ app.put('/api/services/:id', authenticateToken, async (req, res) => {
     if (deliveryTime) service.deliveryDays = deliveryTime;
     if (revisions !== undefined) service.revisions = revisions;
     if (requirements !== undefined) service.requirements = requirements;
-    if (status && ['active', 'paused'].includes(status)) service.status = status;
+    
+    // Handle status: 'active' -> isActive=true, isPaused=false
+    // Handle status: 'paused' -> isActive=true, isPaused=true
+    if (status === 'active') {
+      service.isActive = true;
+      service.isPaused = false;
+    } else if (status === 'paused') {
+      service.isActive = true;
+      service.isPaused = true;
+    }
     
     await service.save();
     
