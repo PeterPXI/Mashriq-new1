@@ -10,108 +10,135 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/order.css">
 </head>
-<body>
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container py-8">
+    <main class="py-6 lg:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Breadcrumb -->
-            <nav class="breadcrumb" aria-label="التنقل">
-                <a href="/app/">الرئيسية</a>
-                <span class="breadcrumb-separator">/</span>
-                <a href="#" id="ordersLink">طلباتي</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current" id="orderNumber">جاري التحميل...</span>
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="التنقل">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <a href="#" id="ordersLink" class="hover:text-primary-600 transition-colors">طلباتي</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium" id="orderNumber">جاري التحميل...</span>
             </nav>
             
             <!-- Order Content -->
-            <div class="order-layout" id="orderContent">
+            <div class="grid lg:grid-cols-3 gap-6" id="orderContent">
                 
                 <!-- Order Main -->
-                <div class="order-main">
+                <div class="lg:col-span-2 space-y-6">
                     
                     <!-- Order Header -->
-                    <div class="order-header" id="orderHeader">
-                        <div class="order-header-skeleton">
-                            <div class="skeleton skeleton-text" style="width: 60%; height: 32px;"></div>
-                            <div class="skeleton skeleton-text mt-2" style="width: 40%;"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6" id="orderHeader">
+                        <div class="space-y-2">
+                            <div class="h-7 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                            <div class="h-5 bg-gray-200 rounded animate-pulse w-1/2"></div>
                         </div>
                     </div>
                     
                     <!-- Timeline Section -->
-                    <div class="order-section">
-                        <h2 class="order-section-title">مسار الطلب</h2>
-                        <div class="timeline" id="orderTimeline">
-                            <div class="timeline-item">
-                                <div class="skeleton skeleton-circle" style="width: 40px; height: 40px;"></div>
-                                <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-6">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                            مسار الطلب
+                        </h2>
+                        <div class="space-y-4" id="orderTimeline">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>
+                                <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Service Info -->
-                    <div class="order-section">
-                        <h2 class="order-section-title">تفاصيل الخدمة</h2>
-                        <div class="service-info-card" id="serviceInfo">
-                            <div class="skeleton skeleton-image" style="width: 120px; height: 90px;"></div>
-                            <div style="flex: 1;">
-                                <div class="skeleton skeleton-text" style="width: 80%;"></div>
-                                <div class="skeleton skeleton-text mt-2" style="width: 50%;"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-6">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+                            </svg>
+                            تفاصيل الخدمة
+                        </h2>
+                        <div class="flex gap-4" id="serviceInfo">
+                            <div class="w-28 h-20 bg-gray-200 rounded-xl animate-pulse flex-shrink-0"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Requirements (if buyer) -->
-                    <div class="order-section" id="requirementsSection" style="display: none;">
-                        <h2 class="order-section-title">متطلبات العميل</h2>
-                        <div class="requirements-content" id="requirementsContent"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="requirementsSection">
+                        <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-4">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            </svg>
+                            متطلبات العميل
+                        </h2>
+                        <div class="text-gray-600" id="requirementsContent"></div>
                     </div>
                     
                     <!-- Delivery (if delivered) -->
-                    <div class="order-section" id="deliverySection" style="display: none;">
-                        <h2 class="order-section-title">التسليم</h2>
-                        <div class="delivery-content" id="deliveryContent"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="deliverySection">
+                        <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-4">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                            التسليم
+                        </h2>
+                        <div class="text-gray-600" id="deliveryContent"></div>
                     </div>
                     
                     <!-- Actions -->
-                    <div class="order-actions" id="orderActions">
+                    <div class="flex flex-wrap gap-3" id="orderActions">
                         <!-- Dynamic actions based on order status and user role -->
                     </div>
                     
                 </div>
                 
                 <!-- Order Sidebar -->
-                <div class="order-sidebar">
+                <div class="lg:col-span-1 space-y-6">
                     
                     <!-- Order Summary -->
-                    <div class="order-summary-card" id="orderSummary">
-                        <h3 class="order-summary-title">ملخص الطلب</h3>
-                        <div class="order-summary-body">
-                            <div class="skeleton skeleton-text"></div>
-                            <div class="skeleton skeleton-text mt-2"></div>
-                            <div class="skeleton skeleton-text mt-2"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6" id="orderSummary">
+                        <h3 class="font-bold text-gray-900 mb-4">ملخص الطلب</h3>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
                         </div>
                     </div>
                     
                     <!-- Seller/Buyer Card -->
-                    <div class="user-card" id="userCard">
-                        <div class="skeleton skeleton-circle" style="width: 48px; height: 48px;"></div>
-                        <div style="flex: 1;">
-                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
-                            <div class="skeleton skeleton-text mt-2" style="width: 40%;"></div>
+                    <div class="bg-white rounded-2xl shadow-sm p-6" id="userCard">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 bg-gray-200 rounded-xl animate-pulse"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Quick Actions -->
-                    <div class="sidebar-actions" id="sidebarActions">
-                        <a href="#" class="btn btn-outline-secondary btn-block" id="chatBtn">
+                    <div class="space-y-3" id="sidebarActions">
+                        <a href="#" class="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors" id="chatBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
                             </svg>
@@ -129,75 +156,76 @@
     <!-- Footer -->
     <div id="footer"></div>
     
-    <!-- Modals -->
-    <div class="modal-overlay" id="deliveryModal" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">تسليم الطلب</h3>
-                <button class="modal-close" id="closeDeliveryModal">&times;</button>
+    <!-- Delivery Modal -->
+    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="deliveryModal">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900">تسليم الطلب</h3>
+                <button class="text-gray-400 hover:text-gray-600 text-2xl" id="closeDeliveryModal">&times;</button>
             </div>
             <form id="deliveryForm">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="deliveryMessage" class="form-label">رسالة التسليم</label>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label for="deliveryMessage" class="block text-sm font-medium text-gray-700 mb-1">رسالة التسليم</label>
                         <textarea 
                             id="deliveryMessage" 
-                            class="form-control" 
                             rows="4"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                             placeholder="اشرح ما تم تسليمه وأضف أي تعليمات..."
                             required
                         ></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="deliveryFiles" class="form-label">روابط الملفات (اختياري)</label>
+                    <div>
+                        <label for="deliveryFiles" class="block text-sm font-medium text-gray-700 mb-1">روابط الملفات (اختياري)</label>
                         <input 
                             type="text" 
                             id="deliveryFiles" 
-                            class="form-control" 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                             placeholder="أضف روابط الملفات مفصولة بفاصلة"
                         >
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelDelivery">إلغاء</button>
-                    <button type="submit" class="btn btn-primary" id="submitDelivery">تسليم الطلب</button>
+                <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
+                    <button type="button" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="cancelDelivery">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors" id="submitDelivery">تسليم الطلب</button>
                 </div>
             </form>
         </div>
     </div>
     
-    <div class="modal-overlay" id="reviewModal" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">تقييم الخدمة</h3>
-                <button class="modal-close" id="closeReviewModal">&times;</button>
+    <!-- Review Modal -->
+    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="reviewModal">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900">تقييم الخدمة</h3>
+                <button class="text-gray-400 hover:text-gray-600 text-2xl" id="closeReviewModal">&times;</button>
             </div>
             <form id="reviewForm">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="form-label">التقييم</label>
-                        <div class="rating-input" id="ratingInput">
-                            <button type="button" class="rating-star-btn" data-rating="1">★</button>
-                            <button type="button" class="rating-star-btn" data-rating="2">★</button>
-                            <button type="button" class="rating-star-btn" data-rating="3">★</button>
-                            <button type="button" class="rating-star-btn" data-rating="4">★</button>
-                            <button type="button" class="rating-star-btn" data-rating="5">★</button>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">التقييم</label>
+                        <div class="flex justify-center gap-2" id="ratingInput">
+                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="1">★</button>
+                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="2">★</button>
+                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="3">★</button>
+                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="4">★</button>
+                            <button type="button" class="text-3xl text-amber-400 rating-star-btn" data-rating="5">★</button>
                         </div>
                         <input type="hidden" id="ratingValue" value="5">
                     </div>
-                    <div class="form-group">
-                        <label for="reviewComment" class="form-label">تعليقك (اختياري)</label>
+                    <div>
+                        <label for="reviewComment" class="block text-sm font-medium text-gray-700 mb-1">تعليقك (اختياري)</label>
                         <textarea 
                             id="reviewComment" 
-                            class="form-control" 
                             rows="3"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                             placeholder="شاركنا تجربتك مع هذه الخدمة..."
                         ></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelReview">إلغاء</button>
-                    <button type="submit" class="btn btn-primary" id="submitReview">إرسال التقييم</button>
+                <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
+                    <button type="button" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="cancelReview">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors" id="submitReview">إرسال التقييم</button>
                 </div>
             </form>
         </div>

@@ -3,171 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="تعديل الخدمة على منصة مشرق">
+    <meta name="description" content="تعديل خدمة على منصة مشرق">
     
     <title>تعديل الخدمة | مشرق</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/dashboard.css">
 </head>
-<body class="dashboard-page">
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="dashboard-container" style="max-width: 800px;">
+    <main class="py-6 lg:py-10">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Page Header -->
-            <div class="dashboard-header">
-                <div class="dashboard-welcome">
-                    <nav class="breadcrumb mb-2" aria-label="التنقل">
-                        <a href="/app/seller/dashboard.html">لوحة التحكم</a>
-                        <span class="breadcrumb-separator">/</span>
-                        <a href="/app/seller/services.html">خدماتي</a>
-                        <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-current">تعديل الخدمة</span>
-                    </nav>
-                    <h1 class="dashboard-title">تعديل الخدمة</h1>
-                </div>
+            <div class="mb-8">
+                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-primary-600 text-sm mb-3 transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                    العودة لخدماتي
+                </a>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">تعديل الخدمة</h1>
             </div>
             
             <!-- Loading State -->
-            <div class="dashboard-section" id="loadingState">
-                <div class="service-form" style="padding: var(--spacing-6);">
-                    <div class="skeleton skeleton-text" style="width: 40%; height: 24px;"></div>
-                    <div class="skeleton skeleton-text mt-4" style="width: 100%; height: 48px;"></div>
-                    <div class="skeleton skeleton-text mt-4" style="width: 30%; height: 24px;"></div>
-                    <div class="skeleton skeleton-text mt-4" style="width: 100%; height: 48px;"></div>
-                    <div class="skeleton skeleton-text mt-4" style="width: 50%; height: 24px;"></div>
-                    <div class="skeleton skeleton-text mt-4" style="width: 100%; height: 120px;"></div>
-                </div>
-            </div>
-            
-            <!-- Error State -->
-            <div class="dashboard-section" id="errorState" style="display: none;">
-                <div class="empty-state" style="padding: var(--spacing-12);">
-                    <div class="empty-state-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 8v4M12 16h.01"/>
-                        </svg>
-                    </div>
-                    <h3 class="empty-state-title">تعذر تحميل الخدمة</h3>
-                    <p class="empty-state-description" id="errorMessage">حدث خطأ أثناء تحميل بيانات الخدمة</p>
-                    <div class="flex gap-3 mt-4">
-                        <button class="btn btn-primary" onclick="location.reload()">إعادة المحاولة</button>
-                        <a href="/app/seller/services.html" class="btn btn-secondary">العودة للخدمات</a>
-                    </div>
+            <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" id="loadingState">
+                <div class="space-y-6">
+                    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/4"></div>
+                    <div class="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/4"></div>
+                    <div class="h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+                    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/4"></div>
+                    <div class="h-32 bg-gray-200 rounded-xl animate-pulse"></div>
                 </div>
             </div>
             
             <!-- Service Form -->
-            <div class="dashboard-section" id="formSection" style="display: none;">
-                <form id="serviceForm" class="service-form">
-                    
-                    <!-- Status Toggle -->
-                    <div class="form-section">
-                        <div class="status-toggle">
-                            <div class="status-toggle-info">
-                                <h3 class="status-toggle-title">حالة الخدمة</h3>
-                                <p class="status-toggle-description">قم بتفعيل أو إيقاف الخدمة</p>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="serviceStatus" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
+            <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8 hidden" id="formContainer">
+                <form id="serviceForm" class="space-y-8">
                     
                     <!-- Basic Info -->
-                    <div class="form-section">
-                        <h3 class="form-section-title">المعلومات الأساسية</h3>
+                    <div class="space-y-5 pb-8 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900">المعلومات الأساسية</h3>
                         
-                        <div class="form-group">
-                            <label for="title" class="form-label">عنوان الخدمة <span class="required">*</span></label>
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">عنوان الخدمة <span class="text-red-500">*</span></label>
                             <input 
                                 type="text" 
                                 id="title" 
-                                class="form-control" 
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 placeholder="مثال: سأصمم لك شعار احترافي لعلامتك التجارية"
                                 required
                                 minlength="10"
                                 maxlength="100"
                             >
-                            <span class="form-hint">اكتب عنواناً واضحاً وجذاباً (10-100 حرف)</span>
-                            <span class="form-error" id="titleError"></span>
+                            <p class="text-xs text-gray-500 mt-1">اكتب عنواناً واضحاً وجذاباً (10-100 حرف)</p>
+                            <p class="text-xs text-red-500 mt-1 hidden" id="titleError"></p>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="category" class="form-label">التخصص <span class="required">*</span></label>
-                            <select id="category" class="form-control" required>
+                        <div>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">التخصص <span class="text-red-500">*</span></label>
+                            <select id="category" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
                                 <option value="">اختر التخصص</option>
                             </select>
-                            <span class="form-error" id="categoryError"></span>
+                            <p class="text-xs text-red-500 mt-1 hidden" id="categoryError"></p>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="description" class="form-label">وصف الخدمة <span class="required">*</span></label>
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">وصف الخدمة <span class="text-red-500">*</span></label>
                             <textarea 
                                 id="description" 
-                                class="form-control" 
                                 rows="6"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                                 placeholder="اشرح خدمتك بالتفصيل: ماذا ستقدم؟ ما المميزات؟ لماذا يختارك العميل؟"
                                 required
                                 minlength="50"
                                 maxlength="2000"
                             ></textarea>
-                            <span class="form-hint">وصف تفصيلي للخدمة (50-2000 حرف)</span>
-                            <span class="form-error" id="descriptionError"></span>
+                            <p class="text-xs text-gray-500 mt-1">وصف تفصيلي للخدمة (50-2000 حرف)</p>
+                            <p class="text-xs text-red-500 mt-1 hidden" id="descriptionError"></p>
                         </div>
                     </div>
                     
                     <!-- Pricing -->
-                    <div class="form-section">
-                        <h3 class="form-section-title">التسعير والتسليم</h3>
+                    <div class="space-y-5 pb-8 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900">التسعير والتسليم</h3>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="price" class="form-label">السعر ($) <span class="required">*</span></label>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">السعر ($) <span class="text-red-500">*</span></label>
                                 <input 
                                     type="number" 
                                     id="price" 
-                                    class="form-control" 
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     placeholder="25"
                                     required
                                     min="5"
                                     max="10000"
                                     step="1"
                                 >
-                                <span class="form-hint">الحد الأدنى: $5</span>
-                                <span class="form-error" id="priceError"></span>
+                                <p class="text-xs text-gray-500 mt-1">الحد الأدنى: $5</p>
+                                <p class="text-xs text-red-500 mt-1 hidden" id="priceError"></p>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="deliveryTime" class="form-label">مدة التسليم (أيام) <span class="required">*</span></label>
+                            <div>
+                                <label for="deliveryTime" class="block text-sm font-medium text-gray-700 mb-1">مدة التسليم (أيام) <span class="text-red-500">*</span></label>
                                 <input 
                                     type="number" 
                                     id="deliveryTime" 
-                                    class="form-control" 
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     placeholder="3"
                                     required
                                     min="1"
                                     max="90"
                                 >
-                                <span class="form-error" id="deliveryTimeError"></span>
+                                <p class="text-xs text-red-500 mt-1 hidden" id="deliveryTimeError"></p>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="revisions" class="form-label">عدد التعديلات</label>
+                            <div>
+                                <label for="revisions" class="block text-sm font-medium text-gray-700 mb-1">عدد التعديلات</label>
                                 <input 
                                     type="number" 
                                     id="revisions" 
-                                    class="form-control" 
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     placeholder="2"
                                     value="1"
                                     min="0"
@@ -178,109 +145,89 @@
                     </div>
                     
                     <!-- Media -->
-                    <div class="form-section">
-                        <h3 class="form-section-title">الوسائط</h3>
+                    <div class="space-y-5 pb-8 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900">الوسائط</h3>
                         
-                        <div class="form-group">
-                            <label for="image" class="form-label">رابط صورة الخدمة</label>
+                        <div>
+                            <label for="image" class="block text-sm font-medium text-gray-700 mb-1">رابط صورة الخدمة</label>
                             <input 
                                 type="url" 
                                 id="image" 
-                                class="form-control" 
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 placeholder="https://example.com/image.jpg"
                             >
-                            <span class="form-hint">استخدم رابط صورة مباشر (PNG, JPG, WEBP)</span>
-                            <span class="form-error" id="imageError"></span>
+                            <p class="text-xs text-gray-500 mt-1">استخدم رابط صورة مباشر (PNG, JPG, WEBP)</p>
+                            <p class="text-xs text-red-500 mt-1 hidden" id="imageError"></p>
                         </div>
                         
-                        <div class="image-preview" id="imagePreview" style="display: none;">
-                            <img id="previewImg" alt="معاينة الصورة">
-                            <button type="button" class="remove-preview" id="removePreview">×</button>
+                        <div class="hidden" id="imagePreview">
+                            <div class="relative inline-block">
+                                <img id="previewImg" alt="معاينة الصورة" class="w-48 h-36 object-cover rounded-xl">
+                                <button type="button" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-lg flex items-center justify-center hover:bg-red-600 transition-colors" id="removePreview">×</button>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Requirements -->
-                    <div class="form-section">
-                        <h3 class="form-section-title">متطلبات العميل</h3>
+                    <div class="space-y-5 pb-8 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900">متطلبات العميل</h3>
                         
-                        <div class="form-group">
-                            <label for="requirements" class="form-label">ما الذي تحتاجه من العميل؟</label>
+                        <div>
+                            <label for="requirements" class="block text-sm font-medium text-gray-700 mb-1">ما الذي تحتاجه من العميل؟</label>
                             <textarea 
                                 id="requirements" 
-                                class="form-control" 
                                 rows="3"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                                 placeholder="مثال: الشعار القديم (إن وجد)، ألوان العلامة التجارية، أفكار أو إلهام..."
                                 maxlength="500"
                             ></textarea>
-                            <span class="form-hint">اختياري - ساعد العميل على تقديم المعلومات المطلوبة</span>
+                            <p class="text-xs text-gray-500 mt-1">اختياري - ساعد العميل على تقديم المعلومات المطلوبة</p>
                         </div>
                     </div>
                     
+                    <!-- Status -->
+                    <div class="space-y-5">
+                        <h3 class="text-lg font-bold text-gray-900">حالة الخدمة</h3>
+                        
+                        <div class="flex items-center gap-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="isActive" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                            </label>
+                            <span class="text-sm font-medium text-gray-700">الخدمة نشطة ومتاحة للطلب</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert -->
+                    <div class="hidden p-4 rounded-xl" id="formAlert"></div>
+                    
                     <!-- Submit -->
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="history.back()">إلغاء</button>
-                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                    <div class="flex justify-end gap-3 pt-6">
+                        <button type="button" class="px-5 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors" onclick="history.back()">إلغاء</button>
+                        <button type="submit" class="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors" id="submitBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-                                <polyline points="17 21 17 13 7 13 7 21"/>
-                                <polyline points="7 3 7 8 15 8"/>
+                                <polyline points="17,21 17,13 7,13 7,21"/>
+                                <polyline points="7,3 7,8 15,8"/>
                             </svg>
                             حفظ التغييرات
                         </button>
                     </div>
                     
-                    <!-- Alert -->
-                    <div class="auth-alert" id="formAlert" style="display: none;"></div>
-                    
                 </form>
             </div>
             
-            <!-- Service Stats (Read-only) -->
-            <div class="dashboard-section" id="statsSection" style="display: none;">
-                <div class="dashboard-section-header">
-                    <h2 class="dashboard-section-title">إحصائيات الخدمة</h2>
+            <!-- Error State -->
+            <div class="bg-white rounded-2xl shadow-sm p-12 text-center hidden" id="errorState">
+                <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-red-500">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M15 9l-6 6M9 9l6 6"/>
+                    </svg>
                 </div>
-                <div class="dashboard-section-body">
-                    <div class="stats-grid stats-grid-mini">
-                        <div class="stat-card stat-card-mini">
-                            <div class="stat-card-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
-                                    <rect x="9" y="3" width="6" height="4" rx="1"/>
-                                </svg>
-                            </div>
-                            <div class="stat-card-content">
-                                <div class="stat-card-value" id="ordersCount">0</div>
-                                <div class="stat-card-label">إجمالي الطلبات</div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card stat-card-mini">
-                            <div class="stat-card-icon warning">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                                </svg>
-                            </div>
-                            <div class="stat-card-content">
-                                <div class="stat-card-value" id="ratingValue">0.0</div>
-                                <div class="stat-card-label">متوسط التقييم</div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card stat-card-mini">
-                            <div class="stat-card-icon success">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </div>
-                            <div class="stat-card-content">
-                                <div class="stat-card-value" id="viewsCount">0</div>
-                                <div class="stat-card-label">المشاهدات</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">تعذر تحميل الخدمة</h3>
+                <p class="text-gray-500 mb-6" id="errorMessage">الخدمة غير موجودة أو لا تملك صلاحية تعديلها</p>
+                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">العودة لخدماتي</a>
             </div>
             
         </div>
@@ -299,158 +246,5 @@
     <script src="/app/js/components/navbar.js"></script>
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/pages/edit-service.js"></script>
-    
-    <style>
-        .form-section {
-            margin-bottom: var(--spacing-8);
-            padding-bottom: var(--spacing-6);
-            border-bottom: var(--border-width-thin) solid var(--color-border);
-        }
-        .form-section:last-of-type {
-            border-bottom: none;
-        }
-        .form-section-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text-primary);
-            margin-bottom: var(--spacing-4);
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: var(--spacing-4);
-        }
-        .form-actions {
-            display: flex;
-            gap: var(--spacing-3);
-            justify-content: flex-end;
-            padding-top: var(--spacing-4);
-        }
-        .required {
-            color: var(--color-error-500);
-        }
-        .image-preview {
-            position: relative;
-            display: inline-block;
-            margin-top: var(--spacing-3);
-        }
-        .image-preview img {
-            max-width: 200px;
-            max-height: 150px;
-            border-radius: var(--border-radius-lg);
-            object-fit: cover;
-        }
-        .remove-preview {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--color-error-500);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .service-form {
-            padding: var(--spacing-6);
-        }
-        
-        /* Status Toggle */
-        .status-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--spacing-4);
-            background-color: var(--color-secondary-50);
-            border-radius: var(--border-radius-lg);
-        }
-        .status-toggle-title {
-            font-size: var(--font-size-base);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text-primary);
-            margin: 0 0 var(--spacing-1);
-        }
-        .status-toggle-description {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-muted);
-            margin: 0;
-        }
-        
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 52px;
-            height: 28px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--color-secondary-300);
-            transition: .3s;
-            border-radius: 28px;
-        }
-        .toggle-slider::before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-            box-shadow: var(--shadow-sm);
-        }
-        .toggle-switch input:checked + .toggle-slider {
-            background-color: var(--color-success-500);
-        }
-        .toggle-switch input:checked + .toggle-slider::before {
-            transform: translateX(24px);
-        }
-        
-        /* Stats Mini in Edit Page */
-        .stats-grid-mini {
-            grid-template-columns: repeat(3, 1fr);
-            margin: 0;
-        }
-        .stat-card-mini {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-3);
-            padding: var(--spacing-3);
-        }
-        .stat-card-mini .stat-card-icon {
-            width: 36px;
-            height: 36px;
-        }
-        .stat-card-mini .stat-card-value {
-            font-size: var(--font-size-lg);
-            margin-bottom: 0;
-        }
-        .stat-card-mini .stat-card-label {
-            font-size: var(--font-size-xs);
-        }
-        
-        @media (max-width: 639px) {
-            .stats-grid-mini {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </body>
 </html>

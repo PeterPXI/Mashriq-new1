@@ -10,199 +10,201 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/checkout.css">
 </head>
-<body class="checkout-page">
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container py-8">
+    <main class="py-6 lg:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Breadcrumb -->
-            <nav class="breadcrumb" aria-label="مسار التنقل">
-                <a href="/app/">الرئيسية</a>
-                <span class="breadcrumb-separator">/</span>
-                <a href="/app/explore.html">الخدمات</a>
-                <span class="breadcrumb-separator">/</span>
-                <a href="#" id="serviceLink">الخدمة</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current">إتمام الطلب</span>
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="مسار التنقل">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <a href="/app/explore.html" class="hover:text-primary-600 transition-colors">الخدمات</a>
+                <span>/</span>
+                <a href="#" id="serviceLink" class="hover:text-primary-600 transition-colors">الخدمة</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium">إتمام الطلب</span>
             </nav>
             
             <!-- Page Header -->
-            <div class="checkout-header">
-                <h1 class="checkout-title">إتمام الطلب</h1>
-                <p class="checkout-subtitle">راجع تفاصيل طلبك قبل التأكيد</p>
+            <div class="mb-8">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">إتمام الطلب</h1>
+                <p class="text-gray-500">راجع تفاصيل طلبك قبل التأكيد</p>
             </div>
             
             <!-- Checkout Layout -->
-            <div class="checkout-layout" id="checkoutContent">
+            <div class="grid lg:grid-cols-3 gap-6" id="checkoutContent">
                 
                 <!-- Main Column -->
-                <div class="checkout-main">
+                <div class="lg:col-span-2 space-y-6">
                     
                     <!-- Service Summary Card -->
-                    <div class="checkout-card" id="serviceCard">
-                        <div class="checkout-card-header">
-                            <h2 class="checkout-card-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="bg-white rounded-2xl shadow-sm" id="serviceCard">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                                     <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
                                 </svg>
                                 الخدمة المطلوبة
                             </h2>
                         </div>
-                        <div class="checkout-card-body">
-                            <div class="service-summary" id="serviceSummary">
-                                <!-- Service summary skeleton -->
-                                <div class="service-summary-image">
-                                    <div class="skeleton skeleton-image"></div>
-                                </div>
-                                <div class="service-summary-info">
-                                    <div class="skeleton skeleton-text" style="width: 80%;"></div>
-                                    <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                        <div class="p-5">
+                            <div class="flex gap-4" id="serviceSummary">
+                                <div class="w-24 h-20 bg-gray-200 rounded-xl animate-pulse flex-shrink-0"></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Seller Info Card -->
-                    <div class="checkout-card" id="sellerCard">
-                        <div class="checkout-card-header">
-                            <h2 class="checkout-card-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="bg-white rounded-2xl shadow-sm" id="sellerCard">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
                                     <circle cx="12" cy="7" r="4"/>
                                 </svg>
                                 البائع
                             </h2>
                         </div>
-                        <div class="checkout-card-body">
-                            <div class="seller-summary" id="sellerSummary">
-                                <div class="skeleton skeleton-avatar avatar-lg"></div>
-                                <div class="flex-1">
-                                    <div class="skeleton skeleton-text" style="width: 120px;"></div>
-                                    <div class="skeleton skeleton-text" style="width: 80px;"></div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-4" id="sellerSummary">
+                                <div class="w-14 h-14 bg-gray-200 rounded-xl animate-pulse"></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-5 bg-gray-200 rounded animate-pulse w-32"></div>
+                                    <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Order Details Card -->
-                    <div class="checkout-card" id="orderDetailsCard">
-                        <div class="checkout-card-header">
-                            <h2 class="checkout-card-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="bg-white rounded-2xl shadow-sm" id="orderDetailsCard">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
                                     <polyline points="14,2 14,8 20,8"/>
                                     <line x1="16" y1="13" x2="8" y2="13"/>
                                     <line x1="16" y1="17" x2="8" y2="17"/>
-                                    <polyline points="10,9 9,9 8,9"/>
                                 </svg>
                                 تفاصيل التسليم
                             </h2>
                         </div>
-                        <div class="checkout-card-body">
-                            <div class="delivery-details" id="deliveryDetails">
-                                <div class="delivery-item">
-                                    <span class="delivery-label">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <div class="p-5">
+                            <div class="grid sm:grid-cols-2 gap-4" id="deliveryDetails">
+                                <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                                    <div class="w-10 h-10 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"/>
                                             <polyline points="12,6 12,12 16,14"/>
                                         </svg>
-                                        مدة التسليم
-                                    </span>
-                                    <span class="delivery-value" id="deliveryTime">-</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-500">مدة التسليم</div>
+                                        <div class="font-bold text-gray-900" id="deliveryTime">-</div>
+                                    </div>
                                 </div>
-                                <div class="delivery-item">
-                                    <span class="delivery-label">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                                    <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                             <polyline points="22,6 12,13 2,6"/>
                                         </svg>
-                                        عدد التعديلات
-                                    </span>
-                                    <span class="delivery-value" id="revisions">-</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-500">عدد التعديلات</div>
+                                        <div class="font-bold text-gray-900" id="revisions">-</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Requirements Card -->
-                    <div class="checkout-card" id="requirementsCard">
-                        <div class="checkout-card-header">
-                            <h2 class="checkout-card-title">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="bg-white rounded-2xl shadow-sm" id="requirementsCard">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
                                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
                                 </svg>
                                 ملاحظات للبائع (اختياري)
                             </h2>
                         </div>
-                        <div class="checkout-card-body">
+                        <div class="p-5">
                             <textarea 
                                 id="buyerNotes" 
-                                class="form-control" 
                                 rows="4"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                                 placeholder="أضف أي تفاصيل أو متطلبات إضافية تريد إخبار البائع بها..."
                             ></textarea>
-                            <p class="form-hint">هذه الملاحظات ستصل للبائع مباشرة بعد إتمام الطلب</p>
+                            <p class="text-xs text-gray-500 mt-2">هذه الملاحظات ستصل للبائع مباشرة بعد إتمام الطلب</p>
                         </div>
                     </div>
                     
                 </div>
                 
                 <!-- Sidebar (Order Summary) -->
-                <aside class="checkout-sidebar">
-                    <div class="order-summary-card" id="orderSummaryCard">
-                        <div class="order-summary-header">
-                            <h2 class="order-summary-title">ملخص الطلب</h2>
+                <aside class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-lg sticky top-24" id="orderSummaryCard">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="text-lg font-bold text-gray-900">ملخص الطلب</h2>
                         </div>
                         
-                        <div class="order-summary-body">
+                        <div class="p-5 space-y-4">
                             <!-- Price Breakdown -->
-                            <div class="price-breakdown" id="priceBreakdown">
-                                <div class="price-row">
+                            <div class="space-y-3" id="priceBreakdown">
+                                <div class="flex justify-between text-gray-600">
                                     <span>سعر الخدمة</span>
                                     <span id="basePrice">-</span>
                                 </div>
-                                <div class="price-row" id="extrasRow" style="display: none;">
+                                <div class="flex justify-between text-gray-600 hidden" id="extrasRow">
                                     <span>الإضافات</span>
                                     <span id="extrasPrice">$0</span>
                                 </div>
-                                <div class="price-row" id="feeRow" style="display: none;">
+                                <div class="flex justify-between text-gray-600 hidden" id="feeRow">
                                     <span>رسوم الخدمة</span>
                                     <span id="serviceFee">$0</span>
                                 </div>
                             </div>
                             
                             <!-- Total -->
-                            <div class="price-total">
-                                <span>الإجمالي</span>
-                                <span class="total-price" id="totalPrice">-</span>
+                            <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                                <span class="font-bold text-gray-900">الإجمالي</span>
+                                <span class="text-2xl font-bold text-primary-600" id="totalPrice">-</span>
                             </div>
                             
                             <!-- Trust Badges -->
-                            <div class="trust-badges">
-                                <div class="trust-badge">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <div class="space-y-2 pt-4 border-t border-gray-100">
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500">
                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                         <path d="M9 12l2 2 4-4"/>
                                     </svg>
                                     ضمان استرداد المال
                                 </div>
-                                <div class="trust-badge">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500">
                                         <circle cx="12" cy="12" r="10"/>
                                         <polyline points="12,6 12,12 16,14"/>
                                     </svg>
                                     تسليم في الموعد
                                 </div>
-                                <div class="trust-badge">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <div class="flex items-center gap-2 text-sm text-gray-600">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple-500">
                                         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
                                     </svg>
                                     دعم على مدار الساعة
@@ -210,7 +212,7 @@
                             </div>
                             
                             <!-- Submit Button -->
-                            <button type="button" class="btn btn-primary btn-lg btn-block" id="confirmOrderBtn">
+                            <button type="button" class="w-full flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-4 rounded-xl font-bold text-lg transition-colors mt-4" id="confirmOrderBtn">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                                     <polyline points="22,4 12,14.01 9,11.01"/>
@@ -219,9 +221,10 @@
                             </button>
                             
                             <!-- Terms -->
-                            <p class="checkout-terms">
+                            <p class="text-xs text-gray-500 text-center">
                                 بالضغط على "تأكيد الطلب" أنت توافق على 
-                                <a href="#">شروط الاستخدام</a> و <a href="#">سياسة الاسترداد</a>
+                                <a href="#" class="text-primary-600 hover:underline">شروط الاستخدام</a> و 
+                                <a href="#" class="text-primary-600 hover:underline">سياسة الاسترداد</a>
                             </p>
                         </div>
                     </div>
@@ -230,16 +233,16 @@
             </div>
             
             <!-- Error State -->
-            <div class="checkout-error" id="checkoutError" style="display: none;">
-                <div class="error-icon">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="checkoutError">
+                <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-red-500">
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M15 9l-6 6M9 9l6 6"/>
                     </svg>
                 </div>
-                <h2 class="error-title">حدث خطأ</h2>
-                <p class="error-message" id="errorMessage">تعذر تحميل بيانات الخدمة</p>
-                <a href="/app/explore.html" class="btn btn-primary">تصفح الخدمات</a>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">حدث خطأ</h2>
+                <p class="text-gray-500 mb-6" id="errorMessage">تعذر تحميل بيانات الخدمة</p>
+                <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">تصفح الخدمات</a>
             </div>
             
         </div>
@@ -249,21 +252,19 @@
     <div id="footer"></div>
     
     <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal" style="display: none;">
-        <div class="modal success-modal">
-            <div class="modal-body text-center">
-                <div class="success-icon">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                        <polyline points="22,4 12,14.01 9,11.01"/>
-                    </svg>
-                </div>
-                <h2 class="modal-title">تم إنشاء الطلب بنجاح! 🎉</h2>
-                <p class="modal-text">تم إرسال طلبك للبائع وسيبدأ بالعمل عليه قريباً</p>
-                <div class="modal-actions">
-                    <a href="#" class="btn btn-primary btn-lg" id="viewOrderBtn">عرض تفاصيل الطلب</a>
-                    <a href="/app/buyer/dashboard.html" class="btn btn-outline-secondary">العودة للوحة التحكم</a>
-                </div>
+    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="successModal">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl p-8 text-center">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22,4 12,14.01 9,11.01"/>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">تم إنشاء الطلب بنجاح! 🎉</h2>
+            <p class="text-gray-500 mb-6">تم إرسال طلبك للبائع وسيبدأ بالعمل عليه قريباً</p>
+            <div class="space-y-3">
+                <a href="#" class="block w-full bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-xl font-bold transition-colors" id="viewOrderBtn">عرض تفاصيل الطلب</a>
+                <a href="/app/buyer/dashboard.html" class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">العودة للوحة التحكم</a>
             </div>
         </div>
     </div>

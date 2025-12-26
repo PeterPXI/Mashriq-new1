@@ -10,131 +10,131 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/orders.css">
 </head>
-<body class="orders-page seller-orders-page">
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container py-8">
+    <main class="py-6 lg:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Breadcrumb -->
-            <nav class="breadcrumb" aria-label="مسار التنقل">
-                <a href="/app/">الرئيسية</a>
-                <span class="breadcrumb-separator">/</span>
-                <a href="/app/seller/dashboard.html">لوحة التحكم</a>
-                <span class="breadcrumb-separator">/</span>
-                <span class="breadcrumb-current">طلبات العملاء</span>
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="مسار التنقل">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <a href="/app/seller/dashboard.html" class="hover:text-primary-600 transition-colors">لوحة التحكم</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium">طلبات العملاء</span>
             </nav>
             
             <!-- Page Header -->
-            <div class="page-header">
-                <div class="page-header-content">
-                    <h1 class="page-title">طلبات العملاء</h1>
-                    <p class="page-subtitle">إدارة ومتابعة طلبات العملاء على خدماتك</p>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">طلبات العملاء</h1>
+                    <p class="text-gray-500">إدارة ومتابعة طلبات العملاء على خدماتك</p>
                 </div>
-                <div class="page-header-actions">
-                    <a href="/app/seller/services.html" class="btn btn-outline-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
-                        </svg>
-                        خدماتي
-                    </a>
-                </div>
+                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-medium transition-colors">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+                    </svg>
+                    خدماتي
+                </a>
             </div>
             
             <!-- Stats Mini Grid -->
-            <div class="stats-mini-grid" id="statsGrid">
-                <div class="stat-mini-card">
-                    <div class="stat-mini-value" id="totalOrders">-</div>
-                    <div class="stat-mini-label">إجمالي الطلبات</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="statsGrid">
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <div class="text-2xl font-bold text-gray-900" id="totalOrders">-</div>
+                    <div class="text-sm text-gray-500">إجمالي الطلبات</div>
                 </div>
-                <div class="stat-mini-card pending">
-                    <div class="stat-mini-value" id="pendingOrders">-</div>
-                    <div class="stat-mini-label">بانتظار القبول</div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border-2 border-blue-200 bg-blue-50">
+                    <div class="text-2xl font-bold text-blue-600" id="pendingOrders">-</div>
+                    <div class="text-sm text-gray-500">بانتظار القبول</div>
                 </div>
-                <div class="stat-mini-card active">
-                    <div class="stat-mini-value" id="activeOrders">-</div>
-                    <div class="stat-mini-label">قيد التنفيذ</div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border-2 border-amber-200 bg-amber-50">
+                    <div class="text-2xl font-bold text-amber-600" id="activeOrders">-</div>
+                    <div class="text-sm text-gray-500">قيد التنفيذ</div>
                 </div>
-                <div class="stat-mini-card completed">
-                    <div class="stat-mini-value" id="totalEarnings">-</div>
-                    <div class="stat-mini-label">إجمالي الأرباح</div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border-2 border-green-200 bg-green-50">
+                    <div class="text-2xl font-bold text-green-600" id="totalEarnings">-</div>
+                    <div class="text-sm text-gray-500">إجمالي الأرباح</div>
                 </div>
             </div>
             
             <!-- Filter Toolbar -->
-            <div class="filter-toolbar">
-                <div class="filter-tabs" id="statusTabs">
-                    <button class="filter-tab active" data-status="all">
+            <div class="bg-white rounded-xl shadow-sm mb-6 overflow-x-auto">
+                <div class="flex min-w-max" id="statusTabs">
+                    <button class="px-5 py-3 text-sm font-medium text-primary-600 border-b-2 border-primary-500 filter-tab active" data-status="all">
                         الكل
-                        <span class="filter-tab-count" id="countAll">0</span>
+                        <span class="bg-primary-100 text-primary-600 text-xs px-2 py-0.5 rounded-full mr-1" id="countAll">0</span>
                     </button>
-                    <button class="filter-tab" data-status="pending">
+                    <button class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors filter-tab" data-status="pending">
                         بانتظار القبول
-                        <span class="filter-tab-count" id="countPending">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full mr-1" id="countPending">0</span>
                     </button>
-                    <button class="filter-tab" data-status="active">
+                    <button class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors filter-tab" data-status="active">
                         قيد التنفيذ
-                        <span class="filter-tab-count" id="countActive">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full mr-1" id="countActive">0</span>
                     </button>
-                    <button class="filter-tab" data-status="delivered">
+                    <button class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors filter-tab" data-status="delivered">
                         تم التسليم
-                        <span class="filter-tab-count" id="countDelivered">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full mr-1" id="countDelivered">0</span>
                     </button>
-                    <button class="filter-tab" data-status="completed">
+                    <button class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors filter-tab" data-status="completed">
                         مكتمل
-                        <span class="filter-tab-count" id="countCompleted">0</span>
+                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full mr-1" id="countCompleted">0</span>
                     </button>
                 </div>
             </div>
             
             <!-- Orders List -->
-            <div class="orders-list" id="ordersList">
+            <div class="space-y-4" id="ordersList">
                 <!-- Loading skeleton -->
-                <div class="order-card skeleton-card">
-                    <div class="skeleton skeleton-image"></div>
-                    <div class="order-card-body">
-                        <div class="skeleton skeleton-text" style="width: 60%;"></div>
-                        <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4">
+                    <div class="w-24 h-20 bg-gray-200 rounded-lg animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                        <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                     </div>
                 </div>
-                <div class="order-card skeleton-card">
-                    <div class="skeleton skeleton-image"></div>
-                    <div class="order-card-body">
-                        <div class="skeleton skeleton-text" style="width: 70%;"></div>
-                        <div class="skeleton skeleton-text" style="width: 30%;"></div>
+                <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4">
+                    <div class="w-24 h-20 bg-gray-200 rounded-lg animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-5 bg-gray-200 rounded animate-pulse w-2/3"></div>
+                        <div class="h-4 bg-gray-200 rounded animate-pulse w-2/5"></div>
                     </div>
                 </div>
             </div>
             
             <!-- Empty State -->
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <div class="empty-state-icon">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="emptyState">
+                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
                         <rect x="9" y="3" width="6" height="4" rx="1"/>
                     </svg>
                 </div>
-                <h3 class="empty-state-title">لا توجد طلبات</h3>
-                <p class="empty-state-text">ستظهر هنا طلبات العملاء عند وصولها</p>
-                <a href="/app/seller/services.html" class="btn btn-primary">إدارة خدماتي</a>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد طلبات</h3>
+                <p class="text-gray-500 mb-6">ستظهر هنا طلبات العملاء عند وصولها</p>
+                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">إدارة خدماتي</a>
             </div>
             
             <!-- No Results State -->
-            <div class="no-results" id="noResults" style="display: none;">
-                <div class="no-results-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="hidden bg-white rounded-2xl shadow-sm p-8 text-center" id="noResults">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="M21 21l-4.35-4.35"/>
                     </svg>
                 </div>
-                <p class="no-results-text">لا توجد طلبات بهذه الحالة</p>
+                <p class="text-gray-500">لا توجد طلبات بهذه الحالة</p>
             </div>
             
         </div>

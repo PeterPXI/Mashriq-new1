@@ -10,150 +10,151 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
     
-    <!-- Styles -->
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    
+    <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/dashboard.css">
-    <link rel="stylesheet" href="/app/assets/css/pages/seller-services.css">
 </head>
-<body class="dashboard-page">
+<body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
     
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="dashboard-container">
+    <main class="py-6 lg:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <!-- Page Header -->
-            <div class="dashboard-header">
-                <div class="dashboard-welcome">
-                    <nav class="breadcrumb mb-2" aria-label="التنقل">
-                        <a href="/app/seller/dashboard.html">لوحة التحكم</a>
-                        <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-current">خدماتي</span>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <nav class="flex items-center gap-2 text-sm text-gray-500 mb-2" aria-label="التنقل">
+                        <a href="/app/seller/dashboard.html" class="hover:text-primary-600 transition-colors">لوحة التحكم</a>
+                        <span>/</span>
+                        <span class="text-gray-900 font-medium">خدماتي</span>
                     </nav>
-                    <h1 class="dashboard-title">خدماتي</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">خدماتي</h1>
                 </div>
-                <div class="dashboard-actions">
-                    <a href="/app/seller/add-service.html" class="btn btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"/>
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                        </svg>
-                        إضافة خدمة جديدة
-                    </a>
-                </div>
+                <a href="/app/seller/add-service.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-5 py-3 rounded-xl font-semibold transition-colors">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    إضافة خدمة جديدة
+                </a>
             </div>
             
             <!-- Stats Summary -->
-            <div class="stats-grid stats-grid-mini" id="statsGrid">
-                <div class="stat-card stat-card-mini">
-                    <div class="stat-card-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="grid grid-cols-3 gap-4 mb-8" id="statsGrid">
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                             <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
                         </svg>
                     </div>
-                    <div class="stat-card-content">
-                        <div class="stat-card-value" id="totalServices">0</div>
-                        <div class="stat-card-label">إجمالي الخدمات</div>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-900" id="totalServices">0</div>
+                        <div class="text-sm text-gray-500">إجمالي الخدمات</div>
                     </div>
                 </div>
                 
-                <div class="stat-card stat-card-mini">
-                    <div class="stat-card-icon success">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="bg-white rounded-xl p-4 shadow-sm border-2 border-green-200 bg-green-50 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                             <polyline points="22,4 12,14.01 9,11.01"/>
                         </svg>
                     </div>
-                    <div class="stat-card-content">
-                        <div class="stat-card-value" id="activeServices">0</div>
-                        <div class="stat-card-label">خدمات نشطة</div>
+                    <div>
+                        <div class="text-2xl font-bold text-green-600" id="activeServices">0</div>
+                        <div class="text-sm text-gray-500">خدمات نشطة</div>
                     </div>
                 </div>
                 
-                <div class="stat-card stat-card-mini">
-                    <div class="stat-card-icon warning">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="bg-white rounded-xl p-4 shadow-sm border-2 border-amber-200 bg-amber-50 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="8" x2="12" y2="12"/>
                             <line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
                     </div>
-                    <div class="stat-card-content">
-                        <div class="stat-card-value" id="pausedServices">0</div>
-                        <div class="stat-card-label">خدمات متوقفة</div>
+                    <div>
+                        <div class="text-2xl font-bold text-amber-600" id="pausedServices">0</div>
+                        <div class="text-sm text-gray-500">خدمات متوقفة</div>
                     </div>
                 </div>
             </div>
             
             <!-- Filters & Search -->
-            <div class="services-toolbar">
-                <div class="search-box">
-                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="M21 21l-4.35-4.35"/>
-                    </svg>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="search-input" 
-                        placeholder="ابحث في خدماتك..."
-                    >
-                </div>
-                <div class="toolbar-filters">
-                    <select id="statusFilter" class="filter-select">
-                        <option value="">جميع الحالات</option>
-                        <option value="active">نشط</option>
-                        <option value="paused">متوقف</option>
-                        <option value="pending">قيد المراجعة</option>
-                    </select>
-                    <select id="sortBy" class="filter-select">
-                        <option value="newest">الأحدث أولاً</option>
-                        <option value="oldest">الأقدم أولاً</option>
-                        <option value="orders">الأكثر طلباً</option>
-                        <option value="rating">الأعلى تقييماً</option>
-                    </select>
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1 relative">
+                        <svg class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="w-full pr-12 pl-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            placeholder="ابحث في خدماتك..."
+                        >
+                    </div>
+                    <div class="flex gap-3">
+                        <select id="statusFilter" class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="">جميع الحالات</option>
+                            <option value="active">نشط</option>
+                            <option value="paused">متوقف</option>
+                            <option value="pending">قيد المراجعة</option>
+                        </select>
+                        <select id="sortBy" class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="newest">الأحدث أولاً</option>
+                            <option value="oldest">الأقدم أولاً</option>
+                            <option value="orders">الأكثر طلباً</option>
+                            <option value="rating">الأعلى تقييماً</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
             <!-- Services List -->
-            <div class="services-section" id="servicesSection">
+            <div id="servicesSection">
                 
                 <!-- Loading State -->
-                <div class="services-loading" id="servicesLoading">
-                    <div class="service-item-skeleton">
-                        <div class="skeleton skeleton-image"></div>
-                        <div class="skeleton-content">
-                            <div class="skeleton skeleton-text" style="width: 70%;"></div>
-                            <div class="skeleton skeleton-text" style="width: 40%;"></div>
+                <div class="space-y-4" id="servicesLoading">
+                    <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4">
+                        <div class="w-28 h-20 bg-gray-200 rounded-lg animate-pulse flex-shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-5 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                            <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                         </div>
                     </div>
-                    <div class="service-item-skeleton">
-                        <div class="skeleton skeleton-image"></div>
-                        <div class="skeleton-content">
-                            <div class="skeleton skeleton-text" style="width: 60%;"></div>
-                            <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                    <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4">
+                        <div class="w-28 h-20 bg-gray-200 rounded-lg animate-pulse flex-shrink-0"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-5 bg-gray-200 rounded animate-pulse w-2/3"></div>
+                            <div class="h-4 bg-gray-200 rounded animate-pulse w-2/5"></div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Services List -->
-                <div class="services-list" id="servicesList" style="display: none;">
+                <div class="space-y-4 hidden" id="servicesList">
                     <!-- Services will be rendered here -->
                 </div>
                 
                 <!-- Empty State -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <div class="empty-state-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="emptyState">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                             <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
                         </svg>
                     </div>
-                    <h3 class="empty-state-title">لا توجد خدمات</h3>
-                    <p class="empty-state-description">ابدأ بإضافة خدمتك الأولى وابدأ بتلقي الطلبات</p>
-                    <a href="/app/seller/add-service.html" class="btn btn-primary mt-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد خدمات</h3>
+                    <p class="text-gray-500 mb-6">ابدأ بإضافة خدمتك الأولى وابدأ بتلقي الطلبات</p>
+                    <a href="/app/seller/add-service.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -163,19 +164,17 @@
                 </div>
                 
                 <!-- No Results -->
-                <div class="empty-state" id="noResults" style="display: none;">
-                    <div class="empty-state-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <div class="hidden bg-white rounded-2xl shadow-sm p-8 text-center" id="noResults">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gray-400">
                             <circle cx="11" cy="11" r="8"/>
                             <path d="M21 21l-4.35-4.35"/>
                             <line x1="8" y1="11" x2="14" y2="11"/>
                         </svg>
                     </div>
-                    <h3 class="empty-state-title">لا توجد نتائج</h3>
-                    <p class="empty-state-description">جرب تغيير كلمات البحث أو الفلاتر</p>
-                    <button class="btn btn-secondary mt-4" id="clearFilters">
-                        مسح الفلاتر
-                    </button>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">لا توجد نتائج</h3>
+                    <p class="text-gray-500 mb-4">جرب تغيير كلمات البحث أو الفلاتر</p>
+                    <button class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="clearFilters">مسح الفلاتر</button>
                 </div>
                 
             </div>
@@ -187,24 +186,26 @@
     <div id="footer"></div>
     
     <!-- Delete Confirmation Modal -->
-    <div class="modal-overlay" id="deleteModal" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">حذف الخدمة</h3>
-                <button class="modal-close" id="closeDeleteModal">&times;</button>
+    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="deleteModal">
+        <div class="bg-white rounded-2xl max-w-sm w-full shadow-xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900">حذف الخدمة</h3>
+                <button class="text-gray-400 hover:text-gray-600 text-2xl" id="closeDeleteModal">&times;</button>
             </div>
-            <div class="modal-body">
-                <p class="text-center">
-                    هل أنت متأكد من حذف هذه الخدمة؟<br>
-                    <strong id="deleteServiceTitle"></strong>
-                </p>
-                <p class="text-center text-muted text-sm mt-2">
-                    لا يمكن التراجع عن هذا الإجراء
-                </p>
+            <div class="p-5 text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    </svg>
+                </div>
+                <p class="text-gray-600 mb-2">هل أنت متأكد من حذف هذه الخدمة؟</p>
+                <p class="font-bold text-gray-900 mb-2" id="deleteServiceTitle"></p>
+                <p class="text-sm text-gray-500">لا يمكن التراجع عن هذا الإجراء</p>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelDelete">إلغاء</button>
-                <button class="btn btn-error" id="confirmDelete">
+            <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
+                <button class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="cancelDelete">إلغاء</button>
+                <button class="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors" id="confirmDelete">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="3 6 5 6 21 6"/>
                         <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
