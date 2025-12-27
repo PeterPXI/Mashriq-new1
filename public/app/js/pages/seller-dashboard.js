@@ -252,7 +252,9 @@
         
         elements.servicesTableBody.innerHTML = recentServices.map(service => {
             const serviceId = service._id || service.id;
-            const serviceImage = service.image || '';
+            // SINGLE SOURCE OF TRUTH: imageUrl
+            const PLACEHOLDER = '/app/assets/images/service-placeholder.svg';
+            const serviceImage = service.imageUrl || (service.imageUrls && service.imageUrls[0]) || PLACEHOLDER;
             const serviceRating = service.rating || service.averageRating || 0;
             const serviceOrders = service.ordersCount || service.totalOrders || 0;
             const servicePrice = service.price || service.basePrice || 0;

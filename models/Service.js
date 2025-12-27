@@ -374,6 +374,19 @@ serviceSchema.virtual('reviews', {
     justOne: false
 });
 
+/**
+ * Virtual: Single image URL for the service.
+ * Returns the first image from imageUrls array or null.
+ * This is the SINGLE SOURCE OF TRUTH for service images.
+ */
+serviceSchema.virtual('imageUrl').get(function() {
+    return this.imageUrls && this.imageUrls.length > 0 ? this.imageUrls[0] : null;
+});
+
+// Ensure virtuals are included in toJSON and toObject
+serviceSchema.set('toJSON', { virtuals: true });
+serviceSchema.set('toObject', { virtuals: true });
+
 // ============================================================
 // CRITICAL INVARIANTS (Documented for reference)
 // These are NOT enforced by the model - they are enforced by SERVICES.

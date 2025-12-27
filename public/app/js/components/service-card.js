@@ -19,9 +19,8 @@ const ServiceCard = {
             description,
             basePrice,
             price,
-            images,
-            image,
-            thumbnail,
+            imageUrl,        // SINGLE SOURCE OF TRUTH
+            imageUrls,       // Fallback for old data
             seller,
             rating,
             averageRating,
@@ -33,13 +32,17 @@ const ServiceCard = {
         
         const serviceId = _id || id;
         const servicePrice = basePrice || price || 0;
-        const serviceImage = images?.[0] || image || thumbnail || Utils.getPlaceholderImage(400, 250, 'خدمة');
+        
+        // Image: Use imageUrl (virtual), fallback to imageUrls[0], then placeholder
+        const PLACEHOLDER = '/app/assets/images/service-placeholder.svg';
+        const serviceImage = imageUrl || (imageUrls && imageUrls[0]) || PLACEHOLDER;
+        
         const serviceRating = rating || averageRating || 0;
         const serviceReviews = reviewCount || totalReviews || 0;
         
         // Seller info
         const sellerName = seller?.username || seller?.name || 'بائع';
-        const sellerAvatar = seller?.avatar || seller?.profileImage;
+        const sellerAvatar = seller?.avatar || seller?.profileImage || seller?.avatarUrl;
         const sellerLevel = seller?.level || 'NEW';
         const sellerInitials = sellerName.substring(0, 2).toUpperCase();
         

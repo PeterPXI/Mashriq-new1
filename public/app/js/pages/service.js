@@ -138,8 +138,16 @@
     function renderGallery() {
         if (!elements.serviceGallery) return;
         
-        const { image, images } = state.service;
-        const allImages = images?.length ? images : (image ? [image] : []);
+        const { imageUrl, imageUrls } = state.service;
+        const PLACEHOLDER = '/app/assets/images/service-placeholder.svg';
+        
+        // Build images array: prefer imageUrls array, fallback to imageUrl, then placeholder
+        let allImages = [];
+        if (imageUrls && imageUrls.length > 0) {
+            allImages = imageUrls;
+        } else if (imageUrl) {
+            allImages = [imageUrl];
+        }
         
         if (allImages.length === 0) {
             elements.serviceGallery.innerHTML = `

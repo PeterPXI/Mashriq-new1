@@ -1,0 +1,8 @@
+<svg width="400" height="250" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#F3F4F6"/>
+  <rect x="160" y="85" width="80" height="80" rx="8" fill="#E5E7EB"/>
+  <path d="M185 115C185 109.477 189.477 105 195 105H205C210.523 105 215 109.477 215 115V135C215 140.523 210.523 145 205 145H195C189.477 145 185 140.523 185 135V115Z" fill="#9CA3AF"/>
+  <circle cx="193" cy="118" r="4" fill="#D1D5DB"/>
+  <path d="M185 138L195 128L205 138L215 128" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="200" y="195" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14" font-weight="500">لا توجد صورة</text>
+</svg>
