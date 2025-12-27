@@ -264,10 +264,7 @@
                 <tr>
                     <td>
                         <div class="service-cell">
-                            ${serviceImage 
-                                ? `<img src="${serviceImage}" alt="" class="service-cell-image" onerror="this.style.display='none'">`
-                                : ''
-                            }
+                            <img src="${serviceImage}" alt="" class="service-cell-image" onerror="this.src='/app/assets/images/service-placeholder.svg'">
                             <span class="service-cell-title">${Utils.escapeHtml(service.title)}</span>
                         </div>
                     </td>
