@@ -454,6 +454,25 @@ app.get('/api/services/:id', async (req, res) => {
   }
 });
 
+// Get current seller's services (authenticated seller only)
+app.get('/api/my-services', authenticateToken, requireSeller, async (req, res) => {
+  try {
+    const services = await Service.find({ sellerId: req.user.id }).sort({ createdAt: -1 });
+    
+    return success(res, 'تم جلب خدماتك بنجاح', { 
+      services: services.map(s => {
+        const obj = s.toObject({ getters: true, virtuals: true });
+        // Ensure imageUrl is always present
+        obj.imageUrl = obj.imageUrl || (obj.imageUrls && obj.imageUrls[0]) || null;
+        return obj;
+      })
+    });
+  } catch (err) {
+    console.error('Get my services error:', err);
+    return error(res, 'حدث خطأ في الخادم', 'GET_MY_SERVICES_ERROR', 500);
+  }
+});
+
 // Create new service (seller only) - with image upload
 app.post('/api/services', authenticateToken, requireSeller, upload.single('image'), async (req, res) => {
   try {
