@@ -25,8 +25,15 @@ const authenticateToken = async (req, res, next) => {
       
       next();
     } catch (err) {
-      console.error(err);
-      return error(res, 'الجلسة منتهية، يرجى تسجيل الدخول مجدداً', 'INVALID_TOKEN', 401);
+      console.error('Auth error:', err.name, err.message);
+      
+      // More specific error messages
+      if (err.name === 'TokenExpiredError') {
+        return error(res, 'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً', 'TOKEN_EXPIRED', 401);
+      } else if (err.name === 'JsonWebTokenError') {
+        return error(res, 'جلسة غير صالحة، يرجى تسجيل الدخول مجدداً', 'INVALID_TOKEN', 401);
+      }
+      return error(res, 'خطأ في المصادقة: ' + err.message, 'AUTH_ERROR', 401);
     }
   } else {
     return error(res, 'يجب تسجيل الدخول للوصول لهذه الخدمة', 'AUTH_REQUIRED', 401);
