@@ -195,11 +195,21 @@
         Loader.buttonStart(elements.submitBtn);
         
         try {
+            // Get token from Auth module
+            const token = Auth.getToken();
+            if (!token) {
+                Toast.error('خطأ', 'يجب تسجيل الدخول أولاً');
+                window.location.href = CONFIG.ROUTES.LOGIN;
+                return;
+            }
+            
+            console.log('Sending request with token:', token.substring(0, 20) + '...');
+            
             // Call API with FormData
             const response = await fetch('/api/services', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             });
