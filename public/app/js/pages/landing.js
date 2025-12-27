@@ -47,6 +47,9 @@
         // Bind events
         bindEvents();
         
+        // Load real stats from API
+        await loadStats();
+        
         // Load featured services from API
         await loadFeaturedServices();
         
@@ -55,18 +58,92 @@
     }
     
     // ─────────────────────────────────────────────────────────────────────────
-    // Render Categories
+    // Load Stats from API
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    async function loadStats() {
+        try {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+            
+            if (data.data?.stats) {
+                const stats = data.data.stats;
+                
+                // Animate counters
+                animateCounter('statServices', stats.services || 0, '+');
+                animateCounter('statSellers', stats.sellers || 0, '+');
+                animateCounter('statOrders', stats.completedOrders || 0, '+');
+            }
+        } catch (error) {
+            console.error('Failed to load stats:', error);
+            // Keep default values on error
+        }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Animate Counter
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    function animateCounter(elementId, targetValue, prefix = '') {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        const duration = 2000; // 2 seconds
+        const startTime = performance.now();
+        const startValue = 0;
+        
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function - ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(startValue + (targetValue - startValue) * eased);
+            
+            element.textContent = prefix + current;
+            
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                element.textContent = prefix + targetValue;
+            }
+        }
+        
+        requestAnimationFrame(update);
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Render Categories - Premium Design
     // ─────────────────────────────────────────────────────────────────────────
     
     function renderCategories() {
         if (!elements.categoriesGrid) return;
         
-        const categoriesHTML = CONFIG.CATEGORIES.map(category => `
-            <a href="/app/explore.html?category=${category.id}" class="category-card">
-                <div class="category-icon">${category.icon}</div>
-                <span class="category-name">${category.name}</span>
-            </a>
-        `).join('');
+        // Category colors for visual variety
+        const categoryColors = {
+            'design': 'from-pink-500 to-rose-500',
+            'writing': 'from-blue-500 to-indigo-500',
+            'programming': 'from-green-500 to-emerald-500',
+            'marketing': 'from-purple-500 to-violet-500',
+            'video': 'from-orange-500 to-red-500',
+            'audio': 'from-cyan-500 to-teal-500',
+            'translation': 'from-yellow-500 to-amber-500',
+            'other': 'from-gray-500 to-slate-500'
+        };
+        
+        const categoriesHTML = CONFIG.CATEGORIES.map(category => {
+            const gradient = categoryColors[category.id] || 'from-orange-500 to-red-500';
+            return `
+                <a href="/app/explore.html?category=${category.id}" 
+                   class="group relative bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-xl border border-gray-100 hover:border-orange-200 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        ${category.icon}
+                    </div>
+                    <span class="font-semibold text-gray-800 group-hover:text-orange-600 transition-colors">${category.name}</span>
+                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                </a>
+            `;
+        }).join('');
         
         elements.categoriesGrid.innerHTML = categoriesHTML;
     }

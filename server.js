@@ -396,6 +396,38 @@ app.post('/api/auth/activate-seller', authenticateToken, async (req, res) => {
   }
 });
 
+// ============ STATS ROUTES ============
+
+// Get platform statistics (public)
+app.get('/api/stats', async (req, res) => {
+  try {
+    // Get real counts from database
+    const [servicesCount, sellersCount, ordersCount] = await Promise.all([
+      Service.countDocuments({ isActive: true }),
+      User.countDocuments({ role: 'seller' }),
+      Order ? Order.countDocuments({ status: 'COMPLETED' }) : 0
+    ]);
+    
+    return success(res, 'تم جلب الإحصائيات بنجاح', {
+      stats: {
+        services: servicesCount,
+        sellers: sellersCount,
+        completedOrders: ordersCount
+      }
+    });
+  } catch (err) {
+    console.error('Get stats error:', err);
+    // Return fallback stats on error
+    return success(res, 'تم جلب الإحصائيات', {
+      stats: {
+        services: 0,
+        sellers: 0,
+        completedOrders: 0
+      }
+    });
+  }
+});
+
 // ============ SERVICES ROUTES ============
 
 // Get all services (public)
