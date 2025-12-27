@@ -11,6 +11,9 @@ require('dotenv').config();
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // Utilities
 const { success, error } = require('./utils/apiResponse');
@@ -46,9 +49,31 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Static files middleware - serve the frontend app
-const path = require('path');
+// ============ FILE UPLOAD CONFIGURATION ============
+const uploadsDir = path.join(__dirname, 'public', 'uploads', 'services');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueName + path.extname(file.originalname));
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowed = /jpeg|jpg|png|gif|webp/;
+  const isValid = allowed.test(path.extname(file.originalname).toLowerCase()) && allowed.test(file.mimetype);
+  cb(isValid ? null : new Error('يُسمح فقط برفع الصور'), isValid);
+};
+
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
+
+// Static files middleware
 app.use('/app', express.static(path.join(__dirname, 'public', 'app')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 // Root redirect to app
 app.get('/', (req, res) => {
@@ -429,13 +454,21 @@ app.get('/api/services/:id', async (req, res) => {
   }
 });
 
-// Create new service (seller only)
-app.post('/api/services', authenticateToken, requireSeller, async (req, res) => {
+// Create new service (seller only) - with image upload
+app.post('/api/services', authenticateToken, requireSeller, upload.single('image'), async (req, res) => {
   try {
-    const { title, description, price, category, image, deliveryTime, revisions, requirements } = req.body;
+    const { title, description, price, category, imageUrl, deliveryTime, revisions, requirements } = req.body;
     
     if (!title || !description || !price || !category) {
       return error(res, 'جميع الحقول المطلوبة يجب ملؤها', 'MISSING_FIELDS', 400);
+    }
+    
+    // Determine image URL - uploaded file or provided URL
+    let finalImageUrl = '';
+    if (req.file) {
+      finalImageUrl = `/uploads/services/${req.file.filename}`;
+    } else if (imageUrl) {
+      finalImageUrl = imageUrl;
     }
     
     const service = await Service.create({
@@ -443,7 +476,7 @@ app.post('/api/services', authenticateToken, requireSeller, async (req, res) => 
       description,
       basePrice: parseFloat(price),
       categoryId: category,
-      imageUrls: image ? [image] : [],
+      imageUrls: finalImageUrl ? [finalImageUrl] : [],
       deliveryDays: deliveryTime || 3,
       revisions: revisions || 0,
       requirements: requirements || '',
@@ -458,6 +491,9 @@ app.post('/api/services', authenticateToken, requireSeller, async (req, res) => 
     
   } catch (err) {
     console.error('Add service error:', err);
+    if (req.file) {
+      fs.unlink(req.file.path, () => {});
+    }
     return error(res, err.message || 'حدث خطأ في الخادم', 'ADD_SERVICE_ERROR', 500);
   }
 });

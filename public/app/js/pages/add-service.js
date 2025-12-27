@@ -22,7 +22,8 @@
         price: document.getElementById('price'),
         deliveryTime: document.getElementById('deliveryTime'),
         revisions: document.getElementById('revisions'),
-        image: document.getElementById('image'),
+        imageFile: document.getElementById('imageFile'),
+        fileName: document.getElementById('fileName'),
         requirements: document.getElementById('requirements'),
         imagePreview: document.getElementById('imagePreview'),
         previewImg: document.getElementById('previewImg'),
@@ -83,15 +84,58 @@
         // Form submit
         elements.form?.addEventListener('submit', handleSubmit);
         
-        // Image preview
-        elements.image?.addEventListener('input', Utils.debounce(handleImageInput, 500));
+        // File input change
+        elements.imageFile?.addEventListener('change', handleFileSelect);
         elements.removePreview?.addEventListener('click', removeImagePreview);
         
         // Clear errors on input
-        const fields = ['title', 'category', 'description', 'price', 'deliveryTime', 'image'];
+        const fields = ['title', 'category', 'description', 'price', 'deliveryTime'];
         fields.forEach(field => {
             elements[field]?.addEventListener('input', () => clearError(field));
         });
+    }
+    
+    // Handle file selection
+    function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (!file) {
+            removeImagePreview();
+            return;
+        }
+        
+        // Validate type
+        if (!file.type.match(/^image\/(jpeg|jpg|png|gif|webp)$/)) {
+            Toast.error('خطأ', 'يُسمح فقط برفع الصور (JPG, PNG, GIF, WebP)');
+            e.target.value = '';
+            return;
+        }
+        
+        // Validate size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            Toast.error('خطأ', 'حجم الصورة يجب أن يكون أقل من 5MB');
+            e.target.value = '';
+            return;
+        }
+        
+        // Update file name display
+        if (elements.fileName) {
+            elements.fileName.textContent = file.name;
+        }
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            if (elements.previewImg) elements.previewImg.src = event.target.result;
+            if (elements.imagePreview) elements.imagePreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function removeImagePreview() {
+        if (elements.imagePreview) elements.imagePreview.classList.add('hidden');
+        if (elements.previewImg) elements.previewImg.src = '';
+        if (elements.imageFile) elements.imageFile.value = '';
+        if (elements.fileName) elements.fileName.textContent = 'لم يتم اختيار ملف';
     }
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -105,36 +149,73 @@
         clearAllErrors();
         hideAlert();
         
-        // Get values
-        const data = {
-            title: elements.title?.value.trim(),
-            category: elements.category?.value,
-            description: elements.description?.value.trim(),
-            price: parseFloat(elements.price?.value) || 0,
-            deliveryTime: parseInt(elements.deliveryTime?.value) || 3,
-            revisions: parseInt(elements.revisions?.value) || 1,
-            image: elements.image?.value.trim(),
-            requirements: elements.requirements?.value.trim(),
-        };
+        // Basic validation
+        const title = elements.title?.value.trim();
+        const category = elements.category?.value;
+        const description = elements.description?.value.trim();
+        const price = parseFloat(elements.price?.value) || 0;
+        const deliveryTime = parseInt(elements.deliveryTime?.value) || 3;
+        const revisions = parseInt(elements.revisions?.value) || 1;
+        const requirements = elements.requirements?.value.trim() || '';
         
-        // Validate
-        if (!validateForm(data)) {
+        if (!title || title.length < 10) {
+            showError('title', 'العنوان يجب أن يكون 10 أحرف على الأقل');
             return;
+        }
+        if (!category) {
+            showError('category', 'يرجى اختيار التخصص');
+            return;
+        }
+        if (!description || description.length < 50) {
+            showError('description', 'الوصف يجب أن يكون 50 حرف على الأقل');
+            return;
+        }
+        if (price < 5) {
+            showError('price', 'السعر يجب أن يكون $5 على الأقل');
+            return;
+        }
+        
+        // Prepare FormData
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('category', category);
+        formData.append('description', description);
+        formData.append('price', price);
+        formData.append('deliveryTime', deliveryTime);
+        formData.append('revisions', revisions);
+        formData.append('requirements', requirements);
+        
+        // Add image file if selected
+        const imageFile = elements.imageFile?.files[0];
+        if (imageFile) {
+            formData.append('image', imageFile);
         }
         
         // Show loading
         Loader.buttonStart(elements.submitBtn);
         
         try {
-            // Call API
-            const response = await API.services.create(data);
+            // Call API with FormData
+            const response = await fetch('/api/services', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.message || 'فشل نشر الخدمة');
+            }
             
             // Show success
             Toast.success('تم بنجاح!', 'تم نشر خدمتك بنجاح');
             showAlert('success', 'تم نشر الخدمة بنجاح! جاري التحويل...');
             
             // Redirect to service page
-            const serviceId = response.data?.service?._id || response.data?.service?.id;
+            const serviceId = result.data?.service?._id || result.data?.service?.id;
             setTimeout(() => {
                 if (serviceId) {
                     window.location.href = `/app/service.html?id=${serviceId}`;
