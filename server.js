@@ -92,8 +92,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Security headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   next();
 });
 
@@ -687,8 +687,8 @@ app.use((req, res) => {
 
 // ============ START SERVER ============
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
