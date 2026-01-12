@@ -321,9 +321,12 @@
         // Actions
         renderActions();
         
-        // Settings form (if owner)
+        // Show owner-only elements
         if (state.isOwner) {
-            populateSettingsForm();
+            showOwnerElements();
+            if (elements.settingsTabBtn) elements.settingsTabBtn.classList.remove('hidden');
+        } else {
+            if (elements.settingsTabBtn) elements.settingsTabBtn.classList.add('hidden');
         }
     }
     
