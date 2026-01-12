@@ -47,11 +47,37 @@
         // Bind events
         bindEvents();
         
+        // Load real stats from API
+        await loadPlatformStats();
+        
         // Load featured services from API
         await loadFeaturedServices();
         
         // Update CTA based on auth state
         updateCTAButton();
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Load Platform Stats
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    async function loadPlatformStats() {
+        try {
+            const response = await API.stats.getOverview();
+            const stats = response.data || {};
+            
+            if (document.getElementById('statServices')) {
+                document.getElementById('statServices').textContent = '+' + (stats.services || 500);
+            }
+            if (document.getElementById('statSellers')) {
+                document.getElementById('statSellers').textContent = '+' + (stats.users || 200);
+            }
+            if (document.getElementById('statOrders')) {
+                document.getElementById('statOrders').textContent = '+' + (stats.orders || 1000);
+            }
+        } catch (error) {
+            console.warn('Could not load platform stats:', error);
+        }
     }
     
     // ─────────────────────────────────────────────────────────────────────────
