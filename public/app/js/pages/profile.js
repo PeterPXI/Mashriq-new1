@@ -226,11 +226,16 @@
             renderProfile();
             
             // Load additional data in parallel
-            await Promise.all([
+            const additionalData = [
                 loadServices(),
-                loadReviews(),
-                loadMyStats(),
-            ]);
+                loadReviews()
+            ];
+            
+            if (state.user?.role === 'seller') {
+                additionalData.push(loadMyStats());
+            }
+            
+            await Promise.all(additionalData);
             
             // Render tabs content
             renderOverview();
@@ -380,7 +385,7 @@
         if (!elements.profileActions) return;
         
         if (state.isOwner) {
-            elements.profileActions.innerHTML = `
+            let html = `
                 <button class="btn btn-ghost" data-tab="settings" onclick="switchTab('settings')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -389,6 +394,19 @@
                     تعديل الملف
                 </button>
             `;
+            
+            if (state.user?.role !== 'seller') {
+                html += `
+                    <button class="btn btn-primary" id="activateSellerBtnAction">
+                        تفعيل وضع البائع
+                    </button>
+                `;
+            }
+            
+            elements.profileActions.innerHTML = html;
+            
+            // Re-bind activate seller button if it exists
+            document.getElementById('activateSellerBtnAction')?.addEventListener('click', handleActivateSeller);
         } else {
             elements.profileActions.innerHTML = `
                 <button class="btn btn-primary">
