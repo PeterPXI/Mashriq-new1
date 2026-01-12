@@ -406,4 +406,8 @@ serviceSchema.set('toObject', { virtuals: true });
 
 const Service = mongoose.model('Service', serviceSchema);
 
+// Virtuals are already defined in the schema above with:
+// toJSON: { virtuals: true },
+// toObject: { virtuals: true }
+
 module.exports = Service;

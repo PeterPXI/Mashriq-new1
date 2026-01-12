@@ -160,9 +160,9 @@
             // Fetch services
             const response = await API.services.getAll(params);
             
-            // Extract data
+            // Extract data - handle both { data: { services: [] } } and { services: [] }
             const data = response.data || response;
-            state.services = data.services || data || [];
+            state.services = data.services || (Array.isArray(data) ? data : []);
             state.totalServices = data.total || data.count || state.services.length;
             state.totalPages = Math.ceil(state.totalServices / state.limit) || 1;
             

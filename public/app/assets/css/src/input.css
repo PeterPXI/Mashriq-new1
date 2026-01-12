@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .is-error {
+        @apply border-red-500 focus:ring-red-500 !important;
+    }
+    
+    .auth-alert {
+        @apply p-4 rounded-xl text-sm mb-6;
+    }
+    
+    .alert-success {
+        @apply bg-green-50 text-green-700 border border-green-200;
+    }
+    
+    .alert-error {
+        @apply bg-red-50 text-red-700 border border-red-200;
+    }
+    
+    .strength-bar {
+        @apply h-1 w-full bg-gray-200 rounded-full overflow-hidden mt-1;
+    }
+    
+    .weak .strength-bar span { @apply w-1/4 bg-red-500; }
+    .fair .strength-bar span { @apply w-2/4 bg-yellow-500; }
+    .good .strength-bar span { @apply w-3/4 bg-blue-500; }
+    .strong .strength-bar span { @apply w-full bg-green-500; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    MASHRIQ - TAILWIND CUSTOM STYLES
    منصة مشرق - أنماط Tailwind المخصصة
