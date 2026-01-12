@@ -219,25 +219,28 @@
         // Remove all classes
         strengthEl.classList.remove('weak', 'fair', 'good', 'strong');
         
+        const strengthTextEl = strengthEl.querySelector('.strength-text') || strengthEl.querySelector('span:last-child');
+        const strengthBarEl = strengthEl.querySelector('.strength-bar span') || strengthEl.querySelector('span block');
+
         if (password.length === 0) {
-            strengthEl.querySelector('.strength-text').textContent = '';
-            strengthEl.querySelector('.strength-bar span').style.width = '0';
+            if (strengthTextEl) strengthTextEl.textContent = '';
+            if (strengthBarEl) strengthBarEl.style.width = '0';
             return;
         }
         
         // Add appropriate class and text
         if (strength <= 1) {
             strengthEl.classList.add('weak');
-            strengthEl.querySelector('.strength-text').textContent = 'ضعيفة';
+            if (strengthTextEl) strengthTextEl.textContent = 'ضعيفة';
         } else if (strength <= 2) {
             strengthEl.classList.add('fair');
-            strengthEl.querySelector('.strength-text').textContent = 'متوسطة';
+            if (strengthTextEl) strengthTextEl.textContent = 'متوسطة';
         } else if (strength <= 3) {
             strengthEl.classList.add('good');
-            strengthEl.querySelector('.strength-text').textContent = 'جيدة';
+            if (strengthTextEl) strengthTextEl.textContent = 'جيدة';
         } else {
             strengthEl.classList.add('strong');
-            strengthEl.querySelector('.strength-text').textContent = 'قوية';
+            if (strengthTextEl) strengthTextEl.textContent = 'قوية';
         }
     }
     

@@ -49,7 +49,7 @@ const API = {
             const data = await response.json();
             
             // Handle unauthorized responses
-            if (response.status === 401) {
+            if (response.status === 401 && !endpoint.includes('/auth/login')) {
                 Auth.logout();
                 Toast.error('انتهت صلاحية الجلسة', 'يرجى تسجيل الدخول مرة أخرى');
                 window.location.href = CONFIG.ROUTES.LOGIN;

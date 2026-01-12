@@ -71,8 +71,13 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
 
-// Static files middleware
+// Serve static files from public/app for /app
 app.use('/app', express.static(path.join(__dirname, 'public', 'app')));
+
+// Serve assets specifically
+app.use('/app/assets', express.static(path.join(__dirname, 'public', 'app', 'assets')));
+app.use('/app/js', express.static(path.join(__dirname, 'public', 'app', 'js')));
+
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 // Root redirect to app
