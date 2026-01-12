@@ -250,10 +250,9 @@ class OrderService {
         // ============================================================
         // STEP 13: Hold escrow (via EscrowService)
         // Constitution: Buyer pays the platform, platform holds funds
-        // NOTE: EscrowService.holdFunds() should be called here
-        // For now, we just mark escrowStatus as HELD (done above)
         // ============================================================
-        // await EscrowService.holdFunds(order._id, buyerId, escrowAmount);
+        const EscrowService = require('./EscrowService');
+        await EscrowService.holdFunds(order);
         
         console.log(`📦 Order created: ${order._id} | ${service.title} | $${totalPrice}`);
         
@@ -612,13 +611,13 @@ class OrderService {
         
         // Release escrow (via EscrowService)
         // Constitution: Funds are released ONLY on COMPLETED
-        // NOTE: EscrowService.releaseFunds() should be called here
-        // await EscrowService.releaseFunds(order._id, order.sellerId, order.sellerPayout);
+        const EscrowService = require('./EscrowService');
+        await EscrowService.releaseFunds(order);
         
         // Update seller trust metrics (via TrustService)
         // Constitution: Order outcomes update seller trust
-        // NOTE: TrustService.recordOrderCompleted() should be called here
-        // await TrustService.recordOrderCompleted(order.sellerId);
+        const TrustService = require('./TrustService');
+        await TrustService.recordOrderCompleted(order);
         
         console.log(`✅ Order completed: ${order._id} | Reason: ${reason}`);
     }
@@ -647,14 +646,14 @@ class OrderService {
         
         // Refund escrow (via EscrowService)
         // Constitution: Funds are refunded on CANCELLED
-        // NOTE: EscrowService.refundFunds() should be called here
-        // await EscrowService.refundFunds(order._id, order.buyerId, order.escrowAmount);
+        const EscrowService = require('./EscrowService');
+        await EscrowService.refundFunds(order);
         
         // Update seller trust metrics if cancelled by system/buyer
         // Constitution: Cancellations affect trust negatively
         if (cancelledBy === CANCELLED_BY.SYSTEM || cancelledBy === CANCELLED_BY.SELLER) {
-            // NOTE: TrustService.recordOrderCancelled() should be called here
-            // await TrustService.recordOrderCancelled(order.sellerId);
+            const TrustService = require('./TrustService');
+            await TrustService.recordOrderCancelled(order, cancelledBy);
         }
         
         console.log(`❌ Order cancelled: ${order._id} | By: ${cancelledBy} | Reason: ${reason}`);
