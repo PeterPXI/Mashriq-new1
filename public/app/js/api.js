@@ -267,6 +267,12 @@ const API = {
             return API.get(CONFIG.ENDPOINTS.MY_STATS);
         },
     },
+
+    // Wallet / Payments
+    wallet: {
+        getHistory: () => API.get('/wallet/history'),
+        getStats: () => API.get('/wallet/stats'),
+    }
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

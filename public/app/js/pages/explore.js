@@ -196,8 +196,8 @@
         
         // Update grid class based on view mode
         elements.servicesGrid.className = state.viewMode === 'list' 
-            ? 'services-list' 
-            : 'services-grid';
+            ? 'space-y-4' 
+            : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
         
         elements.servicesGrid.innerHTML = ServiceCard.renderList(state.services);
         
@@ -458,6 +458,37 @@
         // Debounced search
         elements.searchInput?.addEventListener('input', Utils.debounce(handleSearchInput, 500));
     }
+
+    function clearFilters() {
+        state.filters = {
+            search: '',
+            category: '',
+            sort: '-createdAt',
+            deliveryTime: '',
+        };
+        state.currentPage = 1;
+        if (elements.searchInput) elements.searchInput.value = '';
+        if (elements.categoryFilter) elements.categoryFilter.value = '';
+        if (elements.sortFilter) elements.sortFilter.value = '-createdAt';
+        if (elements.deliveryFilter) elements.deliveryFilter.value = '';
+        loadServices();
+    }
+
+    function removeFilter(type) {
+        if (state.filters[type] !== undefined) {
+            state.filters[type] = type === 'sort' ? '-createdAt' : '';
+            if (type === 'search' && elements.searchInput) elements.searchInput.value = '';
+            if (type === 'category' && elements.categoryFilter) elements.categoryFilter.value = '';
+            if (type === 'sort' && elements.sortFilter) elements.sortFilter.value = '-createdAt';
+            if (type === 'deliveryTime' && elements.deliveryFilter) elements.deliveryFilter.value = '';
+            state.currentPage = 1;
+            loadServices();
+        }
+    }
+
+    // Expose for global access
+    window.ExplorePage = { clearFilters, removeFilter };
+
     
     // ─────────────────────────────────────────────────────────────────────────
     // Event Handlers
