@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="الرسائل والمحادثات على منصة مشرق">
+    
+    <title>الرسائل | مشرق</title>
+    
+    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+    
+    <style>
+        .chat-item { transition: all 0.2s ease; }
+        .chat-item:hover { background-color: #fff7ed; }
+        .chat-item.unread { background-color: #fffbeb; border-right: 3px solid #f59e0b; }
+        .avatar-placeholder { background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%); }
+        .message-preview { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans">
+    <header id="navbar"></header>
+    
+    <main class="py-6 lg:py-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium">الرسائل</span>
+            </nav>
+            
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">الرسائل</h1>
+                    <p class="text-gray-500">محادثاتك مع البائعين والمشترين</p>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span id="totalChats">0</span> محادثة
+                </div>
+            </div>
+            
+            <div id="chatsLoading" class="space-y-4">
+                <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4 animate-pulse">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+                        <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 flex gap-4 animate-pulse">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="chatsList" class="space-y-3 hidden"></div>
+            
+            <div id="emptyState" class="hidden text-center py-16">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
+                        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد محادثات</h3>
+                <p class="text-gray-500 mb-6">عند إنشاء طلب جديد، ستظهر المحادثة هنا</p>
+                <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    تصفح الخدمات
+                </a>
+            </div>
+            
+        </div>
+    </main>
+    
+    <footer id="footer"></footer>
+    
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/messages.js"></script>
+</body>
+</html>

@@ -40,6 +40,9 @@ const CONFIG = {
         CHECKOUT: '/app/checkout.html',
         ORDER: '/app/order.html',
         PROFILE: '/app/profile.html',
+        MESSAGES: '/app/messages.html',
+        WALLET: '/app/wallet.html',
+        NOTIFICATIONS: '/app/notifications.html',
         
         // Buyer Routes
         BUYER_DASHBOARD: '/app/buyer/dashboard.html',
@@ -52,6 +55,12 @@ const CONFIG = {
         SELLER_ADD_SERVICE: '/app/seller/add-service.html',
         SELLER_EDIT_SERVICE: '/app/seller/edit-service.html',
         SELLER_ORDERS: '/app/seller/orders.html',
+        
+        // Admin Routes
+        ADMIN_DASHBOARD: '/app/admin/dashboard.html',
+        ADMIN_USERS: '/app/admin/users.html',
+        ADMIN_DISPUTES: '/app/admin/disputes.html',
+        ADMIN_SERVICES: '/app/admin/services.html',
     },
     
     // ─────────────────────────────────────────────────────────────────────────

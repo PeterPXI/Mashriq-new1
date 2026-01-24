@@ -59,6 +59,22 @@ Core entities with documented "constitution rules" in model files:
 - **Review**: Immutable post-completion feedback
 - **Wallet/Transaction**: Escrow accounting with append-only transaction log
 - **Payment**: Stripe payment sessions for wallet top-ups with idempotency protection
+- **Notification**: User notifications with type-based categorization and read status
+
+### Notifications System
+- **Model**: `models/Notification.js` - Stores all user notifications
+- **Service**: `services/NotificationService.js` - Handles notification creation for all events
+- **Types**: new_order, order_delivered, order_completed, order_cancelled, new_message, new_review, dispute_opened, dispute_resolved, wallet_deposit
+- **Frontend**: Bell icon in navbar with unread count, dedicated notifications page
+
+### Admin Dashboard
+- **Routes**: `/api/admin/*` - Admin-only endpoints
+- **Pages**: 
+  - `/app/admin/dashboard.html` - Overview stats and navigation
+  - `/app/admin/users.html` - User management (search, filter, activate/deactivate)
+  - `/app/admin/disputes.html` - Dispute resolution interface
+  - `/app/admin/services.html` - Service moderation
+- **Access Control**: `requireAdmin` middleware restricts to admin role users
 
 ### Authentication
 - JWT-based authentication with Bearer tokens
@@ -107,6 +123,21 @@ Standardized via `utils/apiResponse.js`:
   - `POST /api/stripe/verify-payment` - Client-side payment verification
   - `GET /api/stripe/balance` - Get wallet balance
   - `GET /api/stripe/transactions` - Get transaction history
+
+### Notifications API
+- `GET /api/notifications` - Get user notifications
+- `GET /api/notifications/count` - Get unread count
+- `PUT /api/notifications/:id/read` - Mark as read
+- `PUT /api/notifications/read-all` - Mark all as read
+
+### Admin API
+- `GET /api/admin/stats` - Platform statistics
+- `GET /api/admin/users` - List users with search/filter
+- `PUT /api/admin/users/:id/status` - Toggle user active status
+- `GET /api/admin/disputes` - List disputes
+- `PUT /api/admin/disputes/:id/resolve` - Resolve a dispute
+- `GET /api/admin/services` - List services
+- `PUT /api/admin/services/:id/status` - Toggle service active status
 
 ### Environment Variables Required
 - `MONGO_URI` - MongoDB connection string (required)

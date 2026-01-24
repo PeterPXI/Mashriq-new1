@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الخدمات | مشرق</title>
+    
+    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+</head>
+<body class="min-h-screen bg-gray-50 font-sans">
+    <header id="navbar"></header>
+    
+    <main class="py-6 lg:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <a href="/app/admin/dashboard.html" class="hover:text-primary-600 transition-colors">لوحة الإدارة</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium">إدارة الخدمات</span>
+            </nav>
+            
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">إدارة الخدمات</h1>
+                    <p class="text-gray-500">مراجعة وإدارة الخدمات المعروضة</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="text" id="searchInput" placeholder="بحث عن خدمة..." class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 w-48">
+                </div>
+            </div>
+            
+            <div id="servicesLoading" class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-xl shadow-sm p-4 animate-pulse flex gap-4">
+                    <div class="w-20 h-20 bg-gray-200 rounded-lg"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="servicesList" class="grid md:grid-cols-2 gap-4 hidden"></div>
+            
+            <div id="emptyState" class="hidden text-center py-16">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد خدمات</h3>
+                <p class="text-gray-500">لم يتم العثور على أي خدمات</p>
+            </div>
+            
+        </div>
+    </main>
+    
+    <footer id="footer"></footer>
+    
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/admin-services.js"></script>
+</body>
+</html>

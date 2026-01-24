@@ -32,6 +32,8 @@ const disputeRoutes = require('./routes/disputeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const stripeRoutes = require('./routes/stripeRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'mashriq_simple_secret';
@@ -614,6 +616,12 @@ app.use('/api/reviews', reviewRoutes);
 
 // Mount Stripe payment routes
 app.use('/api/stripe', stripeRoutes);
+
+// Mount notification routes with authentication
+app.use('/api/notifications', authenticateToken, notificationRoutes);
+
+// Mount admin routes with authentication and admin check
+app.use('/api/admin', authenticateToken, requireAdmin, adminRoutes);
 
 // ============ STATS ROUTES (Public) ============
 // Stats are derived from Service and Order models.

@@ -61,6 +61,11 @@ const Auth = {
         return user?.role === 'buyer';
     },
     
+    isAdmin() {
+        const user = this.getUser();
+        return user?.role === 'admin';
+    },
+    
     getUserId() {
         const user = this.getUser();
         return user?._id || user?.id;

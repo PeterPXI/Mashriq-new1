@@ -66,6 +66,13 @@ const Navbar = {
         const avatar = Auth.getUserAvatar();
         
         return `
+            <a href="${CONFIG.ROUTES.NOTIFICATIONS}" class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" id="notificationBell" title="الإشعارات">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-600">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                </svg>
+                <span id="notificationBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">0</span>
+            </a>
             <div class="relative" id="userDropdownWrapper">
                 <button class="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors" id="userDropdown">
                     ${avatar 
@@ -101,6 +108,19 @@ const Navbar = {
                         </svg>
                         طلباتي
                     </a>
+                    <a href="/app/messages.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
+                            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                        </svg>
+                        الرسائل
+                    </a>
+                    <a href="/app/notifications.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                        </svg>
+                        الإشعارات
+                    </a>
                     <a href="/app/wallet.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
                             <path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
@@ -115,6 +135,15 @@ const Navbar = {
                                 <path d="M12 8v8M8 12h8"/>
                             </svg>
                             أضف خدمة
+                        </a>
+                    ` : ''}
+                    ${Auth.isAdmin() ? `
+                        <div class="my-2 border-t border-gray-100"></div>
+                        <a href="${CONFIG.ROUTES.ADMIN_DASHBOARD}" class="flex items-center gap-3 px-4 py-2.5 text-purple-700 hover:bg-purple-50 transition-colors">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple-500">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            لوحة الإدارة
                         </a>
                     ` : ''}
                     <div class="my-2 border-t border-gray-100"></div>
@@ -152,7 +181,6 @@ const Navbar = {
      * Bind navbar events
      */
     bindEvents(container) {
-        // User dropdown
         const dropdown = container.querySelector('#userDropdown');
         const dropdownMenu = container.querySelector('#userDropdownMenu');
         
@@ -161,18 +189,38 @@ const Navbar = {
             dropdownMenu?.classList.toggle('hidden');
         });
         
-        // Close dropdown on outside click
         document.addEventListener('click', () => {
             dropdownMenu?.classList.add('hidden');
         });
         
-        // Logout button
         const logoutBtn = container.querySelector('#logoutBtn');
         logoutBtn?.addEventListener('click', () => {
             Auth.logout();
             Toast.success('تم تسجيل الخروج', 'نراك قريباً!');
             window.location.href = CONFIG.ROUTES.HOME;
         });
+        
+        if (Auth.isAuthenticated()) {
+            this.loadNotificationCount();
+        }
+    },
+    
+    async loadNotificationCount() {
+        try {
+            const response = await fetch('/api/notifications/count', {
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+            const data = await response.json();
+            if (data.success && data.data?.count > 0) {
+                const badge = document.getElementById('notificationBadge');
+                if (badge) {
+                    badge.textContent = data.data.count > 9 ? '9+' : data.data.count;
+                    badge.classList.remove('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load notification count:', error);
+        }
     },
 };
 
