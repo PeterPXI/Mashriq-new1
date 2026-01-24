@@ -58,6 +58,7 @@ Core entities with documented "constitution rules" in model files:
 - **Dispute**: Buyer-initiated on DELIVERED orders, admin-resolved
 - **Review**: Immutable post-completion feedback
 - **Wallet/Transaction**: Escrow accounting with append-only transaction log
+- **Payment**: Stripe payment sessions for wallet top-ups with idempotency protection
 
 ### Authentication
 - JWT-based authentication with Bearer tokens
@@ -89,10 +90,28 @@ Standardized via `utils/apiResponse.js`:
 | cors | Cross-origin requests |
 | dotenv | Environment variables |
 | uuid | Unique ID generation |
+| stripe | Stripe payment gateway |
+
+### Stripe Integration (Wallet Top-ups)
+- **Implementation**: Stripe Checkout Sessions for secure payments
+- **Flow**: Create checkout → Stripe processes → Webhook confirms → Wallet credited
+- **Security Features**:
+  - Webhook signature verification (requires `STRIPE_WEBHOOK_SECRET`)
+  - Atomic idempotency via Payment model (pending → processing → completed)
+  - User validation on verify-payment endpoint
+- **Files**: `services/stripeClient.js`, `routes/stripeRoutes.js`, `models/Payment.js`
+- **Endpoints**:
+  - `GET /api/stripe/config` - Get publishable key
+  - `POST /api/stripe/create-checkout` - Create checkout session
+  - `POST /api/stripe/webhook` - Stripe webhook (mounted before express.json)
+  - `POST /api/stripe/verify-payment` - Client-side payment verification
+  - `GET /api/stripe/balance` - Get wallet balance
+  - `GET /api/stripe/transactions` - Get transaction history
 
 ### Environment Variables Required
 - `MONGO_URI` - MongoDB connection string (required)
 - `JWT_SECRET` - JWT signing secret (defaults to fallback)
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret (required for production)
 - `CORS_ORIGIN` - Allowed origins (defaults to `*`)
 - `PORT` - Server port (optional)
 
