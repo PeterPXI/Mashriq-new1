@@ -31,6 +31,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const disputeRoutes = require('./routes/disputeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const stripeRoutes = require('./routes/stripeRoutes');
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'mashriq_simple_secret';
@@ -89,6 +90,10 @@ app.get('/', (req, res) => {
 app.get('/app/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'app', 'index.html'));
 });
+
+// Stripe webhook must be registered BEFORE express.json() to receive raw body
+const stripeWebhookRouter = require('./routes/stripeRoutes');
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), stripeWebhookRouter.webhookHandler);
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -606,6 +611,9 @@ app.use('/api/chats', authenticateToken, chatRoutes);
 
 // Mount review routes (auth applied per-route)
 app.use('/api/reviews', reviewRoutes);
+
+// Mount Stripe payment routes
+app.use('/api/stripe', stripeRoutes);
 
 // ============ STATS ROUTES (Public) ============
 // Stats are derived from Service and Order models.
