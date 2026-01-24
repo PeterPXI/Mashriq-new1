@@ -140,8 +140,7 @@ const chatSchema = new mongoose.Schema({
 // Optimize database queries for common access patterns.
 // ============================================================
 
-// Order lookup (most common - get chat for order)
-chatSchema.index({ orderId: 1 }, { unique: true });
+// Note: orderId already has unique: true in schema, creates index automatically
 
 // User's chats as buyer
 chatSchema.index({ buyerId: 1 });

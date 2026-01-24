@@ -241,8 +241,7 @@ const disputeSchema = new mongoose.Schema({
 // Optimize database queries for common access patterns.
 // ============================================================
 
-// Order lookup (most common - check if order has dispute)
-disputeSchema.index({ orderId: 1 }, { unique: true });
+// Note: orderId already has unique: true in schema, creates index automatically
 
 // User's disputes
 disputeSchema.index({ openedById: 1 });

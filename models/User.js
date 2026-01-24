@@ -285,11 +285,8 @@ const userSchema = new mongoose.Schema({
 // Optimize database queries.
 // ============================================================
 
-// Unique email index (primary login identifier)
-userSchema.index({ email: 1 }, { unique: true });
-
-// Unique username index (public identifier)
-userSchema.index({ username: 1 }, { unique: true });
+// Note: email and username already have unique: true in schema definition
+// which creates indexes automatically, so no duplicate index needed
 
 // Role index (for filtering by role)
 userSchema.index({ role: 1 });

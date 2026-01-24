@@ -152,8 +152,7 @@ const walletSchema = new mongoose.Schema({
 // Optimize database queries.
 // ============================================================
 
-// Unique user lookup (primary access pattern)
-walletSchema.index({ userId: 1 }, { unique: true });
+// Note: userId already has unique: true in schema, creates index automatically
 
 // ============================================================
 // VIRTUALS

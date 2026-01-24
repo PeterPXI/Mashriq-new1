@@ -141,8 +141,7 @@ const reviewSchema = new mongoose.Schema({
 // Optimize database queries for common access patterns.
 // ============================================================
 
-// Order lookup (check if order has review)
-reviewSchema.index({ orderId: 1 }, { unique: true });
+// Note: orderId already has unique: true in schema, creates index automatically
 
 // Seller's reviews (for profile page and rating calculation)
 reviewSchema.index({ sellerId: 1, createdAt: -1 });
