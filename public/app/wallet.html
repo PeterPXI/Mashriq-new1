@@ -7,7 +7,7 @@
     
     <title>المحفظة | مشرق</title>
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
     
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
     <link rel="stylesheet" href="/app/assets/css/main.css">
@@ -20,9 +20,9 @@
     <main class="py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">المحفظة</h1>
-                <p class="text-gray-500">إدارة رصيدك وشحن محفظتك للشراء والبيع على مشرق</p>
+            <div class="mb-10">
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">المحفظة</h1>
+                <p class="text-gray-500 text-lg">إدارة رصيدك وشحن محفظتك للشراء والبيع على مشرق</p>
             </div>
             
             <div id="paymentStatus" class="hidden mb-6 p-4 rounded-xl"></div>
@@ -31,32 +31,34 @@
                 
                 <div class="lg:col-span-2 space-y-6">
                     
-                    <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-6 text-white shadow-lg">
-                        <div class="flex items-center justify-between mb-6">
+                    <div class="bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-orange-300/20 rounded-full blur-2xl"></div>
+                        <div class="flex items-center justify-between mb-6 relative">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
                                         <polyline points="1,10 23,10"/>
                                     </svg>
                                 </div>
-                                <span class="text-lg font-medium">رصيدك الحالي</span>
+                                <span class="text-xl font-semibold">رصيدك الحالي</span>
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <div class="text-4xl font-bold mb-1" id="availableBalance">
-                                <span class="inline-block h-10 w-32 bg-white/20 rounded animate-pulse"></span>
+                        <div class="mb-6 relative">
+                            <div class="text-5xl font-extrabold mb-2" id="availableBalance">
+                                <span class="inline-block h-12 w-36 bg-white/20 rounded-lg animate-pulse"></span>
                             </div>
-                            <div class="text-white/70 text-sm">دولار أمريكي متاح للاستخدام</div>
+                            <div class="text-white/80 text-base">دولار أمريكي متاح للاستخدام</div>
                         </div>
-                        <div class="flex gap-4 text-sm">
-                            <div class="bg-white/10 rounded-lg px-4 py-2">
-                                <span class="text-white/70">معلق:</span>
-                                <span class="font-semibold mr-1" id="pendingBalance">$0</span>
+                        <div class="flex gap-4 text-sm relative">
+                            <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
+                                <span class="text-white/80">معلق:</span>
+                                <span class="font-bold mr-1" id="pendingBalance">$0</span>
                             </div>
-                            <div class="bg-white/10 rounded-lg px-4 py-2">
-                                <span class="text-white/70">إجمالي الأرباح:</span>
-                                <span class="font-semibold mr-1" id="totalEarned">$0</span>
+                            <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
+                                <span class="text-white/80">إجمالي الأرباح:</span>
+                                <span class="font-bold mr-1" id="totalEarned">$0</span>
                             </div>
                         </div>
                     </div>

@@ -24,20 +24,9 @@ const Navbar = {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-16">
                         <!-- Logo -->
-                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-2 font-bold text-xl text-gray-900 hover:text-primary-600 transition-colors">
-                            <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                                <rect width="40" height="40" rx="10" fill="url(#logo-gradient)"/>
-                                <path d="M12 28V15L20 10L28 15V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M20 28V20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                                <circle cx="20" cy="15" r="2" fill="white"/>
-                                <defs>
-                                    <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
-                                        <stop stop-color="#F97316"/>
-                                        <stop offset="1" stop-color="#EA580C"/>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                            <span class="hidden sm:block">مشرق</span>
+                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-3 font-bold text-xl text-gray-900 hover:text-primary-600 transition-all group">
+                            <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-10 h-10 rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all">
+                            <span class="hidden sm:block bg-gradient-to-l from-primary-600 to-primary-500 bg-clip-text text-transparent text-2xl font-extrabold">مشرق</span>
                         </a>
                         
                         <!-- Navigation Links -->

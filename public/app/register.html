@@ -8,7 +8,7 @@
     <title>إنشاء حساب | مشرق</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23F97316'/%3E%3Cpath d='M12 28V15L20 10L28 15V28' stroke='white' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
     
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
@@ -23,20 +23,9 @@
             <div class="w-full max-w-md">
                 
                 <!-- Logo -->
-                <a href="/app/" class="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity">
-                    <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                        <rect width="40" height="40" rx="10" fill="url(#auth-logo-gradient)"/>
-                        <path d="M12 28V15L20 10L28 15V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 28V20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                        <circle cx="20" cy="15" r="2" fill="white"/>
-                        <defs>
-                            <linearGradient id="auth-logo-gradient" x1="0" y1="0" x2="40" y2="40">
-                                <stop stop-color="#F97316"/>
-                                <stop offset="1" stop-color="#EA580C"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <span class="text-2xl font-bold text-gray-900">مشرق</span>
+                <a href="/app/" class="flex items-center gap-3 mb-10 group">
+                    <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-12 h-12 rounded-xl shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all">
+                    <span class="text-3xl font-extrabold bg-gradient-to-l from-orange-600 to-orange-500 bg-clip-text text-transparent">مشرق</span>
                 </a>
                 
                 <!-- Header -->
