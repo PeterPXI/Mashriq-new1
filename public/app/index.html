@@ -21,164 +21,74 @@
     <header id="navbar"></header>
     
     <main>
-        <!-- HERO SECTION - Upwork Style -->
-        <section class="relative bg-gradient-to-bl from-amber-50 via-orange-50 to-white pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-            <!-- Decorative Elements -->
-            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div class="absolute -top-24 -left-24 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-0 right-0 w-80 h-80 bg-amber-200/20 rounded-full blur-3xl"></div>
-            </div>
-            
-            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <!-- Left Content -->
-                    <div class="text-right lg:order-2">
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-                            اعثر على <span class="text-orange-500">الموهبة</span> المثالية
-                            <br>لمشروعك القادم
-                        </h1>
-                        <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-xl">
-                            منصة مشرق تربط بين أصحاب المشاريع والطلاب المبدعين. احصل على خدمات احترافية في التصميم والبرمجة والكتابة بأسعار مناسبة وجودة عالية.
-                        </p>
-                        
-                        <!-- Dual CTAs -->
-                        <div class="flex flex-wrap gap-4 mb-8">
-                            <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30">
-                                ابحث عن خدمة
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <path d="M21 21l-4.35-4.35"/>
-                                </svg>
-                            </a>
-                            <a href="/app/register.html" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-orange-600 border-2 border-orange-500 px-8 py-4 rounded-xl font-bold text-lg transition-all">
-                                قدم خدماتك
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M12 5v14M5 12h14"/>
-                                </svg>
-                            </a>
-                        </div>
-                        
-                        <!-- Trust Badges -->
-                        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>ضمان استرداد الأموال</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>دفع آمن 100%</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>دعم على مدار الساعة</span>
-                            </div>
-                        </div>
+        <!-- HERO SECTION -->
+        <section class="relative bg-gradient-to-b from-orange-50 to-white py-16 lg:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-4xl mx-auto mb-12">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                        اعثر على <span class="text-orange-500">الموهبة</span> المثالية لمشروعك
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                        منصة مشرق تربط بين أصحاب المشاريع والطلاب المبدعين. احصل على خدمات احترافية بأسعار مناسبة وجودة عالية.
+                    </p>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+                        <a href="/app/explore.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                            ابحث عن خدمة
+                        </a>
+                        <a href="/app/register.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-orange-600 border-2 border-orange-500 px-8 py-4 rounded-xl font-bold text-lg transition-all">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            قدم خدماتك
+                        </a>
                     </div>
                     
-                    <!-- Right - Hero Image/Illustration -->
-                    <div class="lg:order-1 relative">
-                        <div class="relative">
-                            <!-- Main Card -->
-                            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-                                <div class="flex items-center gap-4 mb-6">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                                        م
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-gray-900 text-lg">مشروع جديد</h3>
-                                        <p class="text-gray-500 text-sm">ابدأ الآن في دقائق</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Search Preview -->
-                                <div class="bg-gray-50 rounded-xl p-4 mb-6">
-                                    <div class="flex items-center gap-3 text-gray-400">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="11" cy="11" r="8"/>
-                                            <path d="M21 21l-4.35-4.35"/>
-                                        </svg>
-                                        <span>ابحث عن: تصميم شعار احترافي...</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Mini Service Cards -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-4 p-3 bg-orange-50 rounded-xl">
-                                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                            </svg>
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="font-semibold text-gray-900 text-sm">تصميم جرافيك</p>
-                                            <p class="text-xs text-gray-500">+150 خدمة</p>
-                                        </div>
-                                        <span class="text-orange-500 font-bold">$5+</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center gap-4 p-3 bg-blue-50 rounded-xl">
-                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                                            </svg>
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="font-semibold text-gray-900 text-sm">برمجة وتطوير</p>
-                                            <p class="text-xs text-gray-500">+80 خدمة</p>
-                                        </div>
-                                        <span class="text-blue-500 font-bold">$10+</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center gap-4 p-3 bg-purple-50 rounded-xl">
-                                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="font-semibold text-gray-900 text-sm">كتابة محتوى</p>
-                                            <p class="text-xs text-gray-500">+120 خدمة</p>
-                                        </div>
-                                        <span class="text-purple-500 font-bold">$5+</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Floating Stats -->
-                            <div class="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-4 border border-gray-100">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-gray-900">+1000</p>
-                                        <p class="text-xs text-gray-500">مشروع مكتمل</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Floating Rating -->
-                            <div class="absolute -top-4 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-gray-100">
-                                <div class="flex items-center gap-2">
-                                    <div class="flex text-yellow-400">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                    </div>
-                                    <span class="font-bold text-gray-900">4.9</span>
-                                </div>
-                            </div>
+                    <!-- Trust Badges -->
+                    <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>ضمان استرداد الأموال</span>
                         </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>دفع آمن 100%</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>دعم على مدار الساعة</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                        <div class="text-3xl font-extrabold text-orange-500 mb-1" id="statServices">+500</div>
+                        <div class="text-gray-500 text-sm">خدمة متاحة</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                        <div class="text-3xl font-extrabold text-orange-500 mb-1" id="statSellers">+200</div>
+                        <div class="text-gray-500 text-sm">بائع محترف</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                        <div class="text-3xl font-extrabold text-orange-500 mb-1" id="statOrders">+1000</div>
+                        <div class="text-gray-500 text-sm">طلب مكتمل</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                        <div class="text-3xl font-extrabold text-orange-500 mb-1">4.9</div>
+                        <div class="text-gray-500 text-sm">متوسط التقييم</div>
                     </div>
                 </div>
             </div>
@@ -428,64 +338,17 @@
         
     </main>
     
-    <footer class="bg-gray-900 text-white pt-16 pb-8" id="footer">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <!-- Brand -->
-                <div class="lg:col-span-1">
-                    <a href="/app/" class="flex items-center gap-3 mb-6">
-                        <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-10 h-10 rounded-xl">
-                        <span class="text-2xl font-bold">مشرق</span>
-                    </a>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        منصة عربية رائدة تربط بين أصحاب المشاريع والطلاب المبدعين لتقديم خدمات رقمية احترافية بأعلى جودة.
-                    </p>
-                </div>
-                
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="font-bold text-lg mb-6">روابط سريعة</h4>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="/app/explore.html" class="hover:text-white transition-colors">استكشف الخدمات</a></li>
-                        <li><a href="/app/register.html" class="hover:text-white transition-colors">انضم كبائع</a></li>
-                        <li><a href="#howItWorks" class="hover:text-white transition-colors">كيف تعمل المنصة</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Categories -->
-                <div>
-                    <h4 class="font-bold text-lg mb-6">التخصصات</h4>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="/app/explore.html?category=design" class="hover:text-white transition-colors">تصميم جرافيك</a></li>
-                        <li><a href="/app/explore.html?category=programming" class="hover:text-white transition-colors">برمجة وتطوير</a></li>
-                        <li><a href="/app/explore.html?category=writing" class="hover:text-white transition-colors">كتابة محتوى</a></li>
-                        <li><a href="/app/explore.html?category=translation" class="hover:text-white transition-colors">ترجمة</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Support -->
-                <div>
-                    <h4 class="font-bold text-lg mb-6">الدعم</h4>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">مركز المساعدة</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">الأسئلة الشائعة</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">تواصل معنا</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-sm">© 2025 مشرق. جميع الحقوق محفوظة.</p>
-                <div class="flex items-center gap-6 text-gray-500 text-sm">
-                    <a href="#" class="hover:text-white transition-colors">سياسة الخصوصية</a>
-                    <a href="#" class="hover:text-white transition-colors">شروط الاستخدام</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div id="footer"></div>
     
-    <script type="module" src="/app/js/config.js"></script>
-    <script type="module" src="/app/js/components/navbar.js"></script>
-    <script type="module" src="/app/js/pages/landing.js"></script>
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/components/service-card.js"></script>
+    <script src="/app/js/pages/landing.js"></script>
 </body>
 </html>
