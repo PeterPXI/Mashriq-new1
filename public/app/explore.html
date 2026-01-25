@@ -91,6 +91,23 @@
                             <option value="3">حتى 3 أيام</option>
                             <option value="7">حتى أسبوع</option>
                         </select>
+                        
+                        <!-- Rating Filter -->
+                        <select class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hidden sm:block" id="ratingFilter">
+                            <option value="">التقييم</option>
+                            <option value="4">4+ نجوم</option>
+                            <option value="3">3+ نجوم</option>
+                            <option value="2">2+ نجوم</option>
+                        </select>
+                        
+                        <!-- Price Range Button -->
+                        <button type="button" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors hidden sm:flex items-center gap-2" id="priceRangeBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                            </svg>
+                            <span id="priceRangeLabel">نطاق السعر</span>
+                        </button>
                     </div>
                     
                     <!-- Results Count & View Toggle -->
@@ -146,6 +163,49 @@
                 
             </div>
         </section>
+        
+        <!-- Price Range Modal -->
+        <div id="priceRangeModal" class="fixed inset-0 z-50 hidden">
+            <div class="absolute inset-0 bg-black/50" id="priceModalOverlay"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">نطاق السعر</h3>
+                    <button type="button" id="closePriceModal" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm text-gray-600 mb-1">من</label>
+                            <div class="relative">
+                                <input type="number" id="minPriceInput" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" min="0">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                            </div>
+                        </div>
+                        <span class="text-gray-400 pt-6">-</span>
+                        <div class="flex-1">
+                            <label class="block text-sm text-gray-600 mb-1">إلى</label>
+                            <div class="relative">
+                                <input type="number" id="maxPriceInput" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="1000" min="0">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" id="clearPriceBtn" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            مسح
+                        </button>
+                        <button type="button" id="applyPriceBtn" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-orange-700 transition-all">
+                            تطبيق
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     </main>
     

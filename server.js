@@ -34,6 +34,9 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const stripeRoutes = require('./routes/stripeRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const authRoutes = require('./routes/authRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+const Favorite = require('./models/Favorite');
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'mashriq_simple_secret';
@@ -541,12 +544,18 @@ app.get('/api/users/:id', async (req, res) => {
 // Get all services (public)
 app.get('/api/services', async (req, res) => {
   try {
-    const { category, search, sellerId, limit } = req.query;
+    const { 
+      category, search, sellerId, limit, page,
+      minPrice, maxPrice, minRating, deliveryTime, sort 
+    } = req.query;
+    
     let query = { isActive: true, isPaused: false };
     
-    // Fix: category -> categoryId
+    // Category filter
     if (category) query.categoryId = category;
     if (sellerId) query.sellerId = sellerId;
+    
+    // Search filter
     if (search) {
       const regex = new RegExp(search, 'i');
       query.$or = [
@@ -556,13 +565,54 @@ app.get('/api/services', async (req, res) => {
       ];
     }
     
-    let servicesQuery = Service.find(query);
-    if (limit) servicesQuery = servicesQuery.limit(parseInt(limit));
+    // Price range filter
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = parseFloat(minPrice);
+      if (maxPrice) query.price.$lte = parseFloat(maxPrice);
+    }
     
-    const services = await servicesQuery.sort({ createdAt: -1 });
+    // Rating filter
+    if (minRating) {
+      query.rating = { $gte: parseFloat(minRating) };
+    }
+    
+    // Delivery time filter
+    if (deliveryTime) {
+      query.deliveryDays = { $lte: parseInt(deliveryTime) };
+    }
+    
+    // Pagination
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 12;
+    const skip = (pageNum - 1) * limitNum;
+    
+    // Sorting
+    let sortOption = { createdAt: -1 };
+    if (sort) {
+      if (sort === '-rating') sortOption = { rating: -1, createdAt: -1 };
+      else if (sort === 'price') sortOption = { price: 1 };
+      else if (sort === '-price') sortOption = { price: -1 };
+      else if (sort === '-ordersCount') sortOption = { ordersCount: -1, createdAt: -1 };
+      else if (sort === '-createdAt') sortOption = { createdAt: -1 };
+      else if (sort === 'createdAt') sortOption = { createdAt: 1 };
+    }
+    
+    // Get total count for pagination
+    const total = await Service.countDocuments(query);
+    
+    // Get services
+    const services = await Service.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limitNum)
+      .populate('seller', 'fullName username avatarUrl');
     
     return success(res, 'تم جلب الخدمات بنجاح', { 
-      services: services.map(s => s.toObject({ getters: true })) 
+      services: services.map(s => s.toObject({ getters: true })),
+      total,
+      page: pageNum,
+      totalPages: Math.ceil(total / limitNum)
     });
   } catch (err) {
     console.error('Get services error:', err);
@@ -750,6 +800,12 @@ app.use('/api/notifications', authenticateToken, notificationRoutes);
 
 // Mount admin routes with authentication and admin check
 app.use('/api/admin', authenticateToken, requireAdmin, adminRoutes);
+
+// Mount auth routes (forgot password, email verification)
+app.use('/api/auth', authRoutes);
+
+// Mount favorites routes with authentication
+app.use('/api/favorites', authenticateToken, favoriteRoutes);
 
 // ============ STATS ROUTES (Public) ============
 // Stats are derived from Service and Order models.

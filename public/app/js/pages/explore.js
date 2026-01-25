@@ -28,6 +28,9 @@
             category: '',
             sort: '-createdAt',
             deliveryTime: '',
+            minRating: '',
+            minPrice: '',
+            maxPrice: '',
         },
     };
     
@@ -50,6 +53,16 @@
         activeFilters: document.getElementById('activeFilters'),
         activeFiltersList: document.getElementById('activeFiltersList'),
         clearFiltersBtn: document.getElementById('clearFiltersBtn'),
+        ratingFilter: document.getElementById('ratingFilter'),
+        priceRangeBtn: document.getElementById('priceRangeBtn'),
+        priceRangeLabel: document.getElementById('priceRangeLabel'),
+        priceRangeModal: document.getElementById('priceRangeModal'),
+        priceModalOverlay: document.getElementById('priceModalOverlay'),
+        closePriceModal: document.getElementById('closePriceModal'),
+        minPriceInput: document.getElementById('minPriceInput'),
+        maxPriceInput: document.getElementById('maxPriceInput'),
+        clearPriceBtn: document.getElementById('clearPriceBtn'),
+        applyPriceBtn: document.getElementById('applyPriceBtn'),
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -122,8 +135,44 @@
             if (elements.deliveryFilter) elements.deliveryFilter.value = delivery;
         }
         
+        const rating = Utils.getUrlParam('rating');
+        if (rating) {
+            state.filters.minRating = rating;
+            if (elements.ratingFilter) elements.ratingFilter.value = rating;
+        }
+        
+        const minPrice = Utils.getUrlParam('minPrice');
+        const maxPrice = Utils.getUrlParam('maxPrice');
+        if (minPrice) {
+            state.filters.minPrice = minPrice;
+            if (elements.minPriceInput) elements.minPriceInput.value = minPrice;
+        }
+        if (maxPrice) {
+            state.filters.maxPrice = maxPrice;
+            if (elements.maxPriceInput) elements.maxPriceInput.value = maxPrice;
+        }
+        updatePriceLabel();
+        
         if (page) {
             state.currentPage = parseInt(page) || 1;
+        }
+    }
+    
+    function updatePriceLabel() {
+        if (!elements.priceRangeLabel) return;
+        const { minPrice, maxPrice } = state.filters;
+        if (minPrice || maxPrice) {
+            if (minPrice && maxPrice) {
+                elements.priceRangeLabel.textContent = `$${minPrice} - $${maxPrice}`;
+            } else if (minPrice) {
+                elements.priceRangeLabel.textContent = `من $${minPrice}`;
+            } else {
+                elements.priceRangeLabel.textContent = `حتى $${maxPrice}`;
+            }
+            elements.priceRangeBtn?.classList.add('bg-orange-50', 'border-orange-300', 'text-orange-700');
+        } else {
+            elements.priceRangeLabel.textContent = 'نطاق السعر';
+            elements.priceRangeBtn?.classList.remove('bg-orange-50', 'border-orange-300', 'text-orange-700');
         }
     }
     
@@ -155,6 +204,18 @@
             
             if (state.filters.deliveryTime) {
                 params.deliveryTime = state.filters.deliveryTime;
+            }
+            
+            if (state.filters.minRating) {
+                params.minRating = state.filters.minRating;
+            }
+            
+            if (state.filters.minPrice) {
+                params.minPrice = state.filters.minPrice;
+            }
+            
+            if (state.filters.maxPrice) {
+                params.maxPrice = state.filters.maxPrice;
             }
             
             // Fetch services
@@ -387,6 +448,28 @@
             });
         }
         
+        if (state.filters.minRating) {
+            activeFilters.push({
+                type: 'minRating',
+                label: `${state.filters.minRating}+ نجوم`,
+            });
+        }
+        
+        if (state.filters.minPrice || state.filters.maxPrice) {
+            let label = 'السعر: ';
+            if (state.filters.minPrice && state.filters.maxPrice) {
+                label += `$${state.filters.minPrice} - $${state.filters.maxPrice}`;
+            } else if (state.filters.minPrice) {
+                label += `من $${state.filters.minPrice}`;
+            } else {
+                label += `حتى $${state.filters.maxPrice}`;
+            }
+            activeFilters.push({
+                type: 'price',
+                label,
+            });
+        }
+        
         if (activeFilters.length === 0) {
             elements.activeFilters.style.display = 'none';
             return;
@@ -424,6 +507,9 @@
         if (state.filters.category) params.set('category', state.filters.category);
         if (state.filters.sort !== '-createdAt') params.set('sort', state.filters.sort);
         if (state.filters.deliveryTime) params.set('delivery', state.filters.deliveryTime);
+        if (state.filters.minRating) params.set('rating', state.filters.minRating);
+        if (state.filters.minPrice) params.set('minPrice', state.filters.minPrice);
+        if (state.filters.maxPrice) params.set('maxPrice', state.filters.maxPrice);
         if (state.currentPage > 1) params.set('page', state.currentPage);
         
         const newUrl = params.toString() 
@@ -445,6 +531,14 @@
         elements.categoryFilter?.addEventListener('change', handleFilterChange);
         elements.sortFilter?.addEventListener('change', handleFilterChange);
         elements.deliveryFilter?.addEventListener('change', handleFilterChange);
+        elements.ratingFilter?.addEventListener('change', handleRatingChange);
+        
+        // Price range modal
+        elements.priceRangeBtn?.addEventListener('click', openPriceModal);
+        elements.priceModalOverlay?.addEventListener('click', closePriceModal);
+        elements.closePriceModal?.addEventListener('click', closePriceModal);
+        elements.clearPriceBtn?.addEventListener('click', clearPriceFilter);
+        elements.applyPriceBtn?.addEventListener('click', applyPriceFilter);
         
         // Clear filters
         elements.clearFiltersBtn?.addEventListener('click', clearFilters);
@@ -458,6 +552,42 @@
         // Debounced search
         elements.searchInput?.addEventListener('input', Utils.debounce(handleSearchInput, 500));
     }
+    
+    function handleRatingChange(e) {
+        state.filters.minRating = e.target.value;
+        state.currentPage = 1;
+        loadServices();
+    }
+    
+    function openPriceModal() {
+        elements.priceRangeModal?.classList.remove('hidden');
+        if (elements.minPriceInput) elements.minPriceInput.value = state.filters.minPrice || '';
+        if (elements.maxPriceInput) elements.maxPriceInput.value = state.filters.maxPrice || '';
+    }
+    
+    function closePriceModal() {
+        elements.priceRangeModal?.classList.add('hidden');
+    }
+    
+    function clearPriceFilter() {
+        state.filters.minPrice = '';
+        state.filters.maxPrice = '';
+        if (elements.minPriceInput) elements.minPriceInput.value = '';
+        if (elements.maxPriceInput) elements.maxPriceInput.value = '';
+        updatePriceLabel();
+        closePriceModal();
+        state.currentPage = 1;
+        loadServices();
+    }
+    
+    function applyPriceFilter() {
+        state.filters.minPrice = elements.minPriceInput?.value || '';
+        state.filters.maxPrice = elements.maxPriceInput?.value || '';
+        updatePriceLabel();
+        closePriceModal();
+        state.currentPage = 1;
+        loadServices();
+    }
 
     function clearFilters() {
         state.filters = {
@@ -465,25 +595,39 @@
             category: '',
             sort: '-createdAt',
             deliveryTime: '',
+            minRating: '',
+            minPrice: '',
+            maxPrice: '',
         };
         state.currentPage = 1;
         if (elements.searchInput) elements.searchInput.value = '';
         if (elements.categoryFilter) elements.categoryFilter.value = '';
         if (elements.sortFilter) elements.sortFilter.value = '-createdAt';
         if (elements.deliveryFilter) elements.deliveryFilter.value = '';
+        if (elements.ratingFilter) elements.ratingFilter.value = '';
+        if (elements.minPriceInput) elements.minPriceInput.value = '';
+        if (elements.maxPriceInput) elements.maxPriceInput.value = '';
+        updatePriceLabel();
         loadServices();
     }
 
     function removeFilter(type) {
-        if (state.filters[type] !== undefined) {
+        if (type === 'price') {
+            state.filters.minPrice = '';
+            state.filters.maxPrice = '';
+            if (elements.minPriceInput) elements.minPriceInput.value = '';
+            if (elements.maxPriceInput) elements.maxPriceInput.value = '';
+            updatePriceLabel();
+        } else if (state.filters[type] !== undefined) {
             state.filters[type] = type === 'sort' ? '-createdAt' : '';
             if (type === 'search' && elements.searchInput) elements.searchInput.value = '';
             if (type === 'category' && elements.categoryFilter) elements.categoryFilter.value = '';
             if (type === 'sort' && elements.sortFilter) elements.sortFilter.value = '-createdAt';
             if (type === 'deliveryTime' && elements.deliveryFilter) elements.deliveryFilter.value = '';
-            state.currentPage = 1;
-            loadServices();
+            if (type === 'minRating' && elements.ratingFilter) elements.ratingFilter.value = '';
         }
+        state.currentPage = 1;
+        loadServices();
     }
 
     // Expose for global access

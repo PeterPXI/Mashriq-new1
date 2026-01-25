@@ -88,6 +88,42 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     
+    /**
+     * Email verification code (6 digits).
+     * Sent to user's email for verification.
+     */
+    emailVerificationCode: {
+        type: String,
+        default: null
+    },
+    
+    /**
+     * Email verification code expiry.
+     * Code expires after 10 minutes.
+     */
+    emailVerificationExpiry: {
+        type: Date,
+        default: null
+    },
+    
+    /**
+     * Password reset token.
+     * Used for password recovery flow.
+     */
+    passwordResetToken: {
+        type: String,
+        default: null
+    },
+    
+    /**
+     * Password reset token expiry.
+     * Token expires after 1 hour.
+     */
+    passwordResetExpiry: {
+        type: Date,
+        default: null
+    },
+    
     // ============================================================
     // PROFILE FIELDS
     // Public-facing user information.

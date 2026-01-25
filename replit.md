@@ -51,7 +51,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Data Models
 Core entities with documented "constitution rules" in model files:
-- **User**: Authentication, profile, internal trust metrics (never exposed)
+- **User**: Authentication, profile, internal trust metrics (never exposed), email verification fields, password reset tokens
 - **Service**: Seller listings with base price + optional extras (multiples of 5)
 - **Order**: Core transaction with service snapshot, escrow tracking, state machine
 - **Chat/Message**: 1:1 order-to-chat, read-only after order closure
@@ -60,6 +60,7 @@ Core entities with documented "constitution rules" in model files:
 - **Wallet/Transaction**: Escrow accounting with append-only transaction log
 - **Payment**: Stripe payment sessions for wallet top-ups with idempotency protection
 - **Notification**: User notifications with type-based categorization and read status
+- **Favorite**: User's saved/bookmarked services (unique per user-service pair)
 
 ### Notifications System
 - **Model**: `models/Notification.js` - Stores all user notifications
@@ -139,6 +140,29 @@ Standardized via `utils/apiResponse.js`:
 - `GET /api/admin/services` - List services
 - `PUT /api/admin/services/:id/status` - Toggle service active status
 
+### Auth API (Password Reset & Email Verification)
+- `POST /api/auth/forgot-password` - Request password reset code (6-digit, 1-hour expiry)
+- `POST /api/auth/verify-reset-code` - Verify reset code validity
+- `POST /api/auth/reset-password` - Reset password with code
+- `POST /api/auth/send-verification` - Send email verification code (requires auth, 10-min expiry)
+- `POST /api/auth/verify-email` - Verify email with code (requires auth)
+
+### Favorites API
+- `GET /api/favorites` - Get user's saved services (requires auth)
+- `POST /api/favorites/:serviceId` - Add service to favorites (requires auth)
+- `DELETE /api/favorites/:serviceId` - Remove from favorites (requires auth)
+- `GET /api/favorites/check/:serviceId` - Check if service is favorited (requires auth)
+
+### Advanced Search (Services API)
+The `/api/services` endpoint now supports advanced filtering:
+- `category` - Filter by category ID
+- `search` - Text search in title, description, seller name
+- `minPrice` / `maxPrice` - Price range filter
+- `minRating` - Minimum rating filter (e.g., 3+, 4+ stars)
+- `deliveryTime` - Maximum delivery days filter
+- `sort` - Sort options: `-createdAt`, `-rating`, `price`, `-price`, `-ordersCount`
+- `page` / `limit` - Pagination support
+
 ### Static & Auxiliary Pages
 - `/app/settings.html` - User settings (profile edit, password, seller mode)
 - `/app/change-password.html` - Dedicated password change page
@@ -148,6 +172,10 @@ Standardized via `utils/apiResponse.js`:
 - `/app/privacy.html` - Privacy Policy
 - `/app/help.html` - Help center / FAQ
 - `/app/contact.html` - Contact form
+- `/app/forgot-password.html` - Password reset flow (3-step: email → code + new password → success)
+- `/app/verify-email.html` - Email verification page (requires auth)
+- `/app/favorites.html` - User's saved services page (requires auth)
+- `/app/explore.html` - Advanced search with filters (category, price range, rating, delivery time)
 
 ### Environment Variables Required
 - `MONGO_URI` - MongoDB connection string (required)
