@@ -10,6 +10,7 @@
         email: document.getElementById('email'),
         bio: document.getElementById('bio'),
         avatarUrl: document.getElementById('avatarUrl'),
+        avatarFile: document.getElementById('avatarFile'),
         avatarImg: document.getElementById('avatarImg'),
         avatarInitials: document.getElementById('avatarInitials'),
         sellerSection: document.getElementById('sellerSection'),
@@ -78,8 +79,62 @@
         elements.avatarUrl?.addEventListener('input', () => {
             updateAvatarPreview(elements.avatarUrl.value, elements.fullName.value);
         });
+        elements.avatarFile?.addEventListener('change', handleAvatarUpload);
         elements.activateSellerBtn?.addEventListener('click', handleActivateSeller);
         elements.logoutBtn?.addEventListener('click', handleLogout);
+    }
+    
+    async function handleAvatarUpload(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            Toast.error('خطأ', 'يرجى اختيار صورة صالحة');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            Toast.error('خطأ', 'حجم الصورة يجب أن يكون أقل من 2 ميجابايت');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('avatar', file);
+        
+        try {
+            Toast.info('جاري الرفع', 'يتم رفع الصورة...');
+            
+            const token = Auth.getToken();
+            const response = await fetch(CONFIG.API_BASE + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                Toast.success('تم', 'تم تحديث الصورة بنجاح');
+                
+                if (data.data?.avatarUrl) {
+                    elements.avatarUrl.value = data.data.avatarUrl;
+                    updateAvatarPreview(data.data.avatarUrl, elements.fullName.value);
+                }
+                
+                if (data.data?.user) {
+                    Auth.setUser(data.data.user);
+                }
+            } else {
+                Toast.error('خطأ', data.message || 'فشل رفع الصورة');
+            }
+        } catch (error) {
+            console.error('Avatar upload error:', error);
+            Toast.error('خطأ', 'حدث خطأ أثناء رفع الصورة');
+        }
+        
+        e.target.value = '';
     }
     
     async function handleProfileSubmit(e) {

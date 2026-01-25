@@ -905,7 +905,7 @@
     }
     
     // ─────────────────────────────────────────────────────────────────────────
-    // Avatar Modal
+    // Avatar Modal & File Upload
     // ─────────────────────────────────────────────────────────────────────────
     
     function openAvatarModal() {
@@ -959,6 +959,65 @@
             Toast.error('خطأ', 'فشل تحديث الصورة');
         }
     }
+    
+    async function handleAvatarFileUpload(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            Toast.error('خطأ', 'يرجى اختيار صورة صالحة');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            Toast.error('خطأ', 'حجم الصورة يجب أن يكون أقل من 2 ميجابايت');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('avatar', file);
+        
+        try {
+            Toast.info('جاري الرفع', 'يتم رفع الصورة...');
+            
+            const token = Auth.getToken();
+            const response = await fetch(CONFIG.API_BASE + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                Toast.success('تم', 'تم تحديث الصورة بنجاح');
+                
+                if (data.data?.avatarUrl) {
+                    state.user.avatarUrl = data.data.avatarUrl;
+                    renderAvatar(state.user);
+                }
+                
+                if (data.data?.user) {
+                    Auth.setUser(data.data.user);
+                    state.user = data.data.user;
+                }
+                
+                closeModals();
+            } else {
+                Toast.error('خطأ', data.message || 'فشل رفع الصورة');
+            }
+        } catch (error) {
+            console.error('Avatar upload error:', error);
+            Toast.error('خطأ', 'حدث خطأ أثناء رفع الصورة');
+        }
+        
+        e.target.value = '';
+    }
+    
+    // Expose function for inline handlers
+    window.handleAvatarFileUpload = handleAvatarFileUpload;
     
     // ─────────────────────────────────────────────────────────────────────────
     // Run

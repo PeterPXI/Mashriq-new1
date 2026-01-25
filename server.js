@@ -54,14 +54,26 @@ app.use(cors(corsOptions));
 
 // ============ FILE UPLOAD CONFIGURATION ============
 const uploadsDir = path.join(__dirname, 'public', 'uploads', 'services');
+const avatarsDir = path.join(__dirname, 'public', 'uploads', 'avatars');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
+}
+if (!fs.existsSync(avatarsDir)) {
+  fs.mkdirSync(avatarsDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueName + path.extname(file.originalname));
+  }
+});
+
+const avatarStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, avatarsDir),
+  filename: (req, file, cb) => {
+    const uniqueName = 'avatar-' + req.user.id + '-' + Date.now();
     cb(null, uniqueName + path.extname(file.originalname));
   }
 });
@@ -73,6 +85,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
+const uploadAvatar = multer({ storage: avatarStorage, limits: { fileSize: 2 * 1024 * 1024 }, fileFilter });
 
 // Serve static files from public/app for /app
 app.use('/app', express.static(path.join(__dirname, 'public', 'app')));
@@ -405,6 +418,121 @@ app.post('/api/auth/activate-seller', authenticateToken, async (req, res) => {
   } catch (err) {
     console.error('Activate seller error:', err);
     return error(res, 'حدث خطأ في الخادم', 'ACTIVATE_SELLER_ERROR', 500);
+  }
+});
+
+// Upload Avatar
+app.post('/api/auth/upload-avatar', authenticateToken, uploadAvatar.single('avatar'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return error(res, 'يرجى اختيار صورة', 'NO_FILE', 400);
+    }
+    
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return error(res, 'المستخدم غير موجود', 'USER_NOT_FOUND', 404);
+    }
+    
+    // Delete old avatar if exists
+    if (user.avatarUrl && user.avatarUrl.startsWith('/uploads/avatars/')) {
+      const oldPath = path.join(__dirname, 'public', user.avatarUrl);
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+    }
+    
+    const avatarUrl = '/uploads/avatars/' + req.file.filename;
+    user.avatarUrl = avatarUrl;
+    await user.save();
+    
+    return success(res, 'تم رفع الصورة بنجاح', {
+      avatarUrl,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        avatarUrl: user.avatarUrl,
+        role: user.role
+      }
+    });
+    
+  } catch (err) {
+    console.error('Avatar upload error:', err);
+    return error(res, 'حدث خطأ أثناء رفع الصورة', 'AVATAR_UPLOAD_ERROR', 500);
+  }
+});
+
+// Get Public User Profile by ID
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-passwordHash -__v');
+    
+    if (!user) {
+      return error(res, 'المستخدم غير موجود', 'USER_NOT_FOUND', 404);
+    }
+    
+    // Get user's services count
+    const servicesCount = await Service.countDocuments({ seller: user._id, isActive: true });
+    
+    // Get user's completed orders count
+    const ordersCount = await Order.countDocuments({
+      $or: [{ buyer: user._id }, { seller: user._id }],
+      status: ORDER_STATUSES.COMPLETED
+    });
+    
+    // Get user's reviews
+    const reviews = await Review.find({ seller: user._id })
+      .populate('buyer', 'fullName username avatarUrl')
+      .populate('service', 'title')
+      .sort({ createdAt: -1 })
+      .limit(10);
+    
+    // Calculate average rating
+    const allReviews = await Review.find({ seller: user._id });
+    const avgRating = allReviews.length > 0 
+      ? (allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length).toFixed(1)
+      : 0;
+    
+    return success(res, 'تم جلب بيانات المستخدم', {
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        bio: user.bio,
+        avatarUrl: user.avatarUrl,
+        role: user.role,
+        createdAt: user.createdAt,
+        isSeller: user.role === USER_ROLES.SELLER || user.role === USER_ROLES.ADMIN,
+      },
+      stats: {
+        services: servicesCount,
+        orders: ordersCount,
+        reviews: allReviews.length,
+        rating: parseFloat(avgRating),
+      },
+      reviews: reviews.map(r => ({
+        id: r._id,
+        rating: r.rating,
+        comment: r.comment,
+        createdAt: r.createdAt,
+        buyer: r.buyer ? {
+          id: r.buyer._id,
+          fullName: r.buyer.fullName,
+          username: r.buyer.username,
+          avatarUrl: r.buyer.avatarUrl,
+        } : null,
+        service: r.service ? {
+          id: r.service._id,
+          title: r.service.title,
+        } : null,
+      })),
+    });
+    
+  } catch (err) {
+    console.error('Get user profile error:', err);
+    return error(res, 'حدث خطأ في الخادم', 'GET_USER_ERROR', 500);
   }
 });
 

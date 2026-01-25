@@ -83,9 +83,11 @@ const CONFIG = {
         LOGIN: '/auth/login',
         REGISTER: '/auth/register',
         ME: '/auth/me',
-        PROFILE: '/auth/profile',              // ← Added: for profile updates
-        PASSWORD: '/auth/password',             // ← Added: for password changes
-        ACTIVATE_SELLER: '/auth/activate-seller', // ← Added: for seller activation
+        PROFILE: '/auth/profile',
+        UPLOAD_AVATAR: '/auth/upload-avatar',
+        PASSWORD: '/auth/password',
+        ACTIVATE_SELLER: '/auth/activate-seller',
+        USER_BY_ID: (id) => `/users/${id}`,
         
         // Services
         SERVICES: '/services',
