@@ -90,8 +90,8 @@
         const categoriesHTML = CONFIG.CATEGORIES.map(category => `
             <a href="/app/explore.html?category=${category.id}" 
                class="group flex flex-col items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary-200 hover:-translate-y-1 transition-all duration-300">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <span class="w-6 h-6 sm:w-7 sm:h-7">${category.icon}</span>
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300" style="background: ${category.bgColor};">
+                    ${category.icon.replace('<svg', '<svg class="w-6 h-6 sm:w-7 sm:h-7"')}
                 </div>
                 <span class="text-sm sm:text-base font-semibold text-gray-800 group-hover:text-primary-600 transition-colors text-center">${category.name}</span>
             </a>
