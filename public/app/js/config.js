@@ -116,14 +116,54 @@ const CONFIG = {
     // Categories (Static for now)
     // ─────────────────────────────────────────────────────────────────────────
     CATEGORIES: [
-        { id: 'design', name: 'تصميم جرافيك', icon: '🎨' },
-        { id: 'writing', name: 'كتابة محتوى', icon: '✍️' },
-        { id: 'programming', name: 'برمجة', icon: '💻' },
-        { id: 'marketing', name: 'تسويق', icon: '📣' },
-        { id: 'video', name: 'فيديو وأنيميشن', icon: '🎬' },
-        { id: 'translation', name: 'ترجمة', icon: '🌍' },
-        { id: 'voiceover', name: 'تعليق صوتي', icon: '🎙️' },
-        { id: 'business', name: 'أعمال', icon: '💼' },
+        { 
+            id: 'design', 
+            name: 'تصميم جرافيك', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>',
+            color: 'from-rose-500 to-pink-600'
+        },
+        { 
+            id: 'writing', 
+            name: 'كتابة محتوى', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+            color: 'from-amber-500 to-orange-600'
+        },
+        { 
+            id: 'programming', 
+            name: 'برمجة', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+            color: 'from-blue-500 to-indigo-600'
+        },
+        { 
+            id: 'marketing', 
+            name: 'تسويق', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+            color: 'from-emerald-500 to-teal-600'
+        },
+        { 
+            id: 'video', 
+            name: 'فيديو وأنيميشن', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
+            color: 'from-purple-500 to-violet-600'
+        },
+        { 
+            id: 'translation', 
+            name: 'ترجمة', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+            color: 'from-cyan-500 to-sky-600'
+        },
+        { 
+            id: 'voiceover', 
+            name: 'تعليق صوتي', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
+            color: 'from-fuchsia-500 to-pink-600'
+        },
+        { 
+            id: 'business', 
+            name: 'أعمال', 
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+            color: 'from-slate-500 to-gray-600'
+        },
     ],
     
     // ─────────────────────────────────────────────────────────────────────────
