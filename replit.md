@@ -139,6 +139,16 @@ Standardized via `utils/apiResponse.js`:
 - `GET /api/admin/services` - List services
 - `PUT /api/admin/services/:id/status` - Toggle service active status
 
+### Static & Auxiliary Pages
+- `/app/settings.html` - User settings (profile edit, password, seller mode)
+- `/app/change-password.html` - Dedicated password change page
+- `/app/become-seller.html` - Seller activation landing page
+- `/app/about.html` - About Us page
+- `/app/terms.html` - Terms of Service
+- `/app/privacy.html` - Privacy Policy
+- `/app/help.html` - Help center / FAQ
+- `/app/contact.html` - Contact form
+
 ### Environment Variables Required
 - `MONGO_URI` - MongoDB connection string (required)
 - `JWT_SECRET` - JWT signing secret (defaults to fallback)

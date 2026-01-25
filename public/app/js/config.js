@@ -61,6 +61,18 @@ const CONFIG = {
         ADMIN_USERS: '/app/admin/users.html',
         ADMIN_DISPUTES: '/app/admin/disputes.html',
         ADMIN_SERVICES: '/app/admin/services.html',
+        
+        // Settings & Account Routes
+        SETTINGS: '/app/settings.html',
+        CHANGE_PASSWORD: '/app/change-password.html',
+        BECOME_SELLER: '/app/become-seller.html',
+        
+        // Static Pages
+        ABOUT: '/app/about.html',
+        TERMS: '/app/terms.html',
+        PRIVACY: '/app/privacy.html',
+        HELP: '/app/help.html',
+        CONTACT: '/app/contact.html',
     },
     
     // ─────────────────────────────────────────────────────────────────────────

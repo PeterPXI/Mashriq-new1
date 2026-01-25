@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإعدادات | مشرق</title>
+    
+    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+</head>
+<body class="min-h-screen bg-gray-50 font-sans">
+    <header id="navbar"></header>
+    
+    <main class="py-8 lg:py-12">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
+                <span>/</span>
+                <span class="text-gray-900 font-medium">الإعدادات</span>
+            </nav>
+            
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">الإعدادات</h1>
+            
+            <div class="space-y-6">
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 mb-1">الملف الشخصي</h2>
+                        <p class="text-sm text-gray-500">تعديل معلوماتك الشخصية والصورة</p>
+                    </div>
+                    <form id="profileForm" class="p-6 space-y-5">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="relative">
+                                <div id="avatarPreview" class="w-20 h-20 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
+                                    <span id="avatarInitials"></span>
+                                    <img id="avatarImg" src="" alt="" class="hidden w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">رابط الصورة الشخصية</label>
+                                <input type="url" id="avatarUrl" placeholder="https://example.com/avatar.jpg" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            </div>
+                        </div>
+                        
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
+                                <input type="text" id="fullName" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
+                                <input type="text" id="username" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                            <input type="email" id="email" disabled class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 cursor-not-allowed">
+                            <p class="text-xs text-gray-400 mt-1">لا يمكن تغيير البريد الإلكتروني</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">نبذة عنك</label>
+                            <textarea id="bio" rows="3" placeholder="اكتب نبذة مختصرة عن نفسك..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-all resize-none"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-gradient-to-l from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all shadow-lg shadow-primary-500/25">
+                            حفظ التغييرات
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 mb-1">الأمان</h2>
+                        <p class="text-sm text-gray-500">إدارة كلمة المرور وأمان الحساب</p>
+                    </div>
+                    <div class="p-6">
+                        <a href="/app/change-password.html" class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">تغيير كلمة المرور</h3>
+                                    <p class="text-sm text-gray-500">قم بتحديث كلمة المرور بشكل دوري</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-500 transition-colors rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div id="sellerSection" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 mb-1">وضع البائع</h2>
+                        <p class="text-sm text-gray-500">تفعيل حسابك كبائع لعرض خدماتك</p>
+                    </div>
+                    <div class="p-6">
+                        <div id="sellerNotActivated" class="hidden">
+                            <div class="text-center py-4">
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">ابدأ بيع خدماتك</h3>
+                                <p class="text-gray-500 mb-6">فعّل وضع البائع لتتمكن من عرض خدماتك والبدء في الربح</p>
+                                <button id="activateSellerBtn" class="px-6 py-3 bg-gradient-to-l from-green-500 to-green-600 text-white font-semibold rounded-xl hover:from-green-600 hover:to-green-700 transition-all">
+                                    تفعيل وضع البائع
+                                </button>
+                            </div>
+                        </div>
+                        <div id="sellerActivated" class="hidden">
+                            <div class="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-green-800">وضع البائع مفعّل</h3>
+                                    <p class="text-sm text-green-600">يمكنك الآن إضافة خدماتك</p>
+                                </div>
+                            </div>
+                            <a href="/app/seller/dashboard.html" class="mt-4 inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium">
+                                الذهاب للوحة البائع
+                                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-red-600 mb-1">منطقة الخطر</h2>
+                        <p class="text-sm text-gray-500">إجراءات لا يمكن التراجع عنها</p>
+                    </div>
+                    <div class="p-6">
+                        <button id="logoutBtn" class="flex items-center gap-3 px-6 py-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-medium">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            تسجيل الخروج
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    
+    <footer id="footer"></footer>
+    
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/components/loader.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/settings.js"></script>
+</body>
+</html>

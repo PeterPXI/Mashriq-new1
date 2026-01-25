@@ -58,12 +58,12 @@ const Footer = {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.HELP}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         كيف تشتري
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.CONTACT}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         الدعم الفني
                                     </a>
                                 </li>
@@ -85,12 +85,12 @@ const Footer = {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.BECOME_SELLER}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         كيف تبيع
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.HELP}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         الضمانات
                                     </a>
                                 </li>
@@ -102,22 +102,22 @@ const Footer = {
                             <h4 class="text-white font-bold mb-4">الشركة</h4>
                             <ul class="space-y-3">
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.ABOUT}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         عن مشرق
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.PRIVACY}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         سياسة الخصوصية
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.TERMS}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         الشروط والأحكام
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+                                    <a href="${CONFIG.ROUTES.CONTACT}" class="text-gray-400 hover:text-primary-400 text-sm transition-colors">
                                         تواصل معنا
                                     </a>
                                 </li>
