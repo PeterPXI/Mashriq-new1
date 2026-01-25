@@ -16,146 +16,204 @@
     <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
     <link rel="stylesheet" href="/app/assets/css/main.css">
+    
+    <style>
+        .animate-fade-up {
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+        
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .trust-card {
+            transition: all 0.3s ease;
+        }
+        .trust-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
+        }
+        
+        .category-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .category-card:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+        
+        .stat-item {
+            position: relative;
+        }
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+        }
+        .stat-item:last-child::after {
+            display: none;
+        }
+        
+        @media (max-width: 640px) {
+            .stat-item::after {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-white font-sans">
     <header id="navbar"></header>
     
     <main>
-        <!-- HERO SECTION WITH INTEGRATED SEARCH -->
-        <section class="relative bg-gradient-to-br from-orange-500 via-orange-400 to-amber-400 overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
-                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <defs>
-                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)"/>
-                </svg>
-            </div>
+        <!-- HERO SECTION -->
+        <section class="relative overflow-hidden hero-pattern" style="background: linear-gradient(to bottom right, #f97316, #fb923c, #fbbf24);">
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-yellow-300/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-600/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
             
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
                 <div class="text-center text-white max-w-4xl mx-auto">
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                    <!-- Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-6 animate-fade-up">
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span>منصة موثوقة لآلاف المحترفين</span>
+                    </div>
+                    
+                    <!-- Headline -->
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 sm:mb-6 animate-fade-up animate-delay-1">
                         وظّف أفضل المواهب العربية
                         <br class="hidden sm:block">
                         <span class="text-yellow-200">لمشروعك القادم</span>
                     </h1>
-                    <p class="text-xl lg:text-2xl text-white/90 mb-10 max-w-2xl mx-auto">
+                    
+                    <!-- Subheadline -->
+                    <p class="text-base sm:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl mx-auto px-4 animate-fade-up animate-delay-2">
                         منصة مشرق تربط بين أصحاب المشاريع والمحترفين العرب. خدمات عالية الجودة بأسعار مناسبة.
                     </p>
                     
-                    <!-- MAIN SEARCH BAR -->
-                    <div class="max-w-3xl mx-auto mb-8">
-                        <form class="bg-white rounded-2xl shadow-2xl p-2 flex flex-col sm:flex-row items-stretch gap-2" id="heroSearchForm">
-                            <div class="flex-1 flex items-center gap-3 px-4 bg-gray-50 rounded-xl">
+                    <!-- SEARCH BAR -->
+                    <div class="max-w-3xl mx-auto mb-6 sm:mb-8 px-2 animate-fade-up animate-delay-3">
+                        <form class="bg-white rounded-2xl shadow-2xl p-1.5 sm:p-2 flex flex-col sm:flex-row items-stretch gap-2" id="heroSearchForm">
+                            <div class="flex-1 flex items-center gap-3 px-3 sm:px-4 bg-gray-50 rounded-xl">
                                 <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="M21 21l-4.35-4.35"/>
                                 </svg>
                                 <input 
                                     type="text" 
-                                    class="flex-1 py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-lg bg-transparent"
+                                    class="flex-1 py-3 sm:py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-base sm:text-lg bg-transparent"
                                     id="heroSearchInput"
-                                    placeholder="ابحث عن أي خدمة... تصميم، برمجة، كتابة"
+                                    placeholder="ابحث عن خدمة... تصميم، برمجة، كتابة"
                                     autocomplete="off"
                                 >
                             </div>
-                            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg">
+                            <button type="submit" class="bg-gradient-to-l from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="M21 21l-4.35-4.35"/>
                                 </svg>
-                                بحث
+                                <span>بحث</span>
                             </button>
                         </form>
                         
                         <!-- Popular Searches -->
-                        <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
-                            <span class="text-white/80 text-sm">الأكثر بحثاً:</span>
-                            <button type="button" class="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur rounded-full text-sm text-white font-medium transition-all search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
-                            <button type="button" class="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur rounded-full text-sm text-white font-medium transition-all search-suggestion" data-search="تطوير موقع">تطوير موقع</button>
-                            <button type="button" class="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur rounded-full text-sm text-white font-medium transition-all search-suggestion" data-search="كتابة مقالات">كتابة مقالات</button>
-                            <button type="button" class="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur rounded-full text-sm text-white font-medium transition-all search-suggestion" data-search="ترجمة">ترجمة</button>
+                        <div class="flex flex-wrap items-center justify-center gap-2 mt-4 sm:mt-6 animate-fade-up animate-delay-4">
+                            <span class="text-white/70 text-xs sm:text-sm">الأكثر بحثاً:</span>
+                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
+                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion hidden sm:inline-flex" data-search="تطوير موقع">تطوير موقع</button>
+                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="كتابة مقالات">كتابة مقالات</button>
+                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="ترجمة">ترجمة</button>
                         </div>
                     </div>
                     
                     <!-- Stats Row -->
-                    <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-16 pt-8 border-t border-white/20">
-                        <div class="text-center">
-                            <div class="text-3xl lg:text-4xl font-extrabold text-white" id="statServices">+500</div>
-                            <div class="text-white/70 text-sm">خدمة متاحة</div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 pt-6 sm:pt-8 border-t border-white/20 max-w-3xl mx-auto">
+                        <div class="stat-item text-center px-2">
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statServices">+500</div>
+                            <div class="text-white/70 text-xs sm:text-sm mt-1">خدمة متاحة</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl lg:text-4xl font-extrabold text-white" id="statSellers">+200</div>
-                            <div class="text-white/70 text-sm">محترف مسجل</div>
+                        <div class="stat-item text-center px-2">
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statSellers">+200</div>
+                            <div class="text-white/70 text-xs sm:text-sm mt-1">محترف مسجل</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl lg:text-4xl font-extrabold text-white" id="statOrders">+1000</div>
-                            <div class="text-white/70 text-sm">مشروع مكتمل</div>
+                        <div class="stat-item text-center px-2">
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statOrders">+1000</div>
+                            <div class="text-white/70 text-xs sm:text-sm mt-1">مشروع مكتمل</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl lg:text-4xl font-extrabold text-white">4.9</div>
-                            <div class="text-white/70 text-sm">متوسط التقييم</div>
+                        <div class="stat-item text-center px-2">
+                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">4.9</div>
+                            <div class="text-white/70 text-xs sm:text-sm mt-1">متوسط التقييم</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Wave Decoration -->
+            <!-- Wave -->
             <div class="absolute bottom-0 left-0 right-0">
-                <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
-                    <path d="M0 100V60C240 20 480 0 720 0C960 0 1200 20 1440 60V100H0Z" fill="white"/>
+                <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full" preserveAspectRatio="none">
+                    <path d="M0 80V50C360 10 720 0 1080 20C1260 30 1380 50 1440 60V80H0Z" fill="white"/>
                 </svg>
             </div>
         </section>
         
         <!-- TRUST BADGES -->
-        <section class="py-8 bg-white border-b border-gray-100">
+        <section class="py-6 sm:py-8 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-16 text-gray-600">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+                    <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                         </div>
-                        <div>
-                            <div class="font-bold text-gray-900">ضمان الأموال</div>
-                            <div class="text-sm text-gray-500">أموالك محفوظة بأمان</div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-gray-900 text-sm sm:text-base truncate">ضمان الأموال</div>
+                            <div class="text-xs sm:text-sm text-gray-500 truncate">أموالك محفوظة بأمان</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
-                        <div>
-                            <div class="font-bold text-gray-900">تسليم سريع</div>
-                            <div class="text-sm text-gray-500">خدمات في الوقت المحدد</div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-gray-900 text-sm sm:text-base truncate">تسليم سريع</div>
+                            <div class="text-xs sm:text-sm text-gray-500 truncate">خدمات في الوقت المحدد</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <div>
-                            <div class="font-bold text-gray-900">محترفون موثوقون</div>
-                            <div class="text-sm text-gray-500">فريق تم التحقق منه</div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-gray-900 text-sm sm:text-base truncate">محترفون موثوقون</div>
+                            <div class="text-xs sm:text-sm text-gray-500 truncate">فريق تم التحقق منه</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
                             </svg>
                         </div>
-                        <div>
-                            <div class="font-bold text-gray-900">دعم متواصل</div>
-                            <div class="text-sm text-gray-500">مساعدة على مدار الساعة</div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-gray-900 text-sm sm:text-base truncate">دعم متواصل</div>
+                            <div class="text-xs sm:text-sm text-gray-500 truncate">مساعدة على مدار الساعة</div>
                         </div>
                     </div>
                 </div>
@@ -163,9 +221,9 @@
         </section>
         
         <!-- CATEGORIES SECTION -->
-        <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50/50" id="categories">
+        <section class="py-10 sm:py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50/50" id="categories">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-10">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-10">
                     <div class="text-center sm:text-right">
                         <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">تصفح حسب التخصص</h2>
                         <p class="text-gray-500 text-sm sm:text-base">اختر الفئة المناسبة لاحتياجاتك</p>
@@ -178,7 +236,7 @@
                     </a>
                 </div>
                 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5" id="categoriesGrid">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5" id="categoriesGrid">
                 </div>
                 
                 <div class="text-center mt-6 sm:hidden">
@@ -193,12 +251,12 @@
         </section>
         
         <!-- FEATURED SERVICES SECTION -->
-        <section class="py-16 lg:py-20 bg-gray-50" id="featuredServices">
+        <section class="py-10 sm:py-14 lg:py-20 bg-gray-50" id="featuredServices">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between mb-10">
-                    <div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">خدمات مميزة</h2>
-                        <p class="text-gray-500">أفضل الخدمات من بائعين موثوقين</p>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 sm:mb-10">
+                    <div class="text-center sm:text-right">
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">خدمات مميزة</h2>
+                        <p class="text-gray-500 text-sm sm:text-base">أفضل الخدمات من بائعين موثوقين</p>
                     </div>
                     <a href="/app/explore.html" class="hidden sm:flex items-center gap-2 text-orange-500 hover:text-orange-600 font-semibold transition-colors">
                         عرض الكل
@@ -208,13 +266,13 @@
                     </a>
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="featuredServicesGrid">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" id="featuredServicesGrid">
                 </div>
                 
-                <div class="text-center mt-10 sm:hidden">
-                    <a href="/app/explore.html" class="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-semibold">
-                        عرض المزيد
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="text-center mt-8 sm:hidden">
+                    <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all">
+                        عرض المزيد من الخدمات
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>
                     </a>
@@ -223,121 +281,123 @@
         </section>
         
         <!-- HOW IT WORKS SECTION -->
-        <section class="py-16 lg:py-20 bg-white" id="howItWorks">
+        <section class="py-10 sm:py-14 lg:py-20 bg-white" id="howItWorks">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-14">
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">كيف تعمل منصة مشرق؟</h2>
-                    <p class="text-gray-500 text-lg max-w-2xl mx-auto">ثلاث خطوات بسيطة للحصول على خدمتك</p>
+                <div class="text-center mb-8 sm:mb-14">
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-4">كيف تعمل منصة مشرق؟</h2>
+                    <p class="text-gray-500 text-sm sm:text-lg max-w-2xl mx-auto">ثلاث خطوات بسيطة للحصول على خدمتك</p>
                 </div>
                 
-                <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+                <div class="grid sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
                     <div class="text-center">
-                        <div class="relative inline-flex mb-6">
-                            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <div class="relative inline-flex mb-4 sm:mb-6">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                     <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">ابحث عن الخدمة</h3>
-                        <p class="text-gray-500 leading-relaxed">تصفح آلاف الخدمات في مختلف التخصصات واختر ما يناسب مشروعك</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">ابحث عن الخدمة</h3>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">تصفح آلاف الخدمات في مختلف التخصصات واختر ما يناسب مشروعك</p>
                     </div>
                     
                     <div class="text-center">
-                        <div class="relative inline-flex mb-6">
-                            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <div class="relative inline-flex mb-4 sm:mb-6">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                     <path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/>
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">اطلب بأمان</h3>
-                        <p class="text-gray-500 leading-relaxed">ادفع بأمان عبر نظام الضمان - أموالك محفوظة حتى تستلم الخدمة</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">اطلب بأمان</h3>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">ادفع بأمان عبر نظام الضمان - أموالك محفوظة حتى تستلم الخدمة</p>
                     </div>
                     
                     <div class="text-center">
-                        <div class="relative inline-flex mb-6">
-                            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <div class="relative inline-flex mb-4 sm:mb-6">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                     <path d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">استلم ووافق</h3>
-                        <p class="text-gray-500 leading-relaxed">استلم عملك، راجعه، وعند رضاك يتم تحويل المبلغ للبائع</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">استلم ووافق</h3>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">استلم عملك، راجعه، وعند رضاك يتم تحويل المبلغ للبائع</p>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- BECOME A SELLER CTA -->
-        <section class="py-16 lg:py-20 bg-gradient-to-l from-gray-900 to-gray-800">
+        <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-l from-gray-900 to-gray-800 overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <span class="inline-block px-4 py-2 bg-orange-500/20 text-orange-400 rounded-full text-sm font-medium mb-6">للمحترفين</span>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                    <div class="text-center lg:text-right">
+                        <span class="inline-block px-4 py-2 bg-orange-500/20 text-orange-400 rounded-full text-sm font-medium mb-4 sm:mb-6">للمحترفين</span>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-4 sm:mb-6">
                             ابدأ بتقديم خدماتك
                             <br>
                             <span class="text-orange-400">واربح من مهاراتك</span>
                         </h2>
-                        <p class="text-gray-400 text-lg mb-8 leading-relaxed">
-                            انضم لمجتمع المحترفين على مشرق. أنشئ خدماتك، حدد أسعارك، واستقبل طلبات من عملاء حقيقيين. نحن نوفر لك المنصة والحماية.
+                        <p class="text-gray-400 text-sm sm:text-lg mb-6 sm:mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                            انضم لمجتمع المحترفين على مشرق. أنشئ خدماتك، حدد أسعارك، واستقبل طلبات من عملاء حقيقيين.
                         </p>
-                        <ul class="space-y-4 mb-8">
-                            <li class="flex items-center gap-3 text-gray-300">
-                                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <ul class="space-y-3 sm:space-y-4 mb-6 sm:mb-8 text-right max-w-sm mx-auto lg:mx-0">
+                            <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
                                 تسجيل مجاني بالكامل
                             </li>
-                            <li class="flex items-center gap-3 text-gray-300">
-                                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
                                 ضمان استلام أموالك
                             </li>
-                            <li class="flex items-center gap-3 text-gray-300">
-                                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
                                 دعم فني متكامل
                             </li>
                         </ul>
-                        <a href="/app/register.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg">
+                        <a href="/app/register.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl">
                             ابدأ البيع الآن
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
                         </a>
                     </div>
+                    
+                    <!-- Earnings Card - Hidden on mobile -->
                     <div class="hidden lg:block">
                         <div class="relative">
                             <div class="absolute -inset-4 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl blur-2xl opacity-30"></div>
-                            <div class="relative bg-white rounded-2xl p-8 shadow-2xl">
+                            <div class="relative bg-white rounded-2xl p-6 sm:p-8 shadow-2xl">
                                 <div class="flex items-center gap-4 mb-6">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-xl sm:text-2xl font-bold">
                                         $
                                     </div>
                                     <div>
-                                        <div class="text-2xl font-bold text-gray-900">أرباحك الشهرية</div>
-                                        <div class="text-gray-500">بناءً على متوسط البائعين</div>
+                                        <div class="text-xl sm:text-2xl font-bold text-gray-900">أرباحك الشهرية</div>
+                                        <div class="text-gray-500 text-sm">بناءً على متوسط البائعين</div>
                                     </div>
                                 </div>
-                                <div class="space-y-4">
-                                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                        <span class="text-gray-600">5 طلبات/شهر</span>
+                                <div class="space-y-3 sm:space-y-4">
+                                    <div class="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-xl">
+                                        <span class="text-gray-600 text-sm sm:text-base">5 طلبات/شهر</span>
                                         <span class="font-bold text-gray-900">$150 - $250</span>
                                     </div>
-                                    <div class="flex items-center justify-between p-4 bg-orange-50 rounded-xl border-2 border-orange-200">
-                                        <span class="text-gray-600">15 طلب/شهر</span>
+                                    <div class="flex items-center justify-between p-3 sm:p-4 bg-orange-50 rounded-xl border-2 border-orange-200">
+                                        <span class="text-gray-600 text-sm sm:text-base">15 طلب/شهر</span>
                                         <span class="font-bold text-orange-600">$450 - $750</span>
                                     </div>
-                                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                        <span class="text-gray-600">30 طلب/شهر</span>
+                                    <div class="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-xl">
+                                        <span class="text-gray-600 text-sm sm:text-base">30 طلب/شهر</span>
                                         <span class="font-bold text-gray-900">$900 - $1500</span>
                                     </div>
                                 </div>
@@ -349,20 +409,20 @@
         </section>
         
         <!-- FINAL CTA SECTION -->
-        <section class="py-16 lg:py-20 bg-orange-50" id="cta">
+        <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-orange-50 to-white" id="cta">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">مستعد لبدء مشروعك؟</h2>
-                <p class="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+                <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-3 sm:mb-4">مستعد لبدء مشروعك؟</h2>
+                <p class="text-gray-600 text-sm sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
                     انضم لآلاف العملاء الراضين واحصل على خدمات احترافية اليوم. التسجيل مجاني ويستغرق دقيقة واحدة.
                 </p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <a href="/app/register.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg" id="ctaButton">
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+                    <a href="/app/register.html" class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl" id="ctaButton">
                         أنشئ حسابك مجاناً
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>
                     </a>
-                    <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-gray-300 px-8 py-4 rounded-xl font-bold text-lg transition-all">
+                    <a href="/app/explore.html" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-gray-300 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all">
                         تصفح الخدمات
                     </a>
                 </div>
