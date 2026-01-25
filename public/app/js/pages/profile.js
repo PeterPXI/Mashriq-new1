@@ -223,7 +223,11 @@
             console.log('Profile loaded:', state.user);
             
             // Render profile
-            renderProfile();
+            try {
+                renderProfile();
+            } catch (renderErr) {
+                console.warn('Non-critical error in renderProfile:', renderErr);
+            }
             
             // Load additional data in parallel
             const additionalData = [
@@ -237,9 +241,13 @@
             
             await Promise.all(additionalData);
             
-            // Render tabs content
-            renderOverview();
-            renderAchievements();
+            // Render tabs content - non-critical, don't fail the whole page
+            try {
+                renderOverview();
+                renderAchievements();
+            } catch (renderErr) {
+                console.warn('Non-critical error in render:', renderErr);
+            }
             
             // Show owner-only elements
             if (state.isOwner) {
@@ -248,7 +256,10 @@
             
         } catch (error) {
             console.error('Failed to load profile:', error);
-            Toast.error('خطأ', 'تعذر تحميل الملف الشخصي');
+            // Only show error toast if we don't have any user data
+            if (!state.user) {
+                Toast.error('خطأ', 'تعذر تحميل الملف الشخصي');
+            }
         } finally {
             state.isLoading = false;
         }

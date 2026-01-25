@@ -35,11 +35,18 @@
             const response = await API.get(CONFIG.ENDPOINTS.ME);
             if (response.success && response.data?.user) {
                 const user = response.data.user;
-                populateForm(user);
+                try {
+                    populateForm(user);
+                } catch (formErr) {
+                    console.warn('Non-critical error populating form:', formErr);
+                }
             }
         } catch (error) {
             console.error('Failed to load user data:', error);
-            Toast.error('خطأ', 'تعذر تحميل البيانات');
+            // Only show toast if it's actually a network/API error
+            if (error?.message) {
+                Toast.error('خطأ', 'تعذر تحميل البيانات');
+            }
         }
     }
     
