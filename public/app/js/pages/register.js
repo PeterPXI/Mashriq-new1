@@ -114,14 +114,28 @@
                 role: document.querySelector('input[name="role"]:checked')?.value || 'buyer'
             });
             
-            // Show success
-            showAlert('success', response.message || 'تم إنشاء الحساب بنجاح! جاري التحويل لصفحة تسجيل الدخول...');
-            Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح');
-            
-            // Redirect to login after short delay
-            setTimeout(() => {
-                window.location.href = CONFIG.ROUTES.LOGIN;
-            }, 2000);
+            // Auto-login with returned token
+            if (response.data?.token && response.data?.user) {
+                Auth.setToken(response.data.token);
+                Auth.setUser(response.data.user);
+                
+                // Show success
+                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح');
+                showAlert('success', 'تم إنشاء الحساب بنجاح! جاري التحويل...');
+                
+                // Redirect to home after short delay
+                setTimeout(() => {
+                    window.location.href = CONFIG.ROUTES.HOME;
+                }, 1000);
+            } else {
+                // Fallback to login page if no token returned
+                showAlert('success', response.message || 'تم إنشاء الحساب بنجاح! جاري التحويل لصفحة تسجيل الدخول...');
+                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح');
+                
+                setTimeout(() => {
+                    window.location.href = CONFIG.ROUTES.LOGIN;
+                }, 2000);
+            }
             
         } catch (error) {
             console.error('Registration error:', error);
