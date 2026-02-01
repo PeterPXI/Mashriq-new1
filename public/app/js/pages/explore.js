@@ -85,6 +85,115 @@
         
         // Load services
         await loadServices();
+        
+        // Initialize AI features
+        await initAI();
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // AI Smart Search
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    let aiEnabled = false;
+    
+    async function initAI() {
+        if (typeof MashriqAI === 'undefined') {
+            console.log('AI Assistant not loaded');
+            return;
+        }
+        
+        try {
+            aiEnabled = await MashriqAI.init();
+            
+            if (aiEnabled) {
+                // Show toggle button
+                const toggleBtn = document.getElementById('toggleAISearchBtn');
+                if (toggleBtn) toggleBtn.classList.remove('hidden');
+                
+                // Bind AI events
+                bindAISearchEvents();
+                
+                console.log('🤖 AI Smart Search enabled');
+            }
+        } catch (error) {
+            console.log('AI initialization failed:', error);
+        }
+    }
+    
+    function bindAISearchEvents() {
+        const toggleBtn = document.getElementById('toggleAISearchBtn');
+        const aiSection = document.getElementById('aiSmartSearchSection');
+        const smartSearchBtn = document.getElementById('smartSearchBtn');
+        const smartSearchInput = document.getElementById('smartSearchInput');
+        const toggleText = document.getElementById('toggleAISearchText');
+        
+        let isAISearchVisible = false;
+        
+        // Toggle AI search section
+        toggleBtn?.addEventListener('click', () => {
+            isAISearchVisible = !isAISearchVisible;
+            if (isAISearchVisible) {
+                aiSection?.classList.remove('hidden');
+                toggleText.textContent = 'إخفاء البحث الذكي';
+                smartSearchInput?.focus();
+            } else {
+                aiSection?.classList.add('hidden');
+                toggleText.textContent = 'جرّب البحث الذكي';
+            }
+        });
+        
+        // Smart search handler
+        smartSearchBtn?.addEventListener('click', async () => {
+            const query = smartSearchInput?.value.trim();
+            if (!query) {
+                Toast.warning('تنبيه', 'يرجى وصف ما تحتاجه');
+                return;
+            }
+            
+            try {
+                MashriqAI.setButtonLoading(smartSearchBtn, true);
+                
+                const categories = CONFIG.CATEGORIES.map(c => c.name);
+                const result = await MashriqAI.smartSearch(query, categories);
+                
+                // Apply the search result
+                if (result.searchTerms && result.searchTerms.length > 0) {
+                    const searchTerm = result.searchTerms[0];
+                    state.filters.search = searchTerm;
+                    if (elements.searchInput) elements.searchInput.value = searchTerm;
+                }
+                
+                if (result.suggestedCategory) {
+                    // Find matching category
+                    const cat = CONFIG.CATEGORIES.find(c => 
+                        c.name.includes(result.suggestedCategory) || 
+                        result.suggestedCategory.includes(c.name)
+                    );
+                    if (cat) {
+                        state.filters.category = cat.id;
+                        if (elements.categoryFilter) elements.categoryFilter.value = cat.id;
+                    }
+                }
+                
+                state.currentPage = 1;
+                await loadServices();
+                
+                // Show tips toast
+                if (result.tips && result.tips.length > 0) {
+                    Toast.info('💡 نصيحة', result.tips[0]);
+                }
+                
+                // Hide AI section after search
+                aiSection?.classList.add('hidden');
+                toggleText.textContent = 'جرّب البحث الذكي';
+                isAISearchVisible = false;
+                
+            } catch (error) {
+                Toast.error('خطأ', error.message || 'فشل البحث الذكي');
+            } finally {
+                MashriqAI.setButtonLoading(smartSearchBtn, false);
+            }
+        });
     }
     
     // ─────────────────────────────────────────────────────────────────────────

@@ -8,8 +8,10 @@
 const Navbar = {
     /**
      * Render the navbar
+     * @param {HTMLElement} container - Container element
+     * @param {Object} options - Options: { hideAuthButtons: boolean }
      */
-    render(container) {
+    render(container, options = {}) {
         if (!container) {
             container = document.getElementById('navbar');
         }
@@ -18,19 +20,34 @@ const Navbar = {
         const isLoggedIn = Auth.isAuthenticated();
         const user = Auth.getUser();
         const isSeller = Auth.isSeller();
+        const hideAuthButtons = options.hideAuthButtons || false;
+        const showRegisterOnly = options.showRegisterOnly || false;
+        const showLoginOnly = options.showLoginOnly || false;
+        
+        // Determine which auth buttons to show
+        let authContent = '';
+        if (isLoggedIn) {
+            authContent = this.renderLoggedIn(user, isSeller);
+        } else if (showRegisterOnly) {
+            authContent = `<a href="${CONFIG.ROUTES.REGISTER}" class="px-3 sm:px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors">إنشاء حساب</a>`;
+        } else if (showLoginOnly) {
+            authContent = `<a href="${CONFIG.ROUTES.LOGIN}" class="px-3 sm:px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors">تسجيل الدخول</a>`;
+        } else if (!hideAuthButtons) {
+            authContent = this.renderLoggedOut();
+        }
         
         container.innerHTML = `
             <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center justify-between h-14 sm:h-16">
                         <!-- Logo -->
-                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-3 font-bold text-xl text-gray-900 hover:text-primary-600 transition-all group">
-                            <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-10 h-10 rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all">
-                            <span class="hidden sm:block bg-gradient-to-l from-primary-600 to-primary-500 bg-clip-text text-transparent text-2xl font-extrabold">مشرق</span>
+                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-2 sm:gap-3 font-bold text-xl text-gray-900 hover:text-primary-600 transition-all group">
+                            <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all">
+                            <span class="bg-gradient-to-l from-primary-600 to-primary-500 bg-clip-text text-transparent text-lg sm:text-2xl font-extrabold">مشرق</span>
                         </a>
                         
-                        <!-- Navigation Links -->
-                        <ul class="flex items-center gap-1">
+                        <!-- Navigation Links (Hidden on mobile) -->
+                        <ul class="hidden sm:flex items-center gap-1">
                             <li>
                                 <a href="${CONFIG.ROUTES.EXPLORE}" class="px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors ${this.isActive('/explore') ? 'text-primary-600 bg-primary-50' : ''}">
                                     استكشف الخدمات
@@ -47,8 +64,45 @@ const Navbar = {
                         
                         <!-- Actions -->
                         <div class="flex items-center gap-2 sm:gap-3">
-                            ${isLoggedIn ? this.renderLoggedIn(user, isSeller) : this.renderLoggedOut()}
+                            ${authContent}
+                            
+                            <!-- Mobile Menu Button -->
+                            <button class="sm:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" id="mobileMenuBtn" aria-label="القائمة">
+                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </button>
                         </div>
+                    </div>
+                    
+                    <!-- Mobile Menu (Hidden by default) -->
+                    <div class="sm:hidden hidden pb-4 border-t border-gray-100 mt-2 pt-3" id="mobileMenu">
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="${CONFIG.ROUTES.EXPLORE}" class="block px-4 py-3 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors ${this.isActive('/explore') ? 'text-primary-600 bg-primary-50' : ''}">
+                                    استكشف الخدمات
+                                </a>
+                            </li>
+                            ${isSeller ? `
+                                <li>
+                                    <a href="${CONFIG.ROUTES.SELLER_SERVICES}" class="block px-4 py-3 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors ${this.isActive('/seller/services') ? 'text-primary-600 bg-primary-50' : ''}">
+                                        خدماتي
+                                    </a>
+                                </li>
+                            ` : ''}
+                            ${!isLoggedIn && !hideAuthButtons && !showRegisterOnly && !showLoginOnly ? `
+                                <li class="pt-2 border-t border-gray-100 mt-2">
+                                    <a href="${CONFIG.ROUTES.LOGIN}" class="block px-4 py-3 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors">
+                                        تسجيل الدخول
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="${CONFIG.ROUTES.REGISTER}" class="block px-4 py-3 rounded-lg bg-primary-500 text-white font-medium text-center">
+                                        إنشاء حساب
+                                    </a>
+                                </li>
+                            ` : ''}
+                        </ul>
                     </div>
                 </div>
             </nav>
@@ -188,6 +242,23 @@ const Navbar = {
      * Bind navbar events
      */
     bindEvents(container) {
+        // Mobile Menu Toggle
+        const mobileMenuBtn = container.querySelector('#mobileMenuBtn');
+        const mobileMenu = container.querySelector('#mobileMenu');
+        
+        mobileMenuBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu?.classList.toggle('hidden');
+            // Toggle icon between hamburger and X
+            const icon = mobileMenuBtn.querySelector('svg');
+            if (mobileMenu?.classList.contains('hidden')) {
+                icon.innerHTML = '<path d="M4 6h16M4 12h16M4 18h16"/>';
+            } else {
+                icon.innerHTML = '<path d="M6 18L18 6M6 6l12 12"/>';
+            }
+        });
+        
+        // User Dropdown
         const dropdown = container.querySelector('#userDropdown');
         const dropdownMenu = container.querySelector('#userDropdownMenu');
         
@@ -196,10 +267,16 @@ const Navbar = {
             dropdownMenu?.classList.toggle('hidden');
         });
         
+        // Close dropdowns on outside click
         document.addEventListener('click', () => {
             dropdownMenu?.classList.add('hidden');
+            mobileMenu?.classList.add('hidden');
+            // Reset mobile menu icon
+            const icon = mobileMenuBtn?.querySelector('svg');
+            if (icon) icon.innerHTML = '<path d="M4 6h16M4 12h16M4 18h16"/>';
         });
         
+        // Logout
         const logoutBtn = container.querySelector('#logoutBtn');
         logoutBtn?.addEventListener('click', () => {
             Auth.logout();

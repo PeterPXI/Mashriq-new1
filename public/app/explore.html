@@ -1,179 +1,247 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="استكشف آلاف الخدمات الرقمية الاحترافية على منصة مشرق - تصميم، برمجة، كتابة، ترجمة والمزيد">
-    
+    <meta name="description"
+        content="استكشف آلاف الخدمات الرقمية الاحترافية على منصة مشرق - تصميم، برمجة، كتابة، ترجمة والمزيد">
+
     <title>استكشف الخدمات | مشرق</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
-    
+
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
-    
+
     <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
 </head>
+
 <body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
-    
+
     <!-- Main Content -->
     <main>
-        
+
         <!-- ═══════════════════════════════════════════════════════════════
              PAGE HEADER
              ═══════════════════════════════════════════════════════════════ -->
-        <section class="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 py-16 lg:py-20 overflow-hidden">
+        <section
+            class="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 py-16 lg:py-20 overflow-hidden">
             <!-- Background Effects -->
             <div class="absolute inset-0 overflow-hidden">
                 <div class="absolute -top-20 -right-20 w-64 h-64 bg-yellow-400/20 rounded-full blur-3xl"></div>
                 <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"></div>
             </div>
-            
+
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                 <div class="text-center text-white mb-10">
                     <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">استكشف الخدمات</h1>
                     <p class="text-white/90 text-lg">اكتشف آلاف الخدمات الاحترافية من بائعين موثوقين</p>
                 </div>
-                
+
                 <!-- Search Bar -->
                 <div class="max-w-2xl mx-auto">
-                    <form class="flex bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-white/50" id="searchForm">
-                        <input 
-                            type="text" 
-                            class="flex-1 min-w-0 px-6 py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-base bg-transparent" 
-                            id="searchInput"
-                            placeholder="ابحث عن خدمة..."
-                            autocomplete="off"
-                        >
-                        <button type="submit" class="flex-shrink-0 bg-gradient-to-l from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-4 font-semibold flex items-center gap-2 transition-all shadow-lg m-1.5 rounded-xl">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <circle cx="11" cy="11" r="8"/>
-                                <path d="M21 21l-4.35-4.35"/>
+                    <form
+                        class="flex bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-white/50"
+                        id="searchForm">
+                        <input type="text"
+                            class="flex-1 min-w-0 px-6 py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-base bg-transparent"
+                            id="searchInput" placeholder="ابحث عن خدمة..." autocomplete="off">
+                        <button type="submit"
+                            class="flex-shrink-0 bg-gradient-to-l from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-4 font-semibold flex items-center gap-2 transition-all shadow-lg m-1.5 rounded-xl">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="M21 21l-4.35-4.35" />
                             </svg>
                             <span class="hidden sm:inline">بحث</span>
                         </button>
                     </form>
+
+                    <!-- AI Smart Search (hidden by default) -->
+                    <div id="aiSmartSearchSection" class="mt-4 hidden">
+                        <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-4 border border-purple-200 shadow-lg">
+                            <div class="flex items-center gap-2 mb-3">
+                                <svg class="ai-icon text-purple-600" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                                </svg>
+                                <span class="text-purple-700 font-semibold">البحث الذكي بالـ AI</span>
+                            </div>
+                            <textarea id="smartSearchInput"
+                                class="w-full px-4 py-3 bg-purple-50 border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 text-gray-700 placeholder-gray-400 resize-none"
+                                rows="2"
+                                placeholder="وصف اللي محتاجه... مثال: عايز حد يصممل شعار لمحل ملابس أطفال"></textarea>
+                            <button type="button" id="smartSearchBtn"
+                                class="mt-2 w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all">
+                                <svg class="ai-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="M21 21l-4.35-4.35" />
+                                </svg>
+                                ابحث بالـ AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Toggle AI Search Button -->
+                    <div class="text-center mt-3">
+                        <button type="button" id="toggleAISearchBtn"
+                            class="hidden text-white/80 hover:text-white text-sm font-medium flex items-center gap-2 mx-auto transition-colors">
+                            <svg class="ai-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                            </svg>
+                            <span id="toggleAISearchText">جرّب البحث الذكي</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- ═══════════════════════════════════════════════════════════════
              FILTERS & RESULTS
              ═══════════════════════════════════════════════════════════════ -->
         <section class="py-8 lg:py-12">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 <!-- Filters Bar -->
-                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 p-4 bg-white rounded-xl shadow-sm" id="filtersBar">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 p-4 bg-white rounded-xl shadow-sm"
+                    id="filtersBar">
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- Category Filter -->
-                        <select class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" id="categoryFilter">
+                        <select
+                            class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            id="categoryFilter">
                             <option value="">جميع التخصصات</option>
                         </select>
-                        
+
                         <!-- Sort Filter -->
-                        <select class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" id="sortFilter">
+                        <select
+                            class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            id="sortFilter">
                             <option value="-createdAt">الأحدث</option>
                             <option value="-rating">الأعلى تقييمًا</option>
                             <option value="price">السعر: من الأقل</option>
                             <option value="-price">السعر: من الأعلى</option>
                             <option value="-ordersCount">الأكثر مبيعًا</option>
                         </select>
-                        
+
                         <!-- Delivery Time Filter -->
-                        <select class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hidden sm:block" id="deliveryFilter">
+                        <select
+                            class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hidden sm:block"
+                            id="deliveryFilter">
                             <option value="">مدة التسليم</option>
                             <option value="1">خلال يوم</option>
                             <option value="3">حتى 3 أيام</option>
                             <option value="7">حتى أسبوع</option>
                         </select>
-                        
+
                         <!-- Rating Filter -->
-                        <select class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hidden sm:block" id="ratingFilter">
+                        <select
+                            class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hidden sm:block"
+                            id="ratingFilter">
                             <option value="">التقييم</option>
                             <option value="4">4+ نجوم</option>
                             <option value="3">3+ نجوم</option>
                             <option value="2">2+ نجوم</option>
                         </select>
-                        
+
                         <!-- Price Range Button -->
-                        <button type="button" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors hidden sm:flex items-center gap-2" id="priceRangeBtn">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="1" x2="12" y2="23"/>
-                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                        <button type="button"
+                            class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors hidden sm:flex items-center gap-2"
+                            id="priceRangeBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23" />
+                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                             </svg>
                             <span id="priceRangeLabel">نطاق السعر</span>
                         </button>
                     </div>
-                    
+
                     <!-- Results Count & View Toggle -->
                     <div class="flex items-center gap-4">
                         <span class="text-sm text-gray-500" id="resultsCount">جاري التحميل...</span>
-                        
+
                         <!-- View Toggle -->
                         <div class="flex bg-gray-100 rounded-lg p-1" id="viewToggle">
-                            <button type="button" class="p-2 rounded-md text-gray-500 hover:text-gray-700 transition-colors view-btn active" data-view="grid" aria-label="عرض شبكي">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="7" height="7"/>
-                                    <rect x="14" y="3" width="7" height="7"/>
-                                    <rect x="14" y="14" width="7" height="7"/>
-                                    <rect x="3" y="14" width="7" height="7"/>
+                            <button type="button"
+                                class="p-2 rounded-md text-gray-500 hover:text-gray-700 transition-colors view-btn active"
+                                data-view="grid" aria-label="عرض شبكي">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7" />
+                                    <rect x="14" y="3" width="7" height="7" />
+                                    <rect x="14" y="14" width="7" height="7" />
+                                    <rect x="3" y="14" width="7" height="7" />
                                 </svg>
                             </button>
-                            <button type="button" class="p-2 rounded-md text-gray-500 hover:text-gray-700 transition-colors view-btn" data-view="list" aria-label="عرض قائمة">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="8" y1="6" x2="21" y2="6"/>
-                                    <line x1="8" y1="12" x2="21" y2="12"/>
-                                    <line x1="8" y1="18" x2="21" y2="18"/>
-                                    <line x1="3" y1="6" x2="3.01" y2="6"/>
-                                    <line x1="3" y1="12" x2="3.01" y2="12"/>
-                                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            <button type="button"
+                                class="p-2 rounded-md text-gray-500 hover:text-gray-700 transition-colors view-btn"
+                                data-view="list" aria-label="عرض قائمة">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="8" y1="6" x2="21" y2="6" />
+                                    <line x1="8" y1="12" x2="21" y2="12" />
+                                    <line x1="8" y1="18" x2="21" y2="18" />
+                                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                                    <line x1="3" y1="18" x2="3.01" y2="18" />
                                 </svg>
                             </button>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Active Filters -->
                 <div class="hidden flex-wrap items-center gap-2 mb-6" id="activeFilters">
                     <span class="text-sm text-gray-500">الفلاتر النشطة:</span>
                     <div class="flex flex-wrap gap-2" id="activeFiltersList"></div>
-                    <button type="button" class="flex items-center gap-1 text-sm text-red-500 hover:text-red-600 transition-colors" id="clearFiltersBtn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
+                    <button type="button"
+                        class="flex items-center gap-1 text-sm text-red-500 hover:text-red-600 transition-colors"
+                        id="clearFiltersBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                         مسح الكل
                     </button>
                 </div>
-                
+
                 <!-- Services Grid -->
                 <div class="services-grid" id="servicesGrid">
                     <!-- Services will be loaded here -->
                 </div>
-                
+
                 <!-- Pagination -->
                 <nav class="flex justify-center mt-10" id="pagination" aria-label="التنقل بين الصفحات">
                     <!-- Pagination will be rendered here -->
                 </nav>
-                
+
             </div>
         </section>
-        
+
         <!-- Price Range Modal -->
         <div id="priceRangeModal" class="fixed inset-0 z-50 hidden">
             <div class="absolute inset-0 bg-black/50" id="priceModalOverlay"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+            <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-bold text-gray-900">نطاق السعر</h3>
-                    <button type="button" id="closePriceModal" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
+                    <button type="button" id="closePriceModal"
+                        class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                     </button>
                 </div>
@@ -182,7 +250,9 @@
                         <div class="flex-1">
                             <label class="block text-sm text-gray-600 mb-1">من</label>
                             <div class="relative">
-                                <input type="number" id="minPriceInput" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" min="0">
+                                <input type="number" id="minPriceInput"
+                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                    placeholder="0" min="0">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                             </div>
                         </div>
@@ -190,28 +260,32 @@
                         <div class="flex-1">
                             <label class="block text-sm text-gray-600 mb-1">إلى</label>
                             <div class="relative">
-                                <input type="number" id="maxPriceInput" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="1000" min="0">
+                                <input type="number" id="maxPriceInput"
+                                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                    placeholder="1000" min="0">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                             </div>
                         </div>
                     </div>
                     <div class="flex gap-3">
-                        <button type="button" id="clearPriceBtn" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <button type="button" id="clearPriceBtn"
+                            class="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             مسح
                         </button>
-                        <button type="button" id="applyPriceBtn" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-orange-700 transition-all">
+                        <button type="button" id="applyPriceBtn"
+                            class="flex-1 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-orange-700 transition-all">
                             تطبيق
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </main>
-    
+
     <!-- Footer -->
     <div id="footer"></div>
-    
+
     <!-- Scripts -->
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
@@ -222,6 +296,8 @@
     <script src="/app/js/components/navbar.js"></script>
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/components/service-card.js"></script>
+    <script src="/app/js/ai-assistant.js"></script>
     <script src="/app/js/pages/explore.js"></script>
 </body>
+
 </html>

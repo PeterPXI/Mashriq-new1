@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="تفاصيل الطلب على منصة مشرق">
-    
+
     <title>تفاصيل الطلب | مشرق</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
-    
+
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
-    
+
     <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
+
+    <!-- Order page specific styles -->
+    <link rel="stylesheet" href="/app/assets/css/pages/order.css">
 </head>
+
 <body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
-    
+
     <!-- Main Content -->
     <main class="py-6 lg:py-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             <!-- Breadcrumb -->
             <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" aria-label="التنقل">
                 <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
@@ -32,13 +37,13 @@
                 <span>/</span>
                 <span class="text-gray-900 font-medium" id="orderNumber">جاري التحميل...</span>
             </nav>
-            
+
             <!-- Order Content -->
             <div class="grid lg:grid-cols-3 gap-6" id="orderContent">
-                
+
                 <!-- Order Main -->
                 <div class="lg:col-span-2 space-y-6">
-                    
+
                     <!-- Order Header -->
                     <div class="bg-white rounded-2xl shadow-sm p-6" id="orderHeader">
                         <div class="space-y-2">
@@ -46,13 +51,14 @@
                             <div class="h-5 bg-gray-200 rounded animate-pulse w-1/2"></div>
                         </div>
                     </div>
-                    
+
                     <!-- Timeline Section -->
                     <div class="bg-white rounded-2xl shadow-sm p-6">
                         <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-6">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12,6 12,12 16,14"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="text-primary-500">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12,6 12,12 16,14" />
                             </svg>
                             مسار الطلب
                         </h2>
@@ -63,13 +69,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Service Info -->
                     <div class="bg-white rounded-2xl shadow-sm p-6">
                         <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-6">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="text-primary-500">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
                             </svg>
                             تفاصيل الخدمة
                         </h2>
@@ -81,40 +88,82 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Requirements (if buyer) -->
                     <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="requirementsSection">
                         <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-4">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
-                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="text-primary-500">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
                             </svg>
                             متطلبات العميل
                         </h2>
                         <div class="text-gray-600" id="requirementsContent"></div>
                     </div>
-                    
+
                     <!-- Delivery (if delivered) -->
                     <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="deliverySection">
                         <h2 class="flex items-center gap-2 font-bold text-gray-900 mb-4">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500">
-                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" class="text-green-500">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                                <polyline points="22,4 12,14.01 9,11.01" />
                             </svg>
                             التسليم
                         </h2>
                         <div class="text-gray-600" id="deliveryContent"></div>
                     </div>
-                    
+
                     <!-- Actions -->
                     <div class="flex flex-wrap gap-3" id="orderActions">
                         <!-- Dynamic actions based on order status and user role -->
                     </div>
-                    
+
+                    <!-- Inline Chat Section -->
+                    <div class="bg-white rounded-2xl shadow-sm" id="chatSection">
+                        <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" class="text-primary-500">
+                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                                </svg>
+                                المحادثة
+                            </h2>
+                            <span class="text-xs text-gray-400" id="chatStatus">جاري التحميل...</span>
+                        </div>
+                        <div class="p-5">
+                            <!-- Messages Container -->
+                            <div class="space-y-4 max-h-80 overflow-y-auto mb-4" id="messagesContainer">
+                                <div class="flex justify-center py-8">
+                                    <div
+                                        class="animate-spin w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Message Input -->
+                            <form id="messageForm" class="flex gap-3">
+                                <input type="text" id="messageInput"
+                                    class="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                    placeholder="اكتب رسالتك..." autocomplete="off">
+                                <button type="submit"
+                                    class="flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-5 py-3 rounded-xl font-medium transition-colors"
+                                    id="sendBtn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <line x1="22" y1="2" x2="11" y2="13" />
+                                        <polygon points="22,2 15,22 11,13 2,9" />
+                                    </svg>
+                                    إرسال
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
-                
+
                 <!-- Order Sidebar -->
                 <div class="lg:col-span-1 space-y-6">
-                    
+
                     <!-- Order Summary -->
                     <div class="bg-white rounded-2xl shadow-sm p-6" id="orderSummary">
                         <h3 class="font-bold text-gray-900 mb-4">ملخص الطلب</h3>
@@ -124,7 +173,7 @@
                             <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
                         </div>
                     </div>
-                    
+
                     <!-- Seller/Buyer Card -->
                     <div class="bg-white rounded-2xl shadow-sm p-6" id="userCard">
                         <div class="flex items-center gap-4">
@@ -135,27 +184,30 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Quick Actions -->
                     <div class="space-y-3" id="sidebarActions">
-                        <a href="#" class="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors" id="chatBtn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        <a href="#"
+                            class="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors"
+                            id="chatBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
                             </svg>
                             التواصل
                         </a>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
-            
+
         </div>
     </main>
-    
+
     <!-- Footer -->
     <div id="footer"></div>
-    
+
     <!-- Delivery Modal -->
     <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="deliveryModal">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
@@ -166,33 +218,32 @@
             <form id="deliveryForm">
                 <div class="p-5 space-y-4">
                     <div>
-                        <label for="deliveryMessage" class="block text-sm font-medium text-gray-700 mb-1">رسالة التسليم</label>
-                        <textarea 
-                            id="deliveryMessage" 
-                            rows="4"
+                        <label for="deliveryMessage" class="block text-sm font-medium text-gray-700 mb-1">رسالة
+                            التسليم</label>
+                        <textarea id="deliveryMessage" rows="4"
                             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                            placeholder="اشرح ما تم تسليمه وأضف أي تعليمات..."
-                            required
-                        ></textarea>
+                            placeholder="اشرح ما تم تسليمه وأضف أي تعليمات..." required></textarea>
                     </div>
                     <div>
-                        <label for="deliveryFiles" class="block text-sm font-medium text-gray-700 mb-1">روابط الملفات (اختياري)</label>
-                        <input 
-                            type="text" 
-                            id="deliveryFiles" 
+                        <label for="deliveryFiles" class="block text-sm font-medium text-gray-700 mb-1">روابط الملفات
+                            (اختياري)</label>
+                        <input type="text" id="deliveryFiles"
                             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            placeholder="أضف روابط الملفات مفصولة بفاصلة"
-                        >
+                            placeholder="أضف روابط الملفات مفصولة بفاصلة">
                     </div>
                 </div>
                 <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
-                    <button type="button" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="cancelDelivery">إلغاء</button>
-                    <button type="submit" class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors" id="submitDelivery">تسليم الطلب</button>
+                    <button type="button"
+                        class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+                        id="cancelDelivery">إلغاء</button>
+                    <button type="submit"
+                        class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
+                        id="submitDelivery">تسليم الطلب</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Review Modal -->
     <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="reviewModal">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
@@ -205,32 +256,43 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">التقييم</label>
                         <div class="flex justify-center gap-2" id="ratingInput">
-                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="1">★</button>
-                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="2">★</button>
-                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="3">★</button>
-                            <button type="button" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn" data-rating="4">★</button>
-                            <button type="button" class="text-3xl text-amber-400 rating-star-btn" data-rating="5">★</button>
+                            <button type="button"
+                                class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn"
+                                data-rating="1">★</button>
+                            <button type="button"
+                                class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn"
+                                data-rating="2">★</button>
+                            <button type="button"
+                                class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn"
+                                data-rating="3">★</button>
+                            <button type="button"
+                                class="text-3xl text-gray-300 hover:text-amber-400 transition-colors rating-star-btn"
+                                data-rating="4">★</button>
+                            <button type="button" class="text-3xl text-amber-400 rating-star-btn"
+                                data-rating="5">★</button>
                         </div>
                         <input type="hidden" id="ratingValue" value="5">
                     </div>
                     <div>
-                        <label for="reviewComment" class="block text-sm font-medium text-gray-700 mb-1">تعليقك (اختياري)</label>
-                        <textarea 
-                            id="reviewComment" 
-                            rows="3"
+                        <label for="reviewComment" class="block text-sm font-medium text-gray-700 mb-1">تعليقك
+                            (اختياري)</label>
+                        <textarea id="reviewComment" rows="3"
                             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                            placeholder="شاركنا تجربتك مع هذه الخدمة..."
-                        ></textarea>
+                            placeholder="شاركنا تجربتك مع هذه الخدمة..."></textarea>
                     </div>
                 </div>
                 <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
-                    <button type="button" class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors" id="cancelReview">إلغاء</button>
-                    <button type="submit" class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors" id="submitReview">إرسال التقييم</button>
+                    <button type="button"
+                        class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+                        id="cancelReview">إلغاء</button>
+                    <button type="submit"
+                        class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
+                        id="submitReview">إرسال التقييم</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Scripts -->
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
@@ -242,4 +304,5 @@
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/pages/order.js"></script>
 </body>
+
 </html>

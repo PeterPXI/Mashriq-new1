@@ -62,21 +62,24 @@
         
         elements.chatsList.innerHTML = state.chats.map(chat => {
             const orderId = chat.orderId?._id || chat.orderId;
-            const orderNumber = chat.orderId?.orderNumber || chat.orderNumber || orderId?.slice(-8) || '---';
+            const orderNumber = orderId?.toString().slice(-8) || '---';
             
-            const isBuyer = (chat.buyerId?._id || chat.buyerId) === currentUserId;
-            const otherUser = isBuyer 
-                ? (chat.sellerId || { fullName: 'البائع' }) 
-                : (chat.buyerId || { fullName: 'المشتري' });
+            // Determine if current user is buyer or seller
+            const buyerId = chat.buyerId?._id || chat.buyerId;
+            const sellerId = chat.sellerId?._id || chat.sellerId;
+            const isBuyer = buyerId?.toString() === currentUserId;
             
-            const otherName = otherUser.fullName || otherUser.username || (isBuyer ? 'البائع' : 'المشتري');
-            const otherAvatar = otherUser.avatarUrl;
+            // Get other user's info (populated data)
+            const otherUser = isBuyer ? chat.sellerId : chat.buyerId;
+            const otherName = otherUser?.fullName || otherUser?.username || (isBuyer ? 'البائع' : 'المشتري');
+            const otherAvatar = otherUser?.avatarUrl;
             
             const lastMessage = chat.lastMessage || {};
             const messagePreview = lastMessage.content || 'لا توجد رسائل بعد';
             const messageTime = lastMessage.createdAt ? formatTime(lastMessage.createdAt) : '';
             
-            const serviceTitle = chat.orderId?.serviceSnapshot?.title || chat.serviceTitle || 'خدمة';
+            // Get service title from populated order
+            const serviceTitle = chat.orderId?.snapshotTitle || 'خدمة';
             const hasUnread = chat.unreadCount > 0;
             
             return `
@@ -85,7 +88,7 @@
                         <div class="flex-shrink-0">
                             ${otherAvatar 
                                 ? `<img src="${otherAvatar}" alt="${Utils.escapeHtml(otherName)}" class="w-12 h-12 rounded-full object-cover">`
-                                : `<div class="w-12 h-12 rounded-full avatar-placeholder flex items-center justify-center text-white font-bold text-lg">${otherName.charAt(0)}</div>`
+                                : `<div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold text-lg">${otherName.charAt(0)}</div>`
                             }
                         </div>
                         <div class="flex-1 min-w-0">

@@ -299,6 +299,9 @@ class ChatService {
                 { sellerId: userId }
             ]
         })
+        .populate('buyerId', 'fullName username avatarUrl')
+        .populate('sellerId', 'fullName username avatarUrl')
+        .populate('orderId', 'snapshotTitle status')
         .sort({ updatedAt: -1 })  // Most recent first
         .limit(Math.min(limit, 100));  // Cap at 100
         

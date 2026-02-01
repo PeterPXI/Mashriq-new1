@@ -139,12 +139,19 @@
             const data = response.data || response;
             state.service = data.service || data;
             
-            // Check ownership
+            // Check ownership - CRITICAL SECURITY CHECK
             const currentUserId = Auth.getUserId();
-            const serviceOwnerId = state.service.seller?._id || state.service.seller;
+            const serviceOwnerId = state.service.sellerId?._id || 
+                                   state.service.sellerId || 
+                                   state.service.seller?._id || 
+                                   state.service.seller;
             
-            if (serviceOwnerId && serviceOwnerId !== currentUserId) {
+            const ownerIdStr = String(serviceOwnerId);
+            const currentIdStr = String(currentUserId);
+            
+            if (!serviceOwnerId || ownerIdStr !== currentIdStr) {
                 showError('لا يمكنك تعديل هذه الخدمة لأنها ليست ملكك');
+                console.warn('Ownership check failed:', { serviceOwnerId: ownerIdStr, currentUserId: currentIdStr });
                 return;
             }
             

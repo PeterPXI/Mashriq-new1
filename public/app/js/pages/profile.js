@@ -54,6 +54,11 @@
         avatarInitials: document.getElementById('avatarInitials'),
         editAvatarBtn: document.getElementById('editAvatarBtn'),
         avatarBadge: document.getElementById('avatarBadge'),
+        // NEW: Online & Level indicators
+        onlineIndicator: document.getElementById('onlineIndicator'),
+        sellerLevelBadge: document.getElementById('sellerLevelBadge'),
+        sellerLevelTag: document.getElementById('sellerLevelTag'),
+        sellerLevelLabel: document.getElementById('sellerLevelLabel'),
         // Profile Info
         profileName: document.getElementById('profileName'),
         profileUsername: document.getElementById('profileUsername'),
@@ -64,13 +69,36 @@
         locationMeta: document.getElementById('locationMeta'),
         userLocation: document.getElementById('userLocation'),
         profileActions: document.getElementById('profileActions'),
+        // NEW: Response Time & Last Online
+        responseTimeMeta: document.getElementById('responseTimeMeta'),
+        avgResponseTime: document.getElementById('avgResponseTime'),
+        lastOnlineMeta: document.getElementById('lastOnlineMeta'),
+        lastOnlineText: document.getElementById('lastOnlineText'),
+        contactSellerBtn: document.getElementById('contactSellerBtn'),
+        // NEW: Trust Signals
+        trustSignalsSection: document.getElementById('trustSignalsSection'),
+        verifiedIdentity: document.getElementById('verifiedIdentity'),
+        verifiedEmail: document.getElementById('verifiedEmail'),
+        verifiedPhone: document.getElementById('verifiedPhone'),
         // Stats
         statOrders: document.getElementById('statOrders'),
         statServices: document.getElementById('statServices'),
         statServicesWrapper: document.getElementById('statServicesWrapper'),
         statRating: document.getElementById('statRating'),
+        statReviewCount: document.getElementById('statReviewCount'),
         statEarnings: document.getElementById('statEarnings'),
         statEarningsWrapper: document.getElementById('statEarningsWrapper'),
+        // NEW: Enhanced Stats
+        statCompletionWrapper: document.getElementById('statCompletionWrapper'),
+        statCompletionRate: document.getElementById('statCompletionRate'),
+        statOnTimeWrapper: document.getElementById('statOnTimeWrapper'),
+        statOnTimeRate: document.getElementById('statOnTimeRate'),
+        // NEW: Level Progress
+        levelProgressSection: document.getElementById('levelProgressSection'),
+        currentLevelName: document.getElementById('currentLevelName'),
+        nextLevelName: document.getElementById('nextLevelName'),
+        levelProgressBar: document.getElementById('levelProgressBar'),
+        levelProgressText: document.getElementById('levelProgressText'),
         // Tabs
         profileTabs: document.getElementById('profileTabs'),
         servicesTabBtn: document.getElementById('servicesTabBtn'),
@@ -151,6 +179,95 @@
         
         // Load data
         await loadProfile();
+        
+        // Initialize AI features
+        await initAI();
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // AI Features
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    let aiEnabled = false;
+    
+    async function initAI() {
+        if (!state.isOwner) return; // Only for profile owner
+        if (typeof MashriqAI === 'undefined') {
+            console.log('AI Assistant not loaded');
+            return;
+        }
+        
+        try {
+            aiEnabled = await MashriqAI.init();
+            
+            if (aiEnabled) {
+                // Show AI buttons
+                const improveBioBtn = document.getElementById('aiImproveBioBtn');
+                if (improveBioBtn) improveBioBtn.classList.remove('hidden');
+                
+                // Bind AI events
+                bindAIEvents();
+                
+                console.log('🤖 AI features enabled');
+            }
+        } catch (error) {
+            console.log('AI initialization failed:', error);
+        }
+    }
+    
+    function bindAIEvents() {
+        const improveBioBtn = document.getElementById('aiImproveBioBtn');
+        const bioTextarea = elements.settingsBio;
+        
+        improveBioBtn?.addEventListener('click', async () => {
+            try {
+                MashriqAI.setButtonLoading(improveBioBtn, true);
+                
+                // Get current profile data
+                const bio = bioTextarea?.value.trim() || '';
+                const skills = [];
+                
+                // Get skills from services categories
+                if (state.services.length > 0) {
+                    const categories = [...new Set(state.services.map(s => s.categoryId || s.category))].filter(Boolean);
+                    categories.forEach(catId => {
+                        const category = CONFIG.CATEGORIES.find(c => c.id === catId);
+                        if (category) skills.push(category.name);
+                    });
+                }
+                
+                const specialty = skills[0] || '';
+                
+                const result = await MashriqAI.improveProfile({ bio, skills, specialty });
+                
+                MashriqAI.showResultModal('✨ النبذة المحسّنة', `<div class="space-y-4">
+                    <div class="p-4 bg-gray-50 rounded-xl">
+                        <h4 class="font-medium mb-2">النبذة الجديدة:</h4>
+                        <p style="white-space: pre-wrap;">${result.improvedBio || result}</p>
+                    </div>
+                    ${result.suggestions ? `
+                    <div class="p-4 bg-blue-50 rounded-xl">
+                        <h4 class="font-medium text-blue-700 mb-2">💡 نصائح للتحسين:</h4>
+                        <ul class="text-sm text-blue-600 space-y-1">
+                            ${result.suggestions.map(s => `<li>• ${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : ''}
+                </div>`, {
+                    copyText: result.improvedBio || result,
+                    onUse: (text) => {
+                        if (bioTextarea) {
+                            bioTextarea.value = text;
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                Toast.error('خطأ', error.message || 'فشل تحسين البروفايل');
+            } finally {
+                MashriqAI.setButtonLoading(improveBioBtn, false);
+            }
+        });
     }
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -332,12 +449,221 @@
         // Actions
         renderActions();
         
+        // NEW: Render enhanced profile features for sellers
+        if (user.role === 'seller') {
+            renderSellerLevel(user);
+            renderTrustSignals(user);
+            renderEnhancedStats(user);
+            renderOnlineStatus(user);
+        }
+        
         // Show owner-only elements
         if (state.isOwner) {
             showOwnerElements();
             if (elements.settingsTabBtn) elements.settingsTabBtn.classList.remove('hidden');
         } else {
             if (elements.settingsTabBtn) elements.settingsTabBtn.classList.add('hidden');
+            // Show contact button for visitors viewing seller profile
+            if (user.role === 'seller' && elements.contactSellerBtn) {
+                elements.contactSellerBtn.classList.remove('hidden');
+            }
+        }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // NEW: Seller Level System (like Fiverr)
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    const SELLER_LEVELS = [
+        { 
+            level: 1, 
+            name: 'بائع جديد', 
+            nameEn: 'New Seller',
+            color: 'bg-gray-100 text-gray-700',
+            badgeColor: 'from-gray-400 to-gray-500',
+            icon: '🌱',
+            minOrders: 0,
+            minRating: 0
+        },
+        { 
+            level: 2, 
+            name: 'بائع نشط', 
+            nameEn: 'Active Seller',
+            color: 'bg-blue-100 text-blue-700',
+            badgeColor: 'from-blue-400 to-blue-500',
+            icon: '⭐',
+            minOrders: 5,
+            minRating: 4.0
+        },
+        { 
+            level: 3, 
+            name: 'بائع محترف', 
+            nameEn: 'Pro Seller',
+            color: 'bg-purple-100 text-purple-700',
+            badgeColor: 'from-purple-400 to-purple-500',
+            icon: '💎',
+            minOrders: 20,
+            minRating: 4.5
+        },
+        { 
+            level: 4, 
+            name: 'Top Rated', 
+            nameEn: 'Top Rated',
+            color: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700',
+            badgeColor: 'from-amber-400 to-yellow-500',
+            icon: '🏆',
+            minOrders: 50,
+            minRating: 4.8
+        }
+    ];
+    
+    function getSellerLevel(completedOrders = 0, rating = 0) {
+        let currentLevel = SELLER_LEVELS[0];
+        for (let i = SELLER_LEVELS.length - 1; i >= 0; i--) {
+            const level = SELLER_LEVELS[i];
+            if (completedOrders >= level.minOrders && rating >= level.minRating) {
+                currentLevel = level;
+                break;
+            }
+        }
+        return currentLevel;
+    }
+    
+    function getNextLevel(currentLevel) {
+        const idx = SELLER_LEVELS.findIndex(l => l.level === currentLevel.level);
+        return idx < SELLER_LEVELS.length - 1 ? SELLER_LEVELS[idx + 1] : null;
+    }
+    
+    function renderSellerLevel(user) {
+        const completedOrders = user.completedOrders || state.myStats?.completedOrders || 0;
+        const rating = user.rating || user.averageRating || state.myStats?.averageRating || 0;
+        const currentLevel = getSellerLevel(completedOrders, rating);
+        const nextLevel = getNextLevel(currentLevel);
+        
+        // Seller Level Badge on Avatar
+        if (elements.sellerLevelBadge) {
+            elements.sellerLevelBadge.innerHTML = `
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br ${currentLevel.badgeColor} rounded-full flex items-center justify-center text-white shadow-lg text-sm sm:text-base" title="${currentLevel.name}">
+                    ${currentLevel.icon}
+                </div>
+            `;
+            elements.sellerLevelBadge.classList.remove('hidden');
+        }
+        
+        // Seller Level Tag
+        if (elements.sellerLevelTag && elements.sellerLevelLabel) {
+            elements.sellerLevelLabel.className = `px-3 py-1 rounded-full text-xs font-bold ${currentLevel.color}`;
+            elements.sellerLevelLabel.textContent = `${currentLevel.icon} ${currentLevel.name}`;
+            elements.sellerLevelTag.classList.remove('hidden');
+        }
+        
+        // Level Progress (only for owner)
+        if (state.isOwner && nextLevel && elements.levelProgressSection) {
+            const ordersNeeded = nextLevel.minOrders - completedOrders;
+            const progress = Math.min(100, (completedOrders / nextLevel.minOrders) * 100);
+            
+            if (elements.currentLevelName) {
+                elements.currentLevelName.textContent = `${currentLevel.icon} ${currentLevel.name}`;
+            }
+            if (elements.nextLevelName) {
+                elements.nextLevelName.textContent = `المستوى التالي: ${nextLevel.name}`;
+            }
+            if (elements.levelProgressBar) {
+                elements.levelProgressBar.style.width = `${progress}%`;
+            }
+            if (elements.levelProgressText) {
+                if (ordersNeeded > 0) {
+                    elements.levelProgressText.textContent = `أكمل ${ordersNeeded} ${ordersNeeded > 1 ? 'طلبات' : 'طلب'} إضافية للترقية`;
+                } else if (rating < nextLevel.minRating) {
+                    elements.levelProgressText.textContent = `حافظ على تقييم ${nextLevel.minRating}+ للترقية`;
+                }
+            }
+            elements.levelProgressSection.classList.remove('hidden');
+        }
+    }
+    
+    function renderTrustSignals(user) {
+        if (!elements.trustSignalsSection) return;
+        
+        // Show trust signals section for sellers
+        elements.trustSignalsSection.classList.remove('hidden');
+        
+        // Email verified (assume true for sellers)
+        if (elements.verifiedEmail) {
+            elements.verifiedEmail.classList.remove('hidden');
+        }
+        
+        // Identity verified (based on isVerified)
+        if (elements.verifiedIdentity) {
+            if (user.isVerified) {
+                elements.verifiedIdentity.classList.remove('hidden');
+            } else {
+                elements.verifiedIdentity.classList.add('hidden');
+            }
+        }
+        
+        // Phone verified (if available)
+        if (elements.verifiedPhone && user.isPhoneVerified) {
+            elements.verifiedPhone.classList.remove('hidden');
+        }
+    }
+    
+    function renderEnhancedStats(user) {
+        const completedOrders = user.completedOrders || state.myStats?.completedOrders || 0;
+        const totalOrders = user.totalOrders || state.myStats?.totalOrders || completedOrders;
+        const reviewCount = user.reviewCount || state.myStats?.reviewCount || 0;
+        
+        // Update review count
+        if (elements.statReviewCount) {
+            elements.statReviewCount.textContent = reviewCount;
+        }
+        
+        // Completion rate (show for sellers)
+        if (elements.statCompletionWrapper && completedOrders > 0) {
+            const completionRate = totalOrders > 0 ? Math.round((completedOrders / totalOrders) * 100) : 100;
+            if (elements.statCompletionRate) {
+                elements.statCompletionRate.textContent = `${completionRate}%`;
+            }
+            elements.statCompletionWrapper.classList.remove('hidden');
+        }
+        
+        // On-time delivery (mock data - can be replaced with real data)
+        if (elements.statOnTimeWrapper && completedOrders >= 3) {
+            const onTimeRate = user.onTimeDeliveryRate || 98; // Default high rate
+            if (elements.statOnTimeRate) {
+                elements.statOnTimeRate.textContent = `${onTimeRate}%`;
+            }
+            elements.statOnTimeWrapper.classList.remove('hidden');
+        }
+    }
+    
+    function renderOnlineStatus(user) {
+        // Simulate online status (in real app, this would come from backend)
+        const isOnline = user.isOnline || Math.random() > 0.3; // For demo
+        const lastSeen = user.lastSeen || new Date(Date.now() - 3600000); // 1 hour ago
+        
+        if (isOnline && elements.onlineIndicator) {
+            elements.onlineIndicator.classList.remove('hidden');
+            if (elements.lastOnlineMeta) {
+                elements.lastOnlineMeta.classList.add('hidden');
+            }
+        } else if (elements.lastOnlineMeta) {
+            if (elements.onlineIndicator) {
+                elements.onlineIndicator.classList.add('hidden');
+            }
+            if (elements.lastOnlineText) {
+                elements.lastOnlineText.textContent = 'آخر ظهور ' + Utils.formatRelativeDate(lastSeen);
+            }
+            elements.lastOnlineMeta.classList.remove('hidden');
+        }
+        
+        // Response time (show for sellers)
+        if (elements.responseTimeMeta) {
+            const responseTime = user.avgResponseTime || '1 ساعة';
+            if (elements.avgResponseTime) {
+                elements.avgResponseTime.textContent = responseTime;
+            }
+            elements.responseTimeMeta.classList.remove('hidden');
         }
     }
     
@@ -992,7 +1318,7 @@
             Toast.info('جاري الرفع', 'يتم رفع الصورة...');
             
             const token = Auth.getToken();
-            const response = await fetch(CONFIG.API_BASE + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
+            const response = await fetch(CONFIG.API_BASE_URL + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token

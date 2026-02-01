@@ -15,6 +15,8 @@
     const state = {
         orderId: null,
         order: null,
+        chat: null,
+        messages: [],
         isLoading: false,
         isBuyer: false,
         isSeller: false,
@@ -93,6 +95,13 @@
         ratingInput: document.getElementById('ratingInput'),
         ratingValue: document.getElementById('ratingValue'),
         reviewComment: document.getElementById('reviewComment'),
+        // Chat elements
+        chatSection: document.getElementById('chatSection'),
+        chatStatus: document.getElementById('chatStatus'),
+        messagesContainer: document.getElementById('messagesContainer'),
+        messageForm: document.getElementById('messageForm'),
+        messageInput: document.getElementById('messageInput'),
+        sendBtn: document.getElementById('sendBtn'),
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -171,6 +180,9 @@
         elements.reviewModal?.addEventListener('click', (e) => {
             if (e.target === elements.reviewModal) closeReviewModal();
         });
+        
+        // Message form
+        elements.messageForm?.addEventListener('submit', handleSendMessage);
     }
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -199,6 +211,14 @@
             renderActions();
             renderSummary();
             renderUserCard();
+            
+            // Set chat button link
+            if (elements.chatBtn) {
+                elements.chatBtn.href = `/app/messages.html?order=${state.orderId}`;
+            }
+            
+            // Load chat messages
+            await loadChat();
             
         } catch (error) {
             console.error('Failed to load order:', error);
@@ -727,6 +747,104 @@
                 </div>
             </div>
         `;
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Chat Functions
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    async function loadChat() {
+        if (!elements.chatSection) return;
+        
+        try {
+            // Get chat for this order
+            const response = await API.get(`/chats/order/${state.orderId}`);
+            const data = response.data || response;
+            state.chat = data.chat || data;
+            state.messages = state.chat?.messages || [];
+            
+            if (elements.chatStatus) {
+                elements.chatStatus.textContent = `${state.messages.length} رسالة`;
+            }
+            
+            renderMessages();
+            
+        } catch (error) {
+            console.error('Failed to load chat:', error);
+            if (elements.chatStatus) {
+                elements.chatStatus.textContent = 'تعذر تحميل المحادثة';
+            }
+            if (elements.messagesContainer) {
+                elements.messagesContainer.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <p>لا توجد رسائل بعد. ابدأ المحادثة!</p>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    function renderMessages() {
+        if (!elements.messagesContainer) return;
+        
+        if (state.messages.length === 0) {
+            elements.messagesContainer.innerHTML = `
+                <div class="text-center py-8 text-gray-400">
+                    <p>لا توجد رسائل بعد. ابدأ المحادثة!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const currentUserId = Auth.getUserId();
+        
+        elements.messagesContainer.innerHTML = state.messages.map(msg => {
+            const isOwn = (msg.senderId?._id || msg.senderId) === currentUserId;
+            const senderName = msg.senderId?.fullName || msg.senderId?.username || (isOwn ? 'أنت' : 'الطرف الآخر');
+            const msgTime = msg.createdAt ? Utils.formatDate(msg.createdAt) : '';
+            
+            return `
+                <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
+                    <div class="max-w-[80%] ${isOwn ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-900'} rounded-2xl px-4 py-3 ${isOwn ? 'rounded-br-sm' : 'rounded-bl-sm'}">
+                        ${!isOwn ? `<div class="text-xs font-medium mb-1 ${isOwn ? 'text-primary-100' : 'text-gray-500'}">${Utils.escapeHtml(senderName)}</div>` : ''}
+                        <p class="break-words">${Utils.escapeHtml(msg.content)}</p>
+                        <div class="text-xs mt-1 ${isOwn ? 'text-primary-200' : 'text-gray-400'}">${msgTime}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // Scroll to bottom
+        elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
+    }
+    
+    async function handleSendMessage(e) {
+        e.preventDefault();
+        
+        const content = elements.messageInput?.value.trim();
+        if (!content || !state.chat) return;
+        
+        const sendBtn = elements.sendBtn;
+        if (sendBtn) sendBtn.disabled = true;
+        
+        try {
+            const chatId = state.chat._id || state.chat.id;
+            await API.post(`/chats/${chatId}/messages`, { content });
+            
+            // Clear input
+            if (elements.messageInput) elements.messageInput.value = '';
+            
+            // Reload chat
+            await loadChat();
+            
+            Toast.success('تم', 'تم إرسال الرسالة');
+            
+        } catch (error) {
+            console.error('Failed to send message:', error);
+            Toast.error('خطأ', error.message || 'تعذر إرسال الرسالة');
+        } finally {
+            if (sendBtn) sendBtn.disabled = false;
+        }
     }
     
     // ─────────────────────────────────────────────────────────────────────────

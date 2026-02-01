@@ -36,6 +36,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 const Favorite = require('./models/Favorite');
 
 const app = express();
@@ -55,29 +56,36 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// ============ FILE UPLOAD CONFIGURATION ============
-const uploadsDir = path.join(__dirname, 'public', 'uploads', 'services');
-const avatarsDir = path.join(__dirname, 'public', 'uploads', 'avatars');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-if (!fs.existsSync(avatarsDir)) {
-  fs.mkdirSync(avatarsDir, { recursive: true });
-}
+// ============ CLOUDINARY CONFIGURATION ============
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueName + path.extname(file.originalname));
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Cloudinary storage for service images (fast upload, no transformation)
+const serviceImageStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'mashriq/services',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    resource_type: 'auto'
+    // Transformations removed for faster upload - apply on-the-fly when displaying
   }
 });
 
-const avatarStorage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, avatarsDir),
-  filename: (req, file, cb) => {
-    const uniqueName = 'avatar-' + req.user.id + '-' + Date.now();
-    cb(null, uniqueName + path.extname(file.originalname));
+// Cloudinary storage for avatars (fast upload, no transformation)
+const avatarStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'mashriq/avatars',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    resource_type: 'auto'
+    // Transformations removed for faster upload - apply on-the-fly when displaying
   }
 });
 
@@ -87,8 +95,9 @@ const fileFilter = (req, file, cb) => {
   cb(isValid ? null : new Error('يُسمح فقط برفع الصور'), isValid);
 };
 
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
+const upload = multer({ storage: serviceImageStorage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
 const uploadAvatar = multer({ storage: avatarStorage, limits: { fileSize: 2 * 1024 * 1024 }, fileFilter });
+
 
 // Serve static files from public/app for /app
 app.use('/app', express.static(path.join(__dirname, 'public', 'app')));
@@ -436,15 +445,11 @@ app.post('/api/auth/upload-avatar', authenticateToken, uploadAvatar.single('avat
       return error(res, 'المستخدم غير موجود', 'USER_NOT_FOUND', 404);
     }
     
-    // Delete old avatar if exists
-    if (user.avatarUrl && user.avatarUrl.startsWith('/uploads/avatars/')) {
-      const oldPath = path.join(__dirname, 'public', user.avatarUrl);
-      if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath);
-      }
-    }
+    // Note: Old local avatars won't be deleted (legacy support)
+    // Cloudinary automatically manages storage
     
-    const avatarUrl = '/uploads/avatars/' + req.file.filename;
+    // Cloudinary returns the URL in req.file.path
+    const avatarUrl = req.file.path;
     user.avatarUrl = avatarUrl;
     await user.save();
     
@@ -645,7 +650,7 @@ app.get('/api/services/:id', async (req, res) => {
 });
 
 // Create new service (seller only) - with image upload
-app.post('/api/services', authenticateToken, requireSeller, upload.single('image'), async (req, res) => {
+app.post('/api/services', authenticateToken, requireSeller, upload.array('images', 5), async (req, res) => {
   try {
     const { title, description, price, category, imageUrl, deliveryTime, revisions, requirements } = req.body;
     
@@ -653,12 +658,13 @@ app.post('/api/services', authenticateToken, requireSeller, upload.single('image
       return error(res, 'جميع الحقول المطلوبة يجب ملؤها', 'MISSING_FIELDS', 400);
     }
     
-    // Determine image URL - uploaded file or provided URL
-    let finalImageUrl = '';
-    if (req.file) {
-      finalImageUrl = `/uploads/services/${req.file.filename}`;
+    // Collect all image URLs from uploaded files
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      // Cloudinary returns the URL in file.path
+      imageUrls = req.files.map(file => file.path);
     } else if (imageUrl) {
-      finalImageUrl = imageUrl;
+      imageUrls = [imageUrl];
     }
     
     const service = await Service.create({
@@ -666,7 +672,7 @@ app.post('/api/services', authenticateToken, requireSeller, upload.single('image
       description,
       basePrice: parseFloat(price),
       categoryId: category,
-      imageUrls: finalImageUrl ? [finalImageUrl] : [],
+      imageUrls: imageUrls,
       deliveryDays: deliveryTime || 3,
       revisions: revisions || 0,
       requirements: requirements || '',
@@ -681,12 +687,12 @@ app.post('/api/services', authenticateToken, requireSeller, upload.single('image
     
   } catch (err) {
     console.error('Add service error:', err);
-    if (req.file) {
-      fs.unlink(req.file.path, () => {});
-    }
+    // Note: Cloudinary handles storage cleanup automatically
+    // We don't need to manually delete files
     return error(res, err.message || 'حدث خطأ في الخادم', 'ADD_SERVICE_ERROR', 500);
   }
 });
+
 
 // Update service (owner only)
 app.put('/api/services/:id', authenticateToken, async (req, res) => {
@@ -806,6 +812,9 @@ app.use('/api/auth', authRoutes);
 
 // Mount favorites routes with authentication
 app.use('/api/favorites', authenticateToken, favoriteRoutes);
+
+// Mount AI routes (some public, some require auth - handled per-route)
+app.use('/api/ai', aiRoutes);
 
 // ============ STATS ROUTES (Public) ============
 // Stats are derived from Service and Order models.

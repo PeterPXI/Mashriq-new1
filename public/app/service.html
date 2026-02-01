@@ -1,135 +1,519 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    
+    <meta name="description" content="تفاصيل الخدمة - منصة مشرق للخدمات المصغرة">
+
     <title>تفاصيل الخدمة | مشرق</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
-    
+
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
-    
-    <!-- Keep main.css for navbar/footer components -->
+
+    <!-- Main CSS -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
+
+    <!-- Custom Styles for Service Page -->
+    <style>
+        /* Smooth animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Gallery hover effect */
+        .gallery-container:hover .gallery-nav {
+            opacity: 1;
+        }
+
+        /* Tab transition */
+        .service-tab-btn {
+            position: relative;
+        }
+
+        .service-tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            right: 50%;
+            height: 2px;
+            background: linear-gradient(to right, #10b981, #14b8a6);
+            transition: all 0.3s ease;
+        }
+
+        .service-tab-btn.active::after,
+        .service-tab-btn:hover::after {
+            left: 0;
+            right: 0;
+        }
+
+        /* Card hover effects */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image zoom on hover */
+        .gallery-image {
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-container:hover .gallery-image {
+            transform: scale(1.02);
+        }
+
+        /* Order card glow */
+        #orderCard {
+            position: relative;
+        }
+
+        #orderCard::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #10b981, #14b8a6, #06b6d4);
+            border-radius: 1rem;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #orderCard:hover::before {
+            opacity: 0.15;
+        }
+
+        /* Scrollbar for tabs */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Loading skeleton animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Mobile bottom bar shadow */
+        #mobileOrderBar {
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* FAQ accordion animation */
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-a.open {
+            max-height: 500px;
+        }
+
+        /* Feature item hover */
+        .feature-item {
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover {
+            background-color: rgba(16, 185, 129, 0.08);
+        }
+
+        /* Reviews progress bar animation */
+        .rating-progress {
+            animation: progressFill 1s ease-out;
+        }
+
+        @keyframes progressFill {
+            from {
+                width: 0;
+            }
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-50 font-sans">
+
+<body class="bg-gradient-to-b from-gray-50 to-white min-h-screen font-sans antialiased">
     <!-- Navbar -->
     <header id="navbar"></header>
-    
+
     <!-- Main Content -->
-    <main class="py-6 lg:py-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+    <main class="pb-28 lg:pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
+
             <!-- Breadcrumb -->
-            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6" id="breadcrumb" aria-label="مسار التنقل">
-                <a href="/app/" class="hover:text-primary-600 transition-colors">الرئيسية</a>
-                <span>/</span>
-                <a href="/app/explore.html" class="hover:text-primary-600 transition-colors">الخدمات</a>
-                <span>/</span>
-                <span class="text-gray-900 font-medium truncate max-w-[200px]" id="breadcrumbTitle">جاري التحميل...</span>
+            <nav class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 overflow-x-auto whitespace-nowrap fade-in"
+                id="breadcrumb" aria-label="مسار التنقل">
+                <a href="/app/" class="hover:text-emerald-600 transition-colors flex-shrink-0 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    الرئيسية
+                </a>
+                <svg class="w-4 h-4 flex-shrink-0 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                <a href="/app/explore.html" class="hover:text-emerald-600 transition-colors flex-shrink-0">الخدمات</a>
+                <svg class="w-4 h-4 flex-shrink-0 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                <span class="text-emerald-600 font-medium truncate max-w-[150px] sm:max-w-none"
+                    id="breadcrumbCategory">جاري التحميل...</span>
             </nav>
-            
-            <!-- Service Detail Layout -->
-            <div class="grid lg:grid-cols-3 gap-8" id="serviceContent">
-                
+
+            <!-- Service Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 fade-in" id="serviceContent">
+
                 <!-- Main Column -->
-                <div class="lg:col-span-2 space-y-6">
-                    
+                <div class="lg:col-span-2 space-y-4 sm:space-y-6" id="mainColumn">
+
                     <!-- Gallery -->
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm" id="serviceGallery">
-                        <div class="aspect-video bg-gray-200 animate-pulse"></div>
-                    </div>
-                    
-                    <!-- Seller Info (Mobile) -->
-                    <div class="lg:hidden" id="sellerInfoMobile"></div>
-                    
-                    <!-- Title & Meta -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm" id="serviceHeader">
-                        <div class="h-8 bg-gray-200 rounded-lg animate-pulse w-3/4 mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded animate-pulse w-1/3"></div>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm" id="serviceDescription">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4">وصف الخدمة</h2>
-                        <div class="space-y-2">
-                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div class="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Features -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm hidden" id="serviceFeatures">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4">مميزات الخدمة</h2>
-                        <ul class="space-y-3" id="featuresList"></ul>
-                    </div>
-                    
-                    <!-- Requirements -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm hidden" id="serviceRequirements">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4">متطلبات العميل</h2>
-                        <div id="requirementsContent"></div>
-                    </div>
-                    
-                    <!-- Seller Info (Desktop) -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm hidden lg:block" id="sellerSection">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4">عن البائع</h2>
-                        <div class="flex items-center gap-4" id="sellerCard">
-                            <div class="w-16 h-16 bg-gray-200 rounded-full animate-pulse"></div>
-                            <div class="flex-1">
-                                <div class="h-5 bg-gray-200 rounded animate-pulse w-32 mb-2"></div>
-                                <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl bg-gray-900 gallery-container"
+                        id="serviceGallery">
+                        <div
+                            class="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-gray-700 skeleton flex items-center justify-center">
+                                <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Reviews -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm" id="reviewsSection">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-bold text-gray-900">التقييمات</h2>
-                            <span class="text-sm text-gray-500" id="reviewsCount"></span>
+
+                    <!-- Service Header -->
+                    <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-sm border border-gray-100"
+                        id="serviceHeader">
+                        <div class="h-7 sm:h-9 bg-gray-200 rounded-xl skeleton w-3/4 mb-4"></div>
+                        <div class="h-4 sm:h-5 bg-gray-100 rounded-lg skeleton w-1/2"></div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="flex flex-wrap gap-2 sm:gap-3" id="quickStats">
+                        <div
+                            class="stat-card inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 bg-white rounded-xl shadow-sm border border-gray-100 text-xs sm:text-sm cursor-default">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-yellow-600" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span id="ratingBadge" class="font-bold text-gray-900">--</span>
+                                <span class="text-gray-400 text-xs block">التقييم</span>
+                            </div>
                         </div>
-                        <div id="reviewsList" class="space-y-4">
-                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div class="h-4 bg-gray-200 rounded animate-pulse w-4/5"></div>
+                        <div
+                            class="stat-card inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 bg-white rounded-xl shadow-sm border border-gray-100 text-xs sm:text-sm cursor-default">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+                                    <rect x="9" y="3" width="6" height="4" rx="1" />
+                                    <path d="M9 14l2 2 4-4" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span id="ordersBadge" class="font-bold text-gray-900">-- طلب</span>
+                                <span class="text-gray-400 text-xs block">مكتمل</span>
+                            </div>
+                        </div>
+                        <div
+                            class="stat-card inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 bg-white rounded-xl shadow-sm border border-gray-100 text-xs sm:text-sm cursor-default">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span id="deliveryBadge" class="font-bold text-gray-900">-- أيام</span>
+                                <span class="text-gray-400 text-xs block">للتسليم</span>
+                            </div>
                         </div>
                     </div>
-                    
-                </div>
-                
-                <!-- Sidebar (Order Card) -->
-                <aside class="lg:col-span-1">
-                    <div class="bg-white rounded-2xl shadow-lg sticky top-24" id="orderCard">
-                        <div class="p-6 border-b border-gray-100">
-                            <div class="h-8 bg-gray-200 rounded animate-pulse w-24"></div>
+
+                    <!-- Mobile Order Card -->
+                    <div class="lg:hidden" id="mobileOrderCard"></div>
+
+                    <!-- Tabs Navigation -->
+                    <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm overflow-hidden border border-gray-100">
+                        <div class="flex overflow-x-auto border-b border-gray-100 scrollbar-hide bg-gray-50/50"
+                            id="tabsNav">
+                            <button
+                                class="service-tab-btn active flex-shrink-0 px-5 sm:px-7 py-4 sm:py-5 text-xs sm:text-sm font-semibold text-emerald-600 border-b-2 border-emerald-600 transition-all bg-white"
+                                data-tab="about">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                    </svg>
+                                    <span class="hidden sm:inline">عن الخدمة</span>
+                                    <span class="sm:hidden">الخدمة</span>
+                                </span>
+                            </button>
+                            <button
+                                class="service-tab-btn flex-shrink-0 px-5 sm:px-7 py-4 sm:py-5 text-xs sm:text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent transition-all hover:bg-gray-50"
+                                data-tab="seller">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    البائع
+                                </span>
+                            </button>
+                            <button
+                                class="service-tab-btn flex-shrink-0 px-5 sm:px-7 py-4 sm:py-5 text-xs sm:text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent transition-all hover:bg-gray-50"
+                                data-tab="reviews">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path
+                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                    <span class="hidden sm:inline">التقييمات</span>
+                                    <span class="sm:hidden">تقييم</span>
+                                    <span
+                                        class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs px-2 py-0.5 rounded-full shadow-sm"
+                                        id="reviewsCountBadge">0</span>
+                                </span>
+                            </button>
+                            <button
+                                class="service-tab-btn flex-shrink-0 px-5 sm:px-7 py-4 sm:py-5 text-xs sm:text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent transition-all hover:bg-gray-50"
+                                data-tab="faq">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                                    </svg>
+                                    <span class="hidden sm:inline">أسئلة شائعة</span>
+                                    <span class="sm:hidden">FAQ</span>
+                                </span>
+                            </button>
                         </div>
-                        <div class="p-6 space-y-4">
-                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div class="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
-                            <div class="h-12 bg-gray-200 rounded-xl animate-pulse mt-6"></div>
+
+                        <!-- Tab: About -->
+                        <div class="service-tab-content p-5 sm:p-7" id="tabAbout">
+                            <div id="serviceDescription">
+                                <div class="space-y-3">
+                                    <div class="h-4 bg-gray-200 rounded skeleton"></div>
+                                    <div class="h-4 bg-gray-200 rounded skeleton w-11/12"></div>
+                                    <div class="h-4 bg-gray-200 rounded skeleton w-3/4"></div>
+                                </div>
+                            </div>
+
+                            <!-- Features -->
+                            <div class="mt-8 hidden" id="serviceFeatures">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                                            <polyline points="22 4 12 14.01 9 11.01" />
+                                        </svg>
+                                    </div>
+                                    ما تحصل عليه
+                                </h3>
+                                <div id="featuresList" class="space-y-2"></div>
+                            </div>
+
+                            <!-- Requirements -->
+                            <div class="mt-8 pt-8 border-t border-gray-100" id="requirementsSection">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+                                            <rect x="9" y="3" width="6" height="4" rx="1" />
+                                            <path d="M9 14l2 2 4-4" />
+                                        </svg>
+                                    </div>
+                                    ما نحتاجه منك
+                                </h3>
+                                <div id="requirementsContent"
+                                    class="text-sm sm:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-xl">
+                                    <p class="text-gray-400 italic">لا توجد متطلبات محددة</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Seller -->
+                        <div class="service-tab-content hidden p-5 sm:p-7" id="tabSeller">
+                            <div id="sellerCard">
+                                <div class="flex items-start gap-4 mb-6">
+                                    <div class="w-20 h-20 rounded-2xl bg-gray-200 skeleton"></div>
+                                    <div class="flex-1">
+                                        <div class="h-6 bg-gray-200 rounded-lg skeleton w-32 mb-2"></div>
+                                        <div class="h-5 bg-gray-100 rounded-full skeleton w-24"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Reviews -->
+                        <div class="service-tab-content hidden p-5 sm:p-7" id="tabReviews">
+                            <div id="reviewsHeader" class="mb-6">
+                                <div class="h-32 bg-gradient-to-r from-gray-100 to-gray-50 rounded-2xl skeleton"></div>
+                            </div>
+                            <div id="reviewsList" class="space-y-4">
+                                <div class="h-24 bg-gray-100 rounded-xl skeleton"></div>
+                                <div class="h-24 bg-gray-100 rounded-xl skeleton"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: FAQ -->
+                        <div class="service-tab-content hidden p-5 sm:p-7" id="tabFaq">
+                            <div id="faqContent">
+                                <div class="text-center py-12">
+                                    <div
+                                        class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                        <svg class="w-10 h-10 text-gray-300" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-gray-400">لا توجد أسئلة شائعة حتى الآن</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar (Desktop Order Card) -->
+                <aside class="hidden lg:block" id="desktopSidebar">
+                    <div class="bg-white rounded-2xl shadow-lg sticky top-24 transition-all duration-300 hover:shadow-2xl border border-gray-100"
+                        id="orderCard">
+                        <!-- Loading state - will be replaced by JS -->
+                        <div class="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 text-center rounded-t-2xl">
+                            <div class="h-10 bg-white/20 rounded-xl skeleton mb-2"></div>
+                            <div class="h-4 bg-white/10 rounded skeleton w-24 mx-auto"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4 mb-6">
+                                <div class="h-12 bg-gray-100 rounded-xl skeleton"></div>
+                                <div class="h-12 bg-gray-100 rounded-xl skeleton"></div>
+                            </div>
+                            <div class="h-14 bg-gradient-to-r from-gray-200 to-gray-100 rounded-xl skeleton"></div>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="mt-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center gap-3 text-sm text-gray-600">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 block">ضمان الحماية</span>
+                                <span class="text-xs text-gray-400">استرداد 100% في حالة عدم الرضا</span>
+                            </div>
                         </div>
                     </div>
                 </aside>
-                
+
             </div>
-            
+
             <!-- Related Services -->
-            <section class="mt-12 hidden" id="relatedSection">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">خدمات مشابهة</h2>
+            <section class="mt-10 sm:mt-14 pt-8 sm:pt-10 border-t border-gray-200 hidden fade-in" id="relatedSection">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">خدمات مشابهة</h2>
+                        <p class="text-sm text-gray-500 mt-1">قد تعجبك هذه الخدمات أيضاً</p>
+                    </div>
+                    <a href="/app/explore.html"
+                        class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 font-medium text-sm transition-colors">
+                        عرض الكل
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </a>
+                </div>
                 <div class="services-grid" id="relatedServicesGrid"></div>
             </section>
-            
+
         </div>
     </main>
-    
+
+    <!-- Mobile Order Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 z-50 lg:hidden"
+        id="mobileOrderBar">
+        <div class="flex items-center justify-between gap-4 max-w-lg mx-auto">
+            <div class="flex-shrink-0">
+                <div class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent"
+                    id="mobilePrice">--</div>
+                <div class="text-xs text-gray-500">السعر الأساسي</div>
+            </div>
+            <a href="#" id="mobileOrderBtn"
+                class="flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 hover:from-emerald-600 hover:via-emerald-700 hover:to-teal-600 text-white font-bold rounded-xl text-center text-sm sm:text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                اطلب الآن
+            </a>
+        </div>
+    </div>
+
     <!-- Footer -->
     <div id="footer"></div>
-    
+
     <!-- Scripts -->
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
@@ -141,5 +525,7 @@
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/components/service-card.js"></script>
     <script src="/app/js/pages/service.js"></script>
+
 </body>
+
 </html>

@@ -260,12 +260,12 @@
             const servicePrice = service.price || service.basePrice || 0;
             const isActive = service.status === 'active';
             
-            return `
-                <tr>
-                    <td>
-                        <div class="service-cell">
-                            <img src="${serviceImage}" alt="" class="service-cell-image" onerror="this.src='/app/assets/images/service-placeholder.svg'">
-                            <span class="service-cell-title">${Utils.escapeHtml(service.title)}</span>
+        return `
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td class="py-3">
+                        <div class="service-cell flex items-center gap-3">
+                            <img src="${serviceImage}" alt="" class="service-cell-image rounded-lg object-cover flex-shrink-0" style="width: 80px; height: 56px;" onerror="this.src='/app/assets/images/service-placeholder.svg'">
+                            <span class="service-cell-title font-medium text-gray-900 line-clamp-2">${Utils.escapeHtml(service.title)}</span>
                         </div>
                     </td>
                     <td class="order-price">${Utils.formatPrice(servicePrice)}</td>

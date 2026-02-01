@@ -82,6 +82,137 @@
         renderCategories();
         bindEvents();
         updateCharCounters();
+        
+        // Initialize AI features
+        await initAI();
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // AI Features
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    let aiEnabled = false;
+    
+    async function initAI() {
+        // Check if MashriqAI is available
+        if (typeof MashriqAI === 'undefined') {
+            console.log('AI Assistant not loaded');
+            return;
+        }
+        
+        try {
+            aiEnabled = await MashriqAI.init();
+            
+            if (aiEnabled) {
+                // Show AI buttons
+                const suggestTitleBtn = document.getElementById('aiSuggestTitleBtn');
+                const generateDescBtn = document.getElementById('aiGenerateDescBtn');
+                
+                if (suggestTitleBtn) suggestTitleBtn.classList.remove('hidden');
+                if (generateDescBtn) generateDescBtn.classList.remove('hidden');
+                
+                // Bind AI events
+                bindAIEvents();
+                
+                console.log('🤖 AI features enabled');
+            }
+        } catch (error) {
+            console.log('AI initialization failed:', error);
+        }
+    }
+    
+    function bindAIEvents() {
+        const suggestTitleBtn = document.getElementById('aiSuggestTitleBtn');
+        const generateDescBtn = document.getElementById('aiGenerateDescBtn');
+        const generateNowBtn = document.getElementById('aiGenerateNowBtn');
+        const cancelBtn = document.getElementById('aiCancelBtn');
+        const aiPointsSection = document.getElementById('aiPointsSection');
+        
+        // Suggest Titles
+        suggestTitleBtn?.addEventListener('click', async () => {
+            try {
+                MashriqAI.setButtonLoading(suggestTitleBtn, true);
+                
+                const categoryObj = CONFIG.CATEGORIES.find(c => c.id === state.selectedCategory);
+                const type = categoryObj?.name || '';
+                
+                if (!type) {
+                    Toast.warning('تنبيه', 'يرجى اختيار التخصص أولاً');
+                    return;
+                }
+                
+                const titles = await MashriqAI.suggestTitles({ type, specialty: type }, 5);
+                
+                MashriqAI.showListModal('✨ عناوين مقترحة', titles, (selectedTitle) => {
+                    if (elements.title) {
+                        elements.title.value = selectedTitle;
+                        updateCharCounter('title', 100);
+                        updatePreview();
+                    }
+                });
+                
+            } catch (error) {
+                Toast.error('خطأ', error.message || 'فشل اقتراح العناوين');
+            } finally {
+                MashriqAI.setButtonLoading(suggestTitleBtn, false);
+            }
+        });
+        
+        // Show AI Points Section
+        generateDescBtn?.addEventListener('click', () => {
+            if (aiPointsSection) {
+                aiPointsSection.classList.remove('hidden');
+                document.getElementById('aiPoints')?.focus();
+            }
+        });
+        
+        // Cancel AI Points
+        cancelBtn?.addEventListener('click', () => {
+            if (aiPointsSection) {
+                aiPointsSection.classList.add('hidden');
+            }
+        });
+        
+        // Generate Description Now
+        generateNowBtn?.addEventListener('click', async () => {
+            try {
+                MashriqAI.setButtonLoading(generateNowBtn, true);
+                
+                const title = elements.title?.value.trim() || '';
+                const categoryObj = CONFIG.CATEGORIES.find(c => c.id === state.selectedCategory);
+                const category = categoryObj?.name || '';
+                const pointsText = document.getElementById('aiPoints')?.value || '';
+                const points = pointsText.split('\n').filter(p => p.trim());
+                
+                if (!title) {
+                    Toast.warning('تنبيه', 'يرجى إدخال عنوان الخدمة أولاً');
+                    return;
+                }
+                
+                if (points.length === 0) {
+                    Toast.warning('تنبيه', 'يرجى إدخال نقاط عن خدمتك');
+                    return;
+                }
+                
+                const description = await MashriqAI.generateDescription({ title, category, points });
+                
+                MashriqAI.showResultModal('📝 الوصف الاحترافي', `<p class="lead" style="white-space: pre-wrap; line-height: 1.8;">${description}</p>`, {
+                    copyText: description,
+                    onUse: (text) => {
+                        if (elements.description) {
+                            elements.description.value = text;
+                            updateCharCounter('description', 2000);
+                        }
+                        aiPointsSection?.classList.add('hidden');
+                    }
+                });
+                
+            } catch (error) {
+                Toast.error('خطأ', error.message || 'فشل توليد الوصف');
+            } finally {
+                MashriqAI.setButtonLoading(generateNowBtn, false);
+            }
+        });
     }
     
     // ─────────────────────────────────────────────────────────────────────────

@@ -112,7 +112,7 @@
             Toast.info('جاري الرفع', 'يتم رفع الصورة...');
             
             const token = Auth.getToken();
-            const response = await fetch(CONFIG.API_BASE + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
+            const response = await fetch(CONFIG.API_BASE_URL + CONFIG.ENDPOINTS.UPLOAD_AVATAR, {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token
