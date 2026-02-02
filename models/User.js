@@ -173,6 +173,15 @@ const userSchema = new mongoose.Schema({
         default: null
     },
     
+    /**
+     * URL to user's profile banner/cover image.
+     * Can be null (uses default gradient).
+     */
+    bannerUrl: {
+        type: String,
+        default: null
+    },
+    
     // ============================================================
     // ROLE & STATUS FIELDS
     // Account state and permissions.

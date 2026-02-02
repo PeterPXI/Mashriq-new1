@@ -22,6 +22,8 @@
         achievements: [],
         currentTab: 'overview',
         isLoading: true,
+        isUploadingAvatar: false,
+        isUploadingBanner: false,
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -143,9 +145,34 @@
         // Modals
         avatarModal: document.getElementById('avatarModal'),
         avatarUrlInput: document.getElementById('avatarUrlInput'),
+        avatarFileInput: document.getElementById('avatarFileInput'),
         avatarPreviewLarge: document.getElementById('avatarPreviewLarge'),
         avatarPreviewImg: document.getElementById('avatarPreviewImg'),
+        avatarUploadProgress: document.getElementById('avatarUploadProgress'),
+        avatarProgressBar: document.getElementById('avatarProgressBar'),
+        avatarProgressText: document.getElementById('avatarProgressText'),
         saveAvatarBtn: document.getElementById('saveAvatarBtn'),
+        // Bio Editing
+        editBioBtn: document.getElementById('editBioBtn'),
+        bioDisplay: document.getElementById('bioDisplay'),
+        bioEditForm: document.getElementById('bioEditForm'),
+        bioTextarea: document.getElementById('bioTextarea'),
+        bioCharCount: document.getElementById('bioCharCount'),
+        saveBioBtn: document.getElementById('saveBioBtn'),
+        cancelBioBtn: document.getElementById('cancelBioBtn'),
+        // Banner Editing
+        profileBanner: document.getElementById('profileBanner'),
+        editBannerBtn: document.getElementById('editBannerBtn'),
+        bannerModal: document.getElementById('bannerModal'),
+        bannerUrlInput: document.getElementById('bannerUrlInput'),
+        bannerFileInput: document.getElementById('bannerFileInput'),
+        bannerPreviewImg: document.getElementById('bannerPreviewImg'),
+        bannerPlaceholder: document.getElementById('bannerPlaceholder'),
+        bannerUploadProgress: document.getElementById('bannerUploadProgress'),
+        bannerProgressBar: document.getElementById('bannerProgressBar'),
+        bannerProgressText: document.getElementById('bannerProgressText'),
+        saveBannerBtn: document.getElementById('saveBannerBtn'),
+        removeBannerBtn: document.getElementById('removeBannerBtn'),
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -294,6 +321,7 @@
         elements.editAvatarBtn?.addEventListener('click', openAvatarModal);
         elements.saveAvatarBtn?.addEventListener('click', saveAvatar);
         elements.avatarUrlInput?.addEventListener('input', Utils.debounce(previewAvatar, 500));
+        elements.avatarFileInput?.addEventListener('change', handleAvatarFileUpload);
         
         // Modal close
         document.querySelectorAll('[data-close-modal]').forEach(btn => {
@@ -305,6 +333,19 @@
         
         // Logout
         elements.logoutBtn?.addEventListener('click', handleLogout);
+        
+        // Bio Editing
+        elements.editBioBtn?.addEventListener('click', openBioEdit);
+        elements.saveBioBtn?.addEventListener('click', saveBio);
+        elements.cancelBioBtn?.addEventListener('click', closeBioEdit);
+        elements.bioTextarea?.addEventListener('input', updateBioCharCount);
+        
+        // Banner Editing
+        elements.editBannerBtn?.addEventListener('click', openBannerModal);
+        elements.saveBannerBtn?.addEventListener('click', saveBanner);
+        elements.removeBannerBtn?.addEventListener('click', removeBanner);
+        elements.bannerUrlInput?.addEventListener('input', Utils.debounce(previewBanner, 500));
+        elements.bannerFileInput?.addEventListener('change', handleBannerFileUpload);
     }
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -362,6 +403,7 @@
             try {
                 renderOverview();
                 renderAchievements();
+                renderBanner(state.user);
             } catch (renderErr) {
                 console.warn('Non-critical error in render:', renderErr);
             }
@@ -471,7 +513,7 @@
     }
     
     // ─────────────────────────────────────────────────────────────────────────
-    // NEW: Seller Level System (like Fiverr)
+    // NEW: Seller Level System 
     // ─────────────────────────────────────────────────────────────────────────
     
     const SELLER_LEVELS = [
@@ -775,6 +817,10 @@
             const data = response.data || response;
             state.services = data.services || [];
             
+            // Expose to window for custom renderers
+            window.__profileServices = state.services;
+            window.__profileIsOwner = state.isOwner;
+            
             // Update stats
             if (elements.statServices) {
                 elements.statServices.textContent = state.services.length;
@@ -797,17 +843,158 @@
         
         if (state.services.length === 0) {
             elements.servicesGrid.innerHTML = '';
-            if (elements.servicesEmpty) elements.servicesEmpty.style.display = 'block';
+            if (elements.servicesEmpty) {
+                elements.servicesEmpty.style.display = 'block';
+                elements.servicesEmpty.classList.remove('hidden');
+            }
+            // Show add service link for owner
+            const addLink = document.getElementById('addServiceLink');
+            if (addLink && state.isOwner) addLink.classList.remove('hidden');
             return;
         }
         
-        if (elements.servicesEmpty) elements.servicesEmpty.style.display = 'none';
+        if (elements.servicesEmpty) {
+            elements.servicesEmpty.style.display = 'none';
+            elements.servicesEmpty.classList.add('hidden');
+        }
         
-        elements.servicesGrid.innerHTML = state.services.map(service => 
-            ServiceCard.render(service)
-        ).join('');
+        // Update seller name in title
+        const titleEl = document.getElementById('sellerNameInTitle');
+        if (titleEl && state.user?.fullName) {
+            titleEl.textContent = state.user.fullName;
+        }
+        
+        // Render enhanced Fiverr-style service cards
+        elements.servicesGrid.innerHTML = state.services.map(service => {
+            const rating = service.rating || service.averageRating || 0;
+            const reviewCount = service.reviewCount || service.reviews?.length || 0;
+            const price = service.price || service.basePrice || 0;
+            
+            // Get proper image URL - check all possible field names
+            let imageUrl = '';
+            if (service.imageUrls && service.imageUrls.length > 0) {
+                imageUrl = service.imageUrls[0];
+            } else if (service.images && service.images.length > 0) {
+                imageUrl = service.images[0];
+            } else if (service.image) {
+                imageUrl = service.image;
+            } else if (service.thumbnail) {
+                imageUrl = service.thumbnail;
+            }
+            
+            // Make sure image URL is absolute
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                imageUrl = '/' + imageUrl;
+            }
+            
+            // Debug log
+            console.log('Service:', service.title, 'imageUrl:', imageUrl, 'imageUrls:', service.imageUrls);
+            
+            const category = CONFIG?.CATEGORIES?.find(c => c.id === service.categoryId)?.name || service.category || '';
+            const sellerName = service.seller?.fullName || state.user?.fullName || 'بائع';
+            const sellerInitial = sellerName.charAt(0) || 'B';
+            
+            // Get seller level
+            const sellerLevel = getSellerLevelForDisplay();
+            
+            return `
+                <a href="/app/service.html?id=${service._id || service.id}" 
+                   class="gig-card group block bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:border-emerald-200 transition-all duration-300">
+                    
+                    <!-- Image Container -->
+                    <div class="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600">
+                        ${imageUrl ? `
+                            <img src="${imageUrl}" 
+                                 alt="${Utils.escapeHtml(service.title)}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                                 onerror="this.remove();">
+                        ` : ''}
+                        
+                        <!-- Gradient overlay for text readability when no image -->
+                        ${!imageUrl ? `
+                            <div class="absolute inset-0 flex items-center justify-center p-4">
+                                <h4 class="text-white text-xl font-bold text-center leading-relaxed drop-shadow-lg">
+                                    ${Utils.escapeHtml(service.title?.substring(0, 50) || 'خدمة')}
+                                </h4>
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 right-3 flex flex-col gap-2">
+                            ${service.isActive === false ? `
+                                <span class="bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">غير نشط</span>
+                            ` : ''}
+                        </div>
+                        
+                        ${category ? `
+                            <div class="absolute top-3 left-3">
+                                <span class="bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
+                                    ${category}
+                                </span>
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Favorite button -->
+                        <button onclick="event.preventDefault(); event.stopPropagation();" 
+                                class="absolute bottom-3 left-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 hover:bg-white hover:scale-110 transition-all duration-300">
+                            <svg class="w-5 h-5 text-gray-500 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-4">
+                        <!-- Seller Info -->
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                ${sellerInitial}
+                            </div>
+                            <span class="text-sm text-gray-700 font-medium truncate flex-1">${Utils.escapeHtml(sellerName)}</span>
+                            <span class="text-[11px] ${sellerLevel.cssClass} px-2 py-0.5 rounded-full font-medium">${sellerLevel.label}</span>
+                        </div>
+                        
+                        <!-- Title -->
+                        <h3 class="text-gray-900 font-semibold leading-snug line-clamp-2 group-hover:text-emerald-600 transition-colors min-h-[2.5rem] text-[15px]">
+                            ${Utils.escapeHtml(service.title)}
+                        </h3>
+                        
+                        <!-- Rating -->
+                        <div class="flex items-center gap-1.5 mt-3">
+                            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <span class="font-bold text-gray-800">${rating.toFixed(1)}</span>
+                            <span class="text-gray-400 text-sm">(${reviewCount})</span>
+                        </div>
+                        
+                        <!-- Price Footer -->
+                        <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                            <span class="text-xs text-gray-400 uppercase tracking-wide">يبدأ من</span>
+                            <span class="text-xl font-bold text-gray-900">$${price}</span>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }).join('');
     }
     
+    // Helper to get seller level for display
+    function getSellerLevelForDisplay() {
+        const completedOrders = state.user?.completedOrders || state.myStats?.completedOrders || 0;
+        const rating = state.user?.rating || state.myStats?.averageRating || 0;
+        
+        if (completedOrders >= 50 && rating >= 4.8) {
+            return { label: 'Top Rated', cssClass: 'bg-amber-100 text-amber-700' };
+        } else if (completedOrders >= 20 && rating >= 4.5) {
+            return { label: 'بائع محترف', cssClass: 'bg-purple-100 text-purple-700' };
+        } else if (completedOrders >= 5 && rating >= 4.0) {
+            return { label: 'بائع نشط', cssClass: 'bg-blue-100 text-blue-700' };
+        } else {
+            return { label: 'بائع جديد', cssClass: 'bg-gray-100 text-gray-600' };
+        }
+    }
+
     function renderTopServices() {
         if (!elements.topServicesGrid || !elements.topServicesSection) return;
         
@@ -841,6 +1028,9 @@
                 state.reviews = [];
             }
             
+            // Expose to window for custom renderers
+            window.__profileReviews = state.reviews;
+            
             if (elements.reviewsCount) {
                 elements.reviewsCount.textContent = state.reviews.length;
             }
@@ -855,46 +1045,110 @@
     }
     
     function renderReviews() {
-        if (!elements.ratingSummary || !elements.reviewsList) return;
+        const reviewsList = elements.reviewsList || document.getElementById('reviewsList');
+        const mobileReviewsList = document.getElementById('mobileReviewsList');
+        const ratingSummary = elements.ratingSummary || document.getElementById('ratingSummary');
+        const reviewsEmpty = elements.reviewsEmpty || document.getElementById('reviewsEmpty');
+        const avgRatingDisplay = document.getElementById('avgRatingDisplay');
+        const totalReviewsDisplay = document.getElementById('totalReviewsDisplay');
+        const statReviewCount = document.getElementById('statReviewCount');
         
         if (state.reviews.length === 0) {
-            elements.ratingSummary.innerHTML = '';
-            elements.reviewsList.innerHTML = '';
-            if (elements.reviewsEmpty) elements.reviewsEmpty.style.display = 'block';
+            if (reviewsList) reviewsList.innerHTML = '';
+            if (mobileReviewsList) mobileReviewsList.innerHTML = '';
+            if (ratingSummary) ratingSummary.innerHTML = '';
+            if (reviewsEmpty) {
+                reviewsEmpty.style.display = 'block';
+                reviewsEmpty.classList.remove('hidden');
+            }
+            if (avgRatingDisplay) avgRatingDisplay.textContent = '0.0';
+            if (totalReviewsDisplay) totalReviewsDisplay.textContent = '0';
+            if (statReviewCount) statReviewCount.textContent = '0';
             return;
         }
         
-        if (elements.reviewsEmpty) elements.reviewsEmpty.style.display = 'none';
+        if (reviewsEmpty) {
+            reviewsEmpty.style.display = 'none';
+            reviewsEmpty.classList.add('hidden');
+        }
         
-        // Rating summary
-        const avgRating = state.reviews.reduce((sum, r) => sum + r.rating, 0) / state.reviews.length;
-        const ratingCounts = [5, 4, 3, 2, 1].map(stars => 
-            state.reviews.filter(r => Math.floor(r.rating) === stars).length
-        );
+        // Calculate stats
+        const avgRating = state.reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / state.reviews.length;
         
-        elements.ratingSummary.innerHTML = `
-            <div class="rating-big">
-                <div class="rating-big-value">${avgRating.toFixed(1)}</div>
-                <div class="rating-big-stars">
-                    ${renderStars(avgRating)}
-                </div>
-                <div class="rating-big-count">${state.reviews.length} تقييم</div>
-            </div>
-            <div class="rating-bars">
-                ${[5, 4, 3, 2, 1].map((stars, i) => `
-                    <div class="rating-bar-row">
-                        <span class="rating-bar-label">${stars}</span>
-                        <div class="rating-bar">
-                            <div class="rating-bar-fill" style="width: ${(ratingCounts[i] / state.reviews.length * 100)}%"></div>
-                        </div>
-                        <span class="rating-bar-count">${ratingCounts[i]}</span>
+        // Update displays
+        if (avgRatingDisplay) avgRatingDisplay.textContent = avgRating.toFixed(1);
+        if (totalReviewsDisplay) totalReviewsDisplay.textContent = state.reviews.length;
+        if (statReviewCount) statReviewCount.textContent = state.reviews.length;
+        
+        // Rating breakdown (communication, quality, etc - simulated from average)
+        if (ratingSummary) {
+            const commRating = Math.min(5, avgRating + 0.1).toFixed(1);
+            const qualityRating = avgRating.toFixed(1);
+            const commitmentRating = Math.max(1, avgRating - 0.1).toFixed(1);
+            const againRating = Math.min(5, avgRating + 0.1).toFixed(1);
+            
+            ratingSummary.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-600 w-16">التواصل</span>
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="rating-progress h-full bg-yellow-400 rounded-full" style="width: ${(commRating / 5) * 100}%"></div>
                     </div>
-                `).join('')}
-            </div>
-        `;
+                    <span class="text-sm text-gray-700 font-medium w-8">${commRating}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-600 w-16">الجودة</span>
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="rating-progress h-full bg-yellow-400 rounded-full" style="width: ${(qualityRating / 5) * 100}%"></div>
+                    </div>
+                    <span class="text-sm text-gray-700 font-medium w-8">${qualityRating}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-600 w-16">الالتزام</span>
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="rating-progress h-full bg-yellow-400 rounded-full" style="width: ${(commitmentRating / 5) * 100}%"></div>
+                    </div>
+                    <span class="text-sm text-gray-700 font-medium w-8">${commitmentRating}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-600 w-16">مرة أخرى</span>
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="rating-progress h-full bg-yellow-400 rounded-full" style="width: ${(againRating / 5) * 100}%"></div>
+                    </div>
+                    <span class="text-sm text-gray-700 font-medium w-8">${againRating}</span>
+                </div>
+            `;
+        }
         
-        // Reviews list
-        elements.reviewsList.innerHTML = state.reviews.map(review => renderReviewCard(review)).join('');
+        // Render review cards
+        const reviewHTML = state.reviews.slice(0, 5).map(review => {
+            const initials = Utils.getInitials(review.buyer?.fullName || 'مستخدم');
+            const name = Utils.escapeHtml(review.buyer?.fullName || 'مستخدم');
+            const rating = review.rating || 5;
+            const stars = '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
+            const date = review.createdAt ? Utils.formatRelativeDate(review.createdAt) : 'منذ فترة';
+            const comment = Utils.escapeHtml(review.comment || 'تقييم إيجابي');
+            
+            return `
+                <div class="p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0 text-sm">
+                            ${initials}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-medium text-gray-900 text-sm">${name}</span>
+                                <span class="text-yellow-400 text-sm">${stars}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm line-clamp-3">${comment}</p>
+                            <span class="text-gray-400 text-xs mt-2 block">${date}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        if (reviewsList) reviewsList.innerHTML = reviewHTML;
+        if (mobileReviewsList) mobileReviewsList.innerHTML = reviewHTML;
     }
     
     function renderLatestReviews() {
@@ -1121,6 +1375,18 @@
         if (elements.editAvatarBtn) elements.editAvatarBtn.style.display = 'flex';
         if (elements.settingsTabBtn) elements.settingsTabBtn.style.display = 'flex';
         
+        // Show bio edit button
+        if (elements.editBioBtn) {
+            elements.editBioBtn.classList.remove('hidden');
+            elements.editBioBtn.style.display = 'flex';
+        }
+        
+        // Show banner edit button
+        if (elements.editBannerBtn) {
+            elements.editBannerBtn.classList.remove('hidden');
+            elements.editBannerBtn.style.display = 'flex';
+        }
+        
         // Show earnings for sellers
         if (state.user?.role === 'seller' && elements.statEarningsWrapper) {
             elements.statEarningsWrapper.style.display = 'block';
@@ -1247,15 +1513,28 @@
     
     function openAvatarModal() {
         if (elements.avatarModal) {
+            elements.avatarModal.classList.remove('hidden');
             elements.avatarModal.style.display = 'flex';
             if (elements.avatarUrlInput) {
                 elements.avatarUrlInput.value = state.user?.avatarUrl || '';
+            }
+            // Show preview if there's an existing avatar
+            if (state.user?.avatarUrl && elements.avatarPreviewImg) {
+                elements.avatarPreviewImg.src = state.user.avatarUrl;
+                elements.avatarPreviewImg.classList.remove('hidden');
             }
         }
     }
     
     function closeModals() {
-        if (elements.avatarModal) elements.avatarModal.style.display = 'none';
+        if (elements.avatarModal) {
+            elements.avatarModal.classList.add('hidden');
+            elements.avatarModal.style.display = 'none';
+        }
+        if (elements.bannerModal) {
+            elements.bannerModal.classList.add('hidden');
+            elements.bannerModal.style.display = 'none';
+        }
     }
     
     function previewAvatar() {
@@ -1294,6 +1573,486 @@
         } catch (error) {
             console.error('Save avatar error:', error);
             Toast.error('خطأ', 'فشل تحديث الصورة');
+        }
+    }
+    
+    async function handleAvatarFileUpload(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        // Prevent concurrent uploads
+        if (state.isUploadingAvatar) {
+            Toast.warning('انتظر', 'جاري رفع صورة أخرى...');
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            Toast.error('خطأ', 'يرجى اختيار صورة صالحة');
+            if (elements.avatarFileInput) elements.avatarFileInput.value = '';
+            return;
+        }
+        
+        // Validate file size (max 2MB for avatars)
+        if (file.size > 2 * 1024 * 1024) {
+            Toast.error('خطأ', 'حجم الصورة يجب أن يكون أقل من 2 ميجابايت');
+            if (elements.avatarFileInput) elements.avatarFileInput.value = '';
+            return;
+        }
+        
+        // Lock upload
+        state.isUploadingAvatar = true;
+        
+        // Show progress bar
+        if (elements.avatarUploadProgress) {
+            elements.avatarUploadProgress.classList.remove('hidden');
+        }
+        updateAvatarProgress(10);
+        
+        // Create upload FormData immediately with the current file
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('folder', 'avatars');
+        
+        // Reset file input immediately to prevent stale file references
+        if (elements.avatarFileInput) elements.avatarFileInput.value = '';
+        
+        try {
+            // Preview the image immediately
+            const localPreviewUrl = URL.createObjectURL(file);
+            if (elements.avatarPreviewImg) {
+                elements.avatarPreviewImg.src = localPreviewUrl;
+                elements.avatarPreviewImg.classList.remove('hidden');
+            }
+            
+            updateAvatarProgress(30);
+            
+            // Upload to server
+            const response = await fetch('/api/upload/image', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: formData
+            });
+            
+            updateAvatarProgress(70);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'فشل في رفع الصورة');
+            }
+            
+            const result = await response.json();
+            const imageUrl = result.data?.url || result.url;
+            
+            if (!imageUrl) {
+                throw new Error('لم يتم استلام رابط الصورة');
+            }
+            
+            updateAvatarProgress(85);
+            
+            // Update the URL input
+            if (elements.avatarUrlInput) {
+                elements.avatarUrlInput.value = imageUrl;
+            }
+            
+            // Save to profile immediately
+            await API.put(CONFIG.ENDPOINTS.PROFILE, { avatarUrl: imageUrl });
+            
+            updateAvatarProgress(100);
+            
+            // Update local state
+            state.user.avatarUrl = imageUrl;
+            Auth.setUser(state.user);
+            
+            // Revoke object URL and set final image
+            URL.revokeObjectURL(localPreviewUrl);
+            
+            // Update avatar display immediately
+            renderAvatar(state.user);
+            
+            // Close modal and show success
+            closeModals();
+            Toast.success('تم!', 'تم رفع وحفظ الصورة بنجاح');
+            
+        } catch (error) {
+            console.error('Avatar upload error:', error);
+            Toast.error('خطأ', error.message || 'فشل في رفع الصورة');
+            
+            // Reset preview if upload failed
+            if (elements.avatarPreviewImg) {
+                elements.avatarPreviewImg.classList.add('hidden');
+            }
+        } finally {
+            // Hide progress bar after a short delay
+            setTimeout(() => {
+                if (elements.avatarUploadProgress) {
+                    elements.avatarUploadProgress.classList.add('hidden');
+                }
+                updateAvatarProgress(0);
+            }, 500);
+            
+            // Unlock upload
+            state.isUploadingAvatar = false;
+        }
+    }
+    
+    function updateAvatarProgress(percent) {
+        if (elements.avatarProgressBar) {
+            elements.avatarProgressBar.style.width = `${percent}%`;
+        }
+        if (elements.avatarProgressText) {
+            elements.avatarProgressText.textContent = `${percent}%`;
+        }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Bio Editing Functions
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    function openBioEdit() {
+        if (!elements.bioEditForm || !elements.bioDisplay) return;
+        
+        // Populate textarea with current bio
+        const currentBio = state.user?.bio || '';
+        if (elements.bioTextarea) {
+            elements.bioTextarea.value = currentBio;
+            updateBioCharCount();
+        }
+        
+        // Toggle visibility
+        elements.bioDisplay.classList.add('hidden');
+        elements.bioEditForm.classList.remove('hidden');
+        
+        // Focus textarea
+        elements.bioTextarea?.focus();
+    }
+    
+    function closeBioEdit() {
+        if (!elements.bioEditForm || !elements.bioDisplay) return;
+        
+        elements.bioEditForm.classList.add('hidden');
+        elements.bioDisplay.classList.remove('hidden');
+    }
+    
+    function updateBioCharCount() {
+        if (!elements.bioTextarea || !elements.bioCharCount) return;
+        
+        const length = elements.bioTextarea.value.length;
+        elements.bioCharCount.textContent = `${length}/500`;
+        
+        // Change color if near limit
+        if (length >= 450) {
+            elements.bioCharCount.classList.remove('text-gray-400');
+            elements.bioCharCount.classList.add('text-orange-500');
+        } else {
+            elements.bioCharCount.classList.remove('text-orange-500');
+            elements.bioCharCount.classList.add('text-gray-400');
+        }
+    }
+    
+    async function saveBio() {
+        const newBio = elements.bioTextarea?.value.trim() || '';
+        
+        // Show loading state
+        if (elements.saveBioBtn) {
+            elements.saveBioBtn.disabled = true;
+            elements.saveBioBtn.textContent = 'جاري الحفظ...';
+        }
+        
+        try {
+            await API.put(CONFIG.ENDPOINTS.PROFILE, { bio: newBio });
+            
+            // Update local state
+            state.user.bio = newBio;
+            Auth.setUser(state.user);
+            
+            // Update display
+            if (elements.profileBio) {
+                if (newBio) {
+                    elements.profileBio.textContent = newBio;
+                    elements.profileBio.classList.remove('italic');
+                } else {
+                    elements.profileBio.textContent = 'لا يوجد وصف بعد...';
+                    elements.profileBio.classList.add('italic');
+                }
+            }
+            
+            closeBioEdit();
+            Toast.success('تم بنجاح!', 'تم تحديث الوصف');
+            
+        } catch (error) {
+            console.error('Save bio error:', error);
+            Toast.error('خطأ', error.message || 'فشل تحديث الوصف');
+        } finally {
+            // Reset button
+            if (elements.saveBioBtn) {
+                elements.saveBioBtn.disabled = false;
+                elements.saveBioBtn.textContent = 'حفظ';
+            }
+        }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    // Banner Editing Functions
+    // ─────────────────────────────────────────────────────────────────────────
+    
+    function openBannerModal() {
+        if (elements.bannerModal) {
+            elements.bannerModal.classList.remove('hidden');
+            elements.bannerModal.style.display = 'flex';
+            if (elements.bannerUrlInput) {
+                elements.bannerUrlInput.value = state.user?.bannerUrl || '';
+            }
+            // Show preview if there's an existing banner
+            if (state.user?.bannerUrl && elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.src = state.user.bannerUrl;
+                elements.bannerPreviewImg.classList.remove('hidden');
+            }
+        }
+    }
+    
+    function previewBanner() {
+        const url = elements.bannerUrlInput?.value.trim();
+        
+        if (!url) {
+            if (elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.classList.add('hidden');
+            }
+            return;
+        }
+        
+        const img = new Image();
+        img.onload = () => {
+            if (elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.src = url;
+                elements.bannerPreviewImg.classList.remove('hidden');
+            }
+        };
+        img.onerror = () => {
+            if (elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.classList.add('hidden');
+            }
+        };
+        img.src = url;
+    }
+    
+    async function saveBanner() {
+        const url = elements.bannerUrlInput?.value.trim();
+        
+        // Show loading state
+        if (elements.saveBannerBtn) {
+            elements.saveBannerBtn.disabled = true;
+            elements.saveBannerBtn.textContent = 'جاري الحفظ...';
+        }
+        
+        try {
+            await API.put(CONFIG.ENDPOINTS.PROFILE, { bannerUrl: url });
+            
+            // Update local state
+            state.user.bannerUrl = url;
+            Auth.setUser(state.user);
+            
+            // Update display
+            renderBanner(state.user);
+            
+            closeModals();
+            Toast.success('تم بنجاح!', 'تم تحديث الغلاف');
+            
+        } catch (error) {
+            console.error('Save banner error:', error);
+            Toast.error('خطأ', error.message || 'فشل تحديث الغلاف');
+        } finally {
+            // Reset button
+            if (elements.saveBannerBtn) {
+                elements.saveBannerBtn.disabled = false;
+                elements.saveBannerBtn.textContent = 'حفظ التغييرات';
+            }
+        }
+    }
+    
+    async function removeBanner() {
+        // Show loading state
+        if (elements.removeBannerBtn) {
+            elements.removeBannerBtn.disabled = true;
+            elements.removeBannerBtn.textContent = 'جاري الإزالة...';
+        }
+        
+        try {
+            await API.put(CONFIG.ENDPOINTS.PROFILE, { bannerUrl: '' });
+            
+            // Update local state
+            state.user.bannerUrl = '';
+            Auth.setUser(state.user);
+            
+            // Update display
+            renderBanner(state.user);
+            
+            // Clear input and preview
+            if (elements.bannerUrlInput) elements.bannerUrlInput.value = '';
+            if (elements.bannerPreviewImg) elements.bannerPreviewImg.classList.add('hidden');
+            
+            closeModals();
+            Toast.success('تم بنجاح!', 'تم إزالة الغلاف');
+            
+        } catch (error) {
+            console.error('Remove banner error:', error);
+            Toast.error('خطأ', error.message || 'فشل إزالة الغلاف');
+        } finally {
+            // Reset button
+            if (elements.removeBannerBtn) {
+                elements.removeBannerBtn.disabled = false;
+                elements.removeBannerBtn.textContent = 'إزالة الغلاف';
+            }
+        }
+    }
+    
+    function renderBanner(user) {
+        if (!elements.profileBanner) return;
+        
+        if (user?.bannerUrl) {
+            elements.profileBanner.src = user.bannerUrl;
+            elements.profileBanner.style.display = 'block';
+        } else {
+            elements.profileBanner.style.display = 'none';
+        }
+    }
+    
+    async function handleBannerFileUpload(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        // Prevent concurrent uploads
+        if (state.isUploadingBanner) {
+            Toast.warning('انتظر', 'جاري رفع صورة أخرى...');
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            Toast.error('خطأ', 'يرجى اختيار صورة صالحة');
+            if (elements.bannerFileInput) elements.bannerFileInput.value = '';
+            return;
+        }
+        
+        // Validate file size (max 5MB for banners)
+        if (file.size > 5 * 1024 * 1024) {
+            Toast.error('خطأ', 'حجم الصورة يجب أن يكون أقل من 5 ميجابايت');
+            if (elements.bannerFileInput) elements.bannerFileInput.value = '';
+            return;
+        }
+        
+        // Lock upload
+        state.isUploadingBanner = true;
+        
+        // Show progress bar
+        if (elements.bannerUploadProgress) {
+            elements.bannerUploadProgress.classList.remove('hidden');
+        }
+        updateBannerProgress(10);
+        
+        // Create upload FormData immediately with the current file
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('folder', 'banners');
+        
+        // Reset file input immediately to prevent stale file references
+        if (elements.bannerFileInput) elements.bannerFileInput.value = '';
+        
+        try {
+            // Preview the image immediately using object URL
+            const localPreviewUrl = URL.createObjectURL(file);
+            if (elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.src = localPreviewUrl;
+                elements.bannerPreviewImg.classList.remove('hidden');
+            }
+            if (elements.bannerPlaceholder) {
+                elements.bannerPlaceholder.classList.add('hidden');
+            }
+            
+            updateBannerProgress(30);
+            
+            // Upload to server
+            const response = await fetch('/api/upload/image', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: formData
+            });
+            
+            updateBannerProgress(70);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'فشل في رفع الصورة');
+            }
+            
+            const result = await response.json();
+            const imageUrl = result.data?.url || result.url;
+            
+            if (!imageUrl) {
+                throw new Error('لم يتم استلام رابط الصورة');
+            }
+            
+            updateBannerProgress(85);
+            
+            // Update the URL input
+            if (elements.bannerUrlInput) {
+                elements.bannerUrlInput.value = imageUrl;
+            }
+            
+            // Save to profile immediately
+            await API.put(CONFIG.ENDPOINTS.PROFILE, { bannerUrl: imageUrl });
+            
+            updateBannerProgress(100);
+            
+            // Update local state
+            state.user.bannerUrl = imageUrl;
+            Auth.setUser(state.user);
+            
+            // Revoke object URL
+            URL.revokeObjectURL(localPreviewUrl);
+            
+            // Update banner display immediately
+            renderBanner(state.user);
+            
+            // Close modal and show success
+            closeModals();
+            Toast.success('تم!', 'تم رفع وحفظ الغلاف بنجاح');
+            
+        } catch (error) {
+            console.error('Banner upload error:', error);
+            Toast.error('خطأ', error.message || 'فشل في رفع الصورة');
+            
+            // Reset preview if upload failed
+            if (elements.bannerPreviewImg) {
+                elements.bannerPreviewImg.classList.add('hidden');
+            }
+            if (elements.bannerPlaceholder) {
+                elements.bannerPlaceholder.classList.remove('hidden');
+            }
+        } finally {
+            // Hide progress bar after a short delay
+            setTimeout(() => {
+                if (elements.bannerUploadProgress) {
+                    elements.bannerUploadProgress.classList.add('hidden');
+                }
+                updateBannerProgress(0);
+            }, 500);
+            
+            // Unlock upload
+            state.isUploadingBanner = false;
+        }
+    }
+    
+    function updateBannerProgress(percent) {
+        if (elements.bannerProgressBar) {
+            elements.bannerProgressBar.style.width = `${percent}%`;
+        }
+        if (elements.bannerProgressText) {
+            elements.bannerProgressText.textContent = `${percent}%`;
         }
     }
     

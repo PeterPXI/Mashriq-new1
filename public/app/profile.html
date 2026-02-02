@@ -4,702 +4,720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="الملف الشخصي على منصة مشرق">
-
-    <title>الملف الشخصي | مشرق</title>
+    <meta name="description" content="الملف الشخصي - منصة مشرق للخدمات المصغرة">
+    <title>الملف الشخصي - مشرق</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+    <link rel="icon" type="image/png" href="/app/assets/images/favicon.png">
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
 
-    <!-- Keep main.css for navbar/footer components -->
+    <!-- Main CSS -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
+
+    <!-- Custom Styles -->
+    <style>
+        /* Fiverr-like Layout */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .profile-layout {
+                grid-template-columns: 280px 1fr;
+            }
+
+            .reviews-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+
+            .seller-sidebar {
+                position: relative !important;
+                top: 0 !important;
+            }
+        }
+
+        /* Sticky Sidebars */
+        .seller-sidebar,
+        .reviews-sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        /* Gig Cards */
+        .gig-card {
+            transition: all 0.2s ease;
+        }
+
+        .gig-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Line Clamp */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Progress Bars */
+        .rating-progress {
+            transition: width 1s ease-out;
+        }
+
+        /* Profile Banner */
+        .profile-banner {
+            position: relative;
+            height: 112px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #0d9488 100%);
+            overflow: hidden;
+        }
+
+        .profile-banner:hover .banner-edit-btn {
+            opacity: 1;
+        }
+
+        .banner-edit-btn {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Online Badge */
+        .online-dot {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
 </head>
 
-<body class="min-h-screen bg-gray-50 font-sans">
+<body class="bg-gray-50 min-h-screen font-sans antialiased">
     <!-- Navbar -->
     <header id="navbar"></header>
 
-    <!-- Profile Hero Section -->
-    <section class="relative bg-gradient-to-br from-gray-50 to-white">
-        <!-- Cover Image -->
-        <div class="h-32 sm:h-40 md:h-48 lg:h-56 relative overflow-hidden" id="profileCover">
-            <div class="absolute inset-0 bg-gradient-to-br from-primary-400 via-primary-500 to-primary-600"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            <div class="absolute inset-0 opacity-30">
-                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <defs>
-                        <pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <circle cx="2" cy="2" r="1" fill="white" opacity="0.3" />
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#dots)" />
-                </svg>
-            </div>
-            <button
-                class="absolute top-3 left-3 sm:top-4 sm:left-4 p-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg text-white transition-all duration-200 hidden"
-                id="editCoverBtn" title="تغيير صورة الغلاف">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21,15 16,10 5,21" />
-                </svg>
-            </button>
-        </div>
+    <!-- Main Content - Fiverr 3-Column Layout -->
+    <main class="profile-layout">
 
-        <!-- Profile Info Card -->
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 md:-mt-20 relative z-10 pb-6">
-            <div class="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100/50 overflow-hidden">
-                <div class="p-4 sm:p-6 md:p-8">
-                    <div class="flex flex-col items-center sm:flex-row sm:items-start gap-4 sm:gap-6">
-                        <!-- Avatar with Level Badge -->
-                        <div class="relative flex-shrink-0">
-                            <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl sm:rounded-3xl flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-xl ring-4 ring-white"
-                                id="profileAvatar">
-                                <span id="avatarInitials" class="select-none">
-                                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-white/60 animate-pulse" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </span>
-                                <img id="avatarImg" src="" alt=""
-                                    class="absolute inset-0 w-full h-full rounded-2xl sm:rounded-3xl object-cover hidden">
-                            </div>
-                            <!-- Edit Avatar Button -->
-                            <button
-                                class="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-xl shadow-lg flex items-center justify-center text-gray-500 hover:text-primary-600 hover:shadow-xl transition-all duration-200 hidden"
-                                id="editAvatarBtn" title="تغيير الصورة الشخصية">
-                                <svg width="14" height="14" class="sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path
-                                        d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-                                    <circle cx="12" cy="13" r="4" />
-                                </svg>
-                            </button>
-                            <!-- Online Status Indicator -->
-                            <div class="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full border-3 border-white shadow-lg hidden"
-                                id="onlineIndicator" title="متصل الآن">
-                            </div>
-                            <!-- Seller Level Badge -->
-                            <div class="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 hidden" id="sellerLevelBadge">
-                                <!-- Will be populated by JS based on level -->
-                            </div>
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- LEFT SIDEBAR - Seller Info -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <aside class="seller-sidebar">
+            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <!-- Profile Banner -->
+                <div class="profile-banner"
+                    style="background: linear-gradient(135deg, #d8ad82 0%, #059669 50%, #0d9488 100%);">
+                    <img id="profileBanner" src="" alt="غلاف الملف الشخصي"
+                        class="absolute inset-0 w-full h-full object-cover" style="display: none;">
+                    <!-- Banner Edit Button (Owner only) -->
+                    <button id="editBannerBtn"
+                        class="banner-edit-btn absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg cursor-pointer"
+                        style="display: none;" title="تغيير الغلاف">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Profile Header with Avatar -->
+                <div class="px-6 pb-6 pt-0 text-center border-b border-gray-100 -mt-12">
+                    <!-- Avatar -->
+                    <div class="relative inline-block" id="profileAvatar">
+                        <div
+                            class="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold mx-auto border-4 border-white shadow-lg">
+                            <span id="avatarInitials">م</span>
+                            <img id="avatarImg" src="" alt=""
+                                class="absolute inset-0 w-full h-full rounded-full object-cover" style="display: none;">
                         </div>
-
-                        <!-- User Info -->
-                        <div class="flex-1 text-center sm:text-right min-w-0">
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-1">
-                                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 truncate"
-                                    id="profileName">
-                                    <span
-                                        class="inline-block h-6 sm:h-7 w-32 sm:w-40 bg-gray-200 rounded-lg animate-pulse"></span>
-                                </h1>
-                                <!-- Verification Badges -->
-                                <div class="flex justify-center sm:justify-start gap-2 flex-shrink-0"
-                                    id="profileBadges"></div>
-                            </div>
-                            <p class="text-gray-500 text-sm sm:text-base mb-2" id="profileUsername">@---</p>
-
-                            <!-- Seller Level Tag -->
-                            <div class="inline-flex items-center gap-2 mb-3 hidden" id="sellerLevelTag">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold" id="sellerLevelLabel">
-                                    <!-- Level 1: بائع جديد, Level 2: بائع نشط, Level 3: بائع محترف, Top Rated -->
-                                </span>
-                            </div>
-
-                            <p class="text-gray-600 text-sm sm:text-base mb-3 line-clamp-2 max-w-lg mx-auto sm:mx-0"
-                                id="profileBio">جاري التحميل...</p>
-
-                            <!-- Profile Meta with Response Time -->
-                            <div class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500"
-                                id="profileMeta">
-                                <!-- Member Since -->
-                                <span class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full">
-                                    <svg width="12" height="12" class="sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                        <line x1="16" y1="2" x2="16" y2="6" />
-                                        <line x1="8" y1="2" x2="8" y2="6" />
-                                        <line x1="3" y1="10" x2="21" y2="10" />
-                                    </svg>
-                                    <span id="memberSince">---</span>
-                                </span>
-                                <!-- Response Time -->
-                                <span
-                                    class="flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-full hidden"
-                                    id="responseTimeMeta">
-                                    <svg width="12" height="12" class="sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polyline points="12,6 12,12 16,14" />
-                                    </svg>
-                                    <span>متوسط الرد: <strong id="avgResponseTime">1 ساعة</strong></span>
-                                </span>
-                                <!-- Location -->
-                                <span class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full hidden"
-                                    id="locationMeta">
-                                    <svg width="12" height="12" class="sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                    <span id="userLocation">---</span>
-                                </span>
-                                <!-- Last Online -->
-                                <span class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full hidden"
-                                    id="lastOnlineMeta">
-                                    <span class="w-2 h-2 rounded-full bg-gray-400"></span>
-                                    <span id="lastOnlineText">آخر ظهور منذ ساعة</span>
-                                </span>
-                            </div>
+                        <!-- Online Indicator -->
+                        <div id="onlineIndicator"
+                            class="hidden absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-3 border-white rounded-full online-dot">
                         </div>
-
-                        <!-- Actions -->
-                        <div class="flex flex-col gap-2 sm:gap-3 flex-shrink-0 mt-2 sm:mt-0" id="profileActions">
-                            <!-- Contact Button (for visitors) -->
-                            <button
-                                class="hidden inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl"
-                                id="contactSellerBtn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                                </svg>
-                                تواصل معي
-                            </button>
-                        </div>
+                        <!-- Seller Level Badge -->
+                        <div id="sellerLevelBadge" class="hidden absolute -bottom-1 -left-1"></div>
                     </div>
 
-                    <!-- Trust Signals Section -->
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-3 mt-4 pt-4 border-t border-gray-100 hidden"
-                        id="trustSignalsSection">
-                        <!-- Verified Identity -->
-                        <div class="flex items-center gap-1.5 text-xs text-gray-600" id="verifiedIdentity">
-                            <svg class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <span>هوية موثقة</span>
-                        </div>
-                        <!-- Verified Email -->
-                        <div class="flex items-center gap-1.5 text-xs text-gray-600" id="verifiedEmail">
-                            <svg class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M22 13V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12c0 1.1.9 2 2 2h8" />
-                                <path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" />
-                                <path d="M16 19l2 2 4-4" />
-                            </svg>
-                            <span>بريد موثق</span>
-                        </div>
-                        <!-- Verified Phone -->
-                        <div class="flex items-center gap-1.5 text-xs text-gray-600 hidden" id="verifiedPhone">
-                            <svg class="w-4 h-4 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
-                            </svg>
-                            <span>هاتف موثق</span>
-                        </div>
+                    <!-- Name & Username -->
+                    <h1 id="profileName" class="mt-4 text-xl font-bold text-gray-900">جاري التحميل...</h1>
+                    <p id="profileUsername" class="text-gray-500 text-sm">@username</p>
+
+                    <!-- Seller Level Tag -->
+                    <div id="sellerLevelTag" class="hidden mt-3">
+                        <span id="sellerLevelLabel"
+                            class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold"></span>
                     </div>
 
-                    <!-- Stats Grid Enhanced -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 mt-6 pt-5 sm:pt-6 border-t border-gray-100"
-                        id="profileStats">
-                        <!-- Orders Completed -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                            <div class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900" id="statOrders">0</div>
-                            <div class="text-xs sm:text-sm text-gray-500">مشروع مكتمل</div>
-                        </div>
-                        <!-- Services (Seller only) -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors"
-                            id="statServicesWrapper">
-                            <div class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900" id="statServices">0
-                            </div>
-                            <div class="text-xs sm:text-sm text-gray-500">خدمة متاحة</div>
-                        </div>
-                        <!-- Rating -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                    <!-- Rating -->
+                    <div class="flex items-center justify-center gap-2 mt-3">
+                        <span class="text-yellow-400 text-lg">★</span>
+                        <span id="statRating" class="font-bold text-yellow-500">0.0</span>
+                        <span class="text-gray-400 text-sm">(<span id="statReviewCount">0</span> تقييم)</span>
+                    </div>
+
+                    <!-- Contact Button -->
+                    <button id="contactSellerBtn"
+                        class="hidden mt-4 w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors">
+                        تواصل معي
+                    </button>
+
+                    <!-- Edit Profile (Owner only) -->
+                    <button id="editAvatarBtn"
+                        class="hidden mt-4 w-full py-2 px-3 text-center border border-gray-300  text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        تعديل الصورة
+                    </button>
+                </div>
+
+                <!-- Description Section (Moved Up & Enhanced) -->
+                <div class="p-5 border-b border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
                             <div
-                                class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
-                                <svg width="14" height="14" class="sm:w-4 sm:h-4" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path
-                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                                        fill="#fbbf24" />
+                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                <span id="statRating">0.0</span>
                             </div>
-                            <div class="text-xs sm:text-sm text-gray-500">(<span id="statReviewCount">0</span> تقييم)
-                            </div>
+                            <h3 class="text-base font-bold text-gray-900">الوصف</h3>
                         </div>
-                        <!-- Completion Rate -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors hidden"
-                            id="statCompletionWrapper">
-                            <div class="text-lg sm:text-xl md:text-2xl font-bold text-green-600"
-                                id="statCompletionRate">100%</div>
-                            <div class="text-xs sm:text-sm text-gray-500">معدل الإتمام</div>
-                        </div>
-                        <!-- On-Time Delivery -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors hidden"
-                            id="statOnTimeWrapper">
-                            <div class="text-lg sm:text-xl md:text-2xl font-bold text-blue-600" id="statOnTimeRate">100%
-                            </div>
-                            <div class="text-xs sm:text-sm text-gray-500">تسليم بالموعد</div>
-                        </div>
-                        <!-- Earnings (Owner only) -->
-                        <div class="text-center p-2 sm:p-3 rounded-xl hover:bg-gray-50 transition-colors hidden"
-                            id="statEarningsWrapper">
-                            <div class="text-lg sm:text-xl md:text-2xl font-bold text-green-600" id="statEarnings">$0
-                            </div>
-                            <div class="text-xs sm:text-sm text-gray-500">الأرباح</div>
-                        </div>
-                    </div>
-
-                    <!-- Seller Level Progress (for sellers) -->
-                    <div class="mt-4 pt-4 border-t border-gray-100 hidden" id="levelProgressSection">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-700" id="currentLevelName">بائع جديد</span>
-                            <span class="text-sm text-gray-500" id="nextLevelName">المستوى التالي: بائع نشط</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-gradient-to-r from-primary-400 to-primary-600 h-2.5 rounded-full transition-all duration-500"
-                                id="levelProgressBar" style="width: 25%"></div>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2" id="levelProgressText">أكمل 3 طلبات إضافية للترقية</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <!-- Profile Tabs -->
-            <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-x-auto">
-                <nav class="flex min-w-max" id="profileTabs">
-                    <button
-                        class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab active"
-                        data-tab="overview">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7" />
-                            <rect x="14" y="3" width="7" height="7" />
-                            <rect x="14" y="14" width="7" height="7" />
-                            <rect x="3" y="14" width="7" height="7" />
-                        </svg>
-                        نظرة عامة
-                    </button>
-                    <button
-                        class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab"
-                        data-tab="services" id="servicesTabBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
-                        </svg>
-                        الخدمات
-                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full"
-                            id="servicesCount">0</span>
-                    </button>
-                    <button
-                        class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab"
-                        data-tab="reviews">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                        التقييمات
-                        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full"
-                            id="reviewsCount">0</span>
-                    </button>
-                    <button
-                        class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab"
-                        data-tab="achievements" id="achievementsTabBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="8" r="7" />
-                            <polyline points="8.21,13.89 7,23 12,20 17,23 15.79,13.88" />
-                        </svg>
-                        الإنجازات
-                    </button>
-                    <button
-                        class="flex items-center gap-2 px-6 py-4 text-sm font-medium text-gray-600 hover:text-primary-600 border-b-2 border-transparent hover:border-primary-300 transition-colors profile-tab hidden"
-                        data-tab="settings" id="settingsTabBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="12" r="3" />
-                            <path
-                                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
-                        </svg>
-                        الإعدادات
-                    </button>
-                </nav>
-            </div>
-
-            <!-- Tab Content -->
-            <div class="profile-tab-content">
-
-                <!-- Overview Tab -->
-                <div class="tab-panel active" id="overviewPanel">
-                    <div class="grid lg:grid-cols-2 gap-6">
-
-                        <!-- Quick Stats Cards -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" class="text-primary-500">
-                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                </svg>
-                                الإحصائيات
-                            </h2>
-                            <div class="grid grid-cols-2 gap-4" id="quickStatsGrid">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Recent Activity -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" class="text-primary-500">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12,6 12,12 16,14" />
-                                </svg>
-                                النشاط الأخير
-                            </h2>
-                            <div class="space-y-4" id="activityTimeline">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Skills/Expertise (Seller only) -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="skillsSection">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-4">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" class="text-primary-500">
-                                    <polygon
-                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" />
-                                </svg>
-                                المهارات والخبرات
-                            </h2>
-                            <div class="flex flex-wrap gap-2" id="skillsGrid">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Top Services Preview (Seller only) -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6 hidden" id="topServicesSection">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" class="text-primary-500">
-                                        <polygon
-                                            points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" />
-                                    </svg>
-                                    أفضل الخدمات
-                                </h2>
-                                <a href="#"
-                                    class="text-sm text-primary-600 hover:text-primary-700 font-medium see-all-link"
-                                    data-tab="services">عرض الكل</a>
-                            </div>
-                            <div class="space-y-3" id="topServicesGrid">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Latest Reviews -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6 lg:col-span-2">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" class="text-primary-500">
-                                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                                    </svg>
-                                    أحدث التقييمات
-                                </h2>
-                                <a href="#"
-                                    class="text-sm text-primary-600 hover:text-primary-700 font-medium see-all-link"
-                                    data-tab="reviews">عرض الكل</a>
-                            </div>
-                            <div class="space-y-4" id="latestReviews">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Services Tab -->
-                <div class="tab-panel hidden" id="servicesPanel">
-                    <div class="services-grid" id="servicesGrid">
-                        <!-- Populated by JS -->
-                    </div>
-                    <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="servicesEmpty">
-                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5" class="text-gray-400">
-                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+                        <!-- Edit Bio Button (Owner only) -->
+                        <button id="editBioBtn"
+                            class="hidden text-emerald-600 hover:text-emerald-700 p-1.5 rounded-lg hover:bg-emerald-50 transition-colors"
+                            title="تعديل الوصف">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد خدمات</h3>
-                        <p class="text-gray-500">لم يتم نشر أي خدمات بعد</p>
-                    </div>
-                </div>
-
-                <!-- Reviews Tab -->
-                <div class="tab-panel hidden" id="reviewsPanel">
-                    <!-- Rating Summary -->
-                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" id="ratingSummary">
-                        <!-- Populated by JS -->
+                        </button>
                     </div>
 
-                    <!-- Reviews List -->
-                    <div class="space-y-4" id="reviewsList">
-                        <!-- Populated by JS -->
+                    <!-- Bio Display -->
+                    <div id="bioDisplay">
+                        <p id="profileBio"
+                            class="text-gray-600 text-sm leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-100 italic">
+                            لا يوجد وصف بعد...</p>
                     </div>
 
-                    <div class="hidden bg-white rounded-2xl shadow-sm p-12 text-center" id="reviewsEmpty">
-                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5" class="text-gray-400">
-                                <path
-                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">لا توجد تقييمات</h3>
-                        <p class="text-gray-500">لم يتم استلام أي تقييمات بعد</p>
-                    </div>
-                </div>
-
-                <!-- Achievements Tab -->
-                <div class="tab-panel hidden" id="achievementsPanel">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" id="achievementsGrid">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Settings Tab (Owner only) -->
-                <div class="tab-panel hidden" id="settingsPanel">
-                    <div class="max-w-2xl space-y-6">
-
-                        <!-- Profile Settings -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-6">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                                معلومات الملف الشخصي
-                            </h2>
-                            <form id="profileForm" class="space-y-4">
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="settingsFullName"
-                                            class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
-                                        <input type="text" id="settingsFullName"
-                                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                            placeholder="أدخل اسمك الكامل">
-                                    </div>
-                                    <div>
-                                        <label for="settingsUsername"
-                                            class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
-                                        <div class="relative">
-                                            <span
-                                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">@</span>
-                                            <input type="text" id="settingsUsername"
-                                                class="w-full pr-8 pl-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500"
-                                                placeholder="username" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex items-center justify-between mb-1">
-                                        <label for="settingsBio" class="block text-sm font-medium text-gray-700">النبذة
-                                            التعريفية</label>
-                                        <button type="button" id="aiImproveBioBtn"
-                                            class="hidden text-xs bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-3 py-1 rounded-lg hover:from-purple-600 hover:to-indigo-700 transition-colors flex items-center gap-1">
-                                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <path
-                                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                                            </svg>
-                                            حسّن بالـ AI
-                                        </button>
-                                    </div>
-                                    <textarea id="settingsBio" rows="4"
-                                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                                        placeholder="اكتب نبذة قصيرة عنك..."></textarea>
-                                    <p class="text-xs text-gray-500 mt-1">اكتب وصفاً جذاباً يوضح خبراتك ومهاراتك (150
-                                        حرف كحد أقصى)</p>
-                                </div>
-                                <div>
-                                    <label for="settingsAvatar"
-                                        class="block text-sm font-medium text-gray-700 mb-1">رابط الصورة الشخصية</label>
-                                    <input type="url" id="settingsAvatar"
-                                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                        placeholder="https://example.com/avatar.jpg">
-                                </div>
-                                <button type="submit"
-                                    class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
-                                    id="saveProfileBtn">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2">
-                                        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
-                                        <polyline points="17,21 17,13 7,13 7,21" />
-                                        <polyline points="7,3 7,8 15,8" />
-                                    </svg>
-                                    حفظ التغييرات
+                    <!-- Bio Edit Form (Hidden by default) -->
+                    <div id="bioEditForm" class="hidden">
+                        <textarea id="bioTextarea"
+                            class="w-full p-4 border border-emerald-300 rounded-xl text-sm text-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                            rows="4" maxlength="500" placeholder="اكتب وصفاً عن نفسك وخبراتك..."></textarea>
+                        <div class="flex items-center justify-between mt-2">
+                            <span id="bioCharCount" class="text-xs text-gray-400">0/500</span>
+                            <div class="flex gap-2">
+                                <button id="cancelBioBtn"
+                                    class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium rounded-lg hover:bg-gray-100 transition-colors">
+                                    إلغاء
                                 </button>
-                            </form>
-                        </div>
-
-                        <!-- Account Settings -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-6">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                    <path d="M7 11V7a5 5 0 0110 0v4" />
-                                </svg>
-                                إعدادات الحساب
-                            </h2>
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">البريد الإلكتروني</h3>
-                                        <p class="text-sm text-gray-500" id="settingsEmail">---</p>
-                                    </div>
-                                    <button class="text-sm text-gray-400 px-4 py-2 rounded-lg" disabled>تغيير</button>
-                                </div>
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">كلمة المرور</h3>
-                                        <p class="text-sm text-gray-500">••••••••</p>
-                                    </div>
-                                    <a href="/app/change-password.html"
-                                        class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors">تغيير</a>
-                                </div>
-                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
-                                    id="sellerModeOption">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">وضع البائع</h3>
-                                        <p class="text-sm text-gray-500" id="sellerModeStatus">غير مفعل</p>
-                                    </div>
-                                    <button
-                                        class="text-sm bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                        id="activateSellerBtn">تفعيل</button>
-                                </div>
+                                <button id="saveBioBtn"
+                                    class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700  font-semibold rounded-lg transition-colors shadow-sm">
+                                    حفظ
+                                </button>
                             </div>
                         </div>
-
-                        <!-- Danger Zone -->
-                        <div class="bg-white rounded-2xl shadow-sm p-6 border border-red-100">
-                            <h2 class="flex items-center gap-2 text-lg font-bold text-red-600 mb-6">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                                    <line x1="12" y1="9" x2="12" y2="13" />
-                                    <line x1="12" y1="17" x2="12.01" y2="17" />
-                                </svg>
-                                منطقة الخطر
-                            </h2>
-                            <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
-                                <div>
-                                    <h3 class="font-medium text-gray-900">تسجيل الخروج</h3>
-                                    <p class="text-sm text-gray-500">سيتم تسجيل خروجك من جميع الأجهزة</p>
-                                </div>
-                                <button
-                                    class="text-sm bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                    id="logoutBtn">تسجيل الخروج</button>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
+                <!-- Profile Info -->
+                <!-- User Info Section -->
+                <div class="p-5 space-y-4 border-b border-gray-100">
+                    <!-- Location -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-xs text-gray-400 font-medium">من</span>
+                            <span id="userLocation" class="text-gray-800 text-sm font-semibold">مصر 🇪🇬</span>
+                        </div>
+                    </div>
+
+                    <!-- Member Since -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-xs text-gray-400 font-medium">عضو منذ</span>
+                            <span id="memberSince" class="text-gray-800 text-sm font-semibold">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Response Time (Hidden by default) -->
+                    <div id="responseTimeMeta" class="hidden flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-xs text-gray-400 font-medium">متوسط وقت الرد</span>
+                            <span id="avgResponseTime" class="text-gray-800 text-sm font-semibold">1 ساعة</span>
+                        </div>
+                    </div>
+
+                    <!-- Last Online (Hidden by default) -->
+                    <div id="lastOnlineMeta" class="hidden flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-xs text-gray-400 font-medium">آخر ظهور</span>
+                            <span id="lastOnlineText" class="text-gray-800 text-sm font-semibold">-</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Languages Section -->
+                <div class="p-4 border-b border-gray-100">
+                    <h3 class="text-base font-bold text-gray-900 mb-3">اللغات</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-800 text-sm">العربية</span>
+                            <span class="text-gray-400 text-xs">- أصلي</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-800 text-sm">English</span>
+                            <span class="text-gray-400 text-xs">- Fluent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Signals -->
+                <div id="trustSignalsSection" class="hidden p-4 border-b border-gray-100">
+                    <h3 class="text-base font-bold text-gray-900 mb-3">التحقق</h3>
+                    <ul class="space-y-2">
+                        <li id="verifiedEmail" class="hidden flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            البريد الإلكتروني
+                        </li>
+                        <li id="verifiedIdentity" class="hidden flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            بطاقة الهوية
+                        </li>
+                        <li id="verifiedPhone" class="hidden flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            رقم الهاتف
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Skills Section -->
+                <div id="skillsSection" class="p-4">
+                    <h3 class="text-base font-bold text-gray-900 mb-3">المهارات</h3>
+                    <div id="skillsGrid" class="flex flex-wrap gap-2">
+                        <!-- Skills will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Level Progress (Owner Only) -->
+                <div id="levelProgressSection" class="hidden p-4 bg-gray-50 border-t border-gray-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <span id="currentLevelName" class="text-sm font-medium text-gray-700"></span>
+                        <span id="nextLevelName" class="text-xs text-gray-500"></span>
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="levelProgressBar"
+                            class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-500"
+                            style="width: 0%"></div>
+                    </div>
+                    <p id="levelProgressText" class="text-xs text-gray-500 mt-2 text-center"></p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- CENTER - Services Grid -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div class="gigs-section">
+            <!-- Section Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-900">
+                    خدمات <span id="sellerNameInTitle">البائع</span>
+                </h2>
+                <!-- Tabs -->
+                <div id="profileTabs" class="flex gap-4">
+                    <button data-tab="services"
+                        class="tab-btn text-emerald-600 border-b-2 border-emerald-600 pb-1 font-medium">
+                        الخدمات النشطة (<span id="servicesCount">0</span>)
+                    </button>
+                </div>
             </div>
 
+            <!-- Services Grid -->
+            <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Loading Skeletons -->
+                <div class="gig-card bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div class="h-40 skeleton"></div>
+                    <div class="p-4 space-y-3">
+                        <div class="h-4 skeleton rounded w-3/4"></div>
+                        <div class="h-3 skeleton rounded w-1/2"></div>
+                        <div class="h-6 skeleton rounded w-1/4"></div>
+                    </div>
+                </div>
+                <div class="gig-card bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div class="h-40 skeleton"></div>
+                    <div class="p-4 space-y-3">
+                        <div class="h-4 skeleton rounded w-3/4"></div>
+                        <div class="h-3 skeleton rounded w-1/2"></div>
+                        <div class="h-6 skeleton rounded w-1/4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="servicesEmpty" class="hidden text-center py-16">
+                <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">لا توجد خدمات بعد</h3>
+                <p class="text-gray-500 mb-6">لم يتم إضافة أي خدمات حتى الآن</p>
+                <a href="/app/seller/add-service.html" id="addServiceLink"
+                    class="hidden inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    إضافة خدمة جديدة
+                </a>
+            </div>
+
+            <!-- Mobile Reviews Section (shown on small screens) -->
+            <div class="lg:hidden mt-8">
+                <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div class="p-4 border-b border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-900">التقييمات</h3>
+                    </div>
+                    <div id="mobileReviewsList" class="divide-y divide-gray-100">
+                        <!-- Reviews will be populated by JS -->
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- RIGHT SIDEBAR - Reviews -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <aside class="reviews-sidebar hidden lg:block">
+            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <!-- Reviews Header -->
+                <div class="p-4 border-b border-gray-100">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">التقييمات</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-yellow-400 text-lg">★★★★★</span>
+                        <span id="avgRatingDisplay" class="font-bold text-yellow-500">0.0</span>
+                        <span class="text-gray-400 text-sm">(<span id="totalReviewsDisplay">0</span> تقييم)</span>
+                    </div>
+                </div>
+
+                <!-- Rating Breakdown -->
+                <div id="ratingSummary" class="p-4 border-b border-gray-100 space-y-3">
+                    <!-- Rating bars will be populated by JS -->
+                </div>
+
+                <!-- Review Items -->
+                <div id="reviewsList" class="divide-y divide-gray-100">
+                    <!-- Reviews will be populated by JS -->
+                </div>
+
+                <!-- Empty Reviews -->
+                <div id="reviewsEmpty" class="hidden p-8 text-center">
+                    <p class="text-gray-500">لا توجد تقييمات بعد</p>
+                </div>
+
+                <!-- See All Link -->
+                <a href="#"
+                    class="block text-center py-4 text-emerald-600 font-medium hover:bg-gray-50 transition-colors border-t border-gray-100">
+                    عرض جميع التقييمات
+                </a>
+            </div>
+        </aside>
     </main>
 
     <!-- Footer -->
-    <div id="footer"></div>
+    <footer id="footer"></footer>
 
-    <!-- Edit Avatar Modal -->
-    <div class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4" id="avatarModal">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl">
-            <div class="flex items-center justify-between p-5 border-b border-gray-100">
-                <h3 class="text-lg font-bold text-gray-900">تغيير الصورة الشخصية</h3>
-                <button type="button" class="text-gray-400 hover:text-gray-600 text-2xl"
-                    data-close-modal>&times;</button>
+    <!-- Avatar Modal -->
+    <div id="avatarModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">تغيير الصورة الشخصية</h3>
+                <button data-close-modal class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-            <div class="p-5 space-y-4">
-                <div class="text-center">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">رفع صورة من جهازك</label>
-                    <label
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-medium cursor-pointer transition-colors">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                            <polyline points="17,8 12,3 7,8" />
-                            <line x1="12" y1="3" x2="12" y2="15" />
-                        </svg>
-                        اختر صورة
-                        <input type="file" id="avatarFileInput" accept="image/*" class="hidden"
-                            onchange="handleAvatarFileUpload(event)">
-                    </label>
-                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, WEBP - حد أقصى 2 ميجابايت</p>
+            <div class="space-y-4">
+                <div id="avatarPreviewLarge"
+                    class="w-24 h-24 mx-auto rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <img id="avatarPreviewImg" src="" alt="" class="w-full h-full object-cover hidden">
+                    <span class="text-gray-400 text-2xl">📷</span>
                 </div>
 
+                <!-- File Upload Button -->
                 <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">أو</span>
+                    <input type="file" id="avatarFileInput" accept="image/*" class="hidden">
+                    <label for="avatarFileInput"
+                        class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-emerald-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
+                        <svg class="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-emerald-600 font-medium">اختر صورة من جهازك</span>
+                    </label>
+                </div>
+
+                <!-- OR Divider -->
+                <div class="flex items-center gap-3">
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <span class="text-xs text-gray-400">أو</span>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                </div>
+
+                <input type="url" id="avatarUrlInput" placeholder="الصق رابط الصورة هنا..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+
+                <!-- Upload Progress (Hidden by default) -->
+                <div id="avatarUploadProgress" class="hidden">
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="avatarProgressBar" class="h-full bg-emerald-500 transition-all duration-300"
+                                style="width: 0%"></div>
+                        </div>
+                        <span id="avatarProgressText" class="text-xs text-gray-500">0%</span>
                     </div>
                 </div>
 
-                <div>
-                    <label for="avatarUrlInput" class="block text-sm font-medium text-gray-700 mb-1">رابط الصورة</label>
-                    <input type="url" id="avatarUrlInput"
-                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="https://example.com/avatar.jpg">
-                </div>
-                <div class="hidden w-32 h-32 mx-auto rounded-xl overflow-hidden" id="avatarPreviewLarge">
-                    <img id="avatarPreviewImg" src="" alt="معاينة" class="w-full h-full object-cover">
-                </div>
-            </div>
-            <div class="flex justify-end gap-3 p-5 border-t border-gray-100">
-                <button
-                    class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
-                    data-close-modal>إلغاء</button>
-                <button
-                    class="px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors"
-                    id="saveAvatarBtn">حفظ رابط الصورة</button>
+                <button id="saveAvatarBtn"
+                    class="w-full py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                    حفظ التغييرات
+                </button>
             </div>
         </div>
+    </div>
+
+    <!-- Banner Modal -->
+    <div id="bannerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold">تغيير غلاف الملف الشخصي</h3>
+                <button data-close-modal class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <!-- Banner Preview -->
+                <div id="bannerPreviewContainer"
+                    class="w-full h-32 rounded-xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 overflow-hidden relative"
+                    style="background: linear-gradient(135deg, #e4b02a 0%, #f8a427 50%, #ff9d35 100%);"></div>
+                <img id="bannerPreviewImg" src="" alt="" class="w-full h-full object-cover hidden">
+                <div id="bannerPlaceholder" class="absolute inset-0 flex items-center justify-center text-white/50">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Upload Options -->
+            <div class="space-y-3">
+                <!-- File Upload Button -->
+                <div class="relative">
+                    <input type="file" id="bannerFileInput" accept="image/*" class="hidden">
+                    <label for="bannerFileInput"
+                        class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-emerald-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
+                        <svg class="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-emerald-600 font-medium">اختر صورة من جهازك</span>
+                    </label>
+                </div>
+
+                <!-- OR Divider -->
+                <div class="flex items-center gap-3">
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <span class="text-xs text-gray-400">أو</span>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-400 text-center">يفضل استخدام صورة بحجم 1500×500 بكسل للحصول على أفضل نتيجة
+            </p>
+
+            <!-- Upload Progress (Hidden by default) -->
+            <div id="bannerUploadProgress" class="hidden">
+                <div class="flex items-center gap-3">
+                    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="bannerProgressBar" class="h-full bg-emerald-500 transition-all duration-300"
+                            style="width: 0%"></div>
+                    </div>
+                    <span id="bannerProgressText" class="text-xs text-gray-500">0%</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button id="removeBannerBtn"
+                    class="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                    إزالة الغلاف
+                </button>
+                <button id="saveBannerBtn"
+                    class="flex-1 py-3 bg-orange-600 text-black bg-emerald-500 font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                    حفظ التغييرات
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Hidden Elements for Settings (Owner Only) -->
+    <div id="settingsPanel" class="hidden">
+        <form id="profileForm">
+            <input type="text" id="settingsFullName">
+            <input type="text" id="settingsUsername">
+            <textarea id="settingsBio"></textarea>
+            <input type="text" id="settingsEmail">
+            <button type="submit" id="saveProfileBtn">حفظ</button>
+        </form>
+        <button id="activateSellerBtn" class="hidden">تفعيل وضع البائع</button>
+        <button id="logoutBtn">تسجيل خروج</button>
+    </div>
+
+    <!-- Hidden stat elements for JS compatibility -->
+    <div class="hidden">
+        <span id="statOrders">0</span>
+        <span id="statServices">0</span>
+        <span id="statServicesWrapper"></span>
+        <span id="statEarnings">0</span>
+        <span id="statEarningsWrapper"></span>
+        <span id="statCompletionWrapper"></span>
+        <span id="statCompletionRate">0</span>
+        <span id="statOnTimeWrapper"></span>
+        <span id="statOnTimeRate">0</span>
+        <span id="profileBadges"></span>
+        <span id="profileMeta"></span>
+        <span id="locationMeta"></span>
+        <span id="profileActions"></span>
+        <span id="profileCover"></span>
+        <span id="editCoverBtn"></span>
+        <span id="avatarBadge"></span>
+        <span id="servicesTabBtn"></span>
+        <span id="settingsTabBtn"></span>
+        <span id="overviewPanel"></span>
+        <span id="reviewsPanel"></span>
+        <span id="achievementsPanel"></span>
+        <span id="quickStatsGrid"></span>
+        <span id="activityTimeline"></span>
+        <span id="topServicesSection"></span>
+        <span id="topServicesGrid"></span>
+        <span id="latestReviews"></span>
+        <span id="reviewsCount"></span>
+        <span id="achievementsGrid"></span>
+        <span id="sellerModeOption"></span>
+        <span id="sellerModeStatus"></span>
+        <span id="settingsAvatar"></span>
     </div>
 
     <!-- Scripts -->
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
-    <script src="/app/js/components/toast.js"></script>
-    <script src="/app/js/components/loader.js"></script>
     <script src="/app/js/auth.js"></script>
     <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/toast.js"></script>
     <script src="/app/js/components/navbar.js"></script>
     <script src="/app/js/components/footer.js"></script>
-    <script src="/app/js/components/service-card.js"></script>
-    <script src="/app/js/ai-assistant.js"></script>
+
+    <!-- AI Features (optional) -->
+    <script src="/app/js/ai-assistant.js" defer></script>
+
+    <!-- Profile Page JS -->
     <script src="/app/js/pages/profile.js"></script>
 </body>
 

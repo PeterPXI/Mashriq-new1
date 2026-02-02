@@ -18,7 +18,7 @@
     function initElements() {
         const ids = ['navbar', 'footer', 'breadcrumbTitle', 'breadcrumbCategory', 'serviceGallery', 'serviceHeader', 
             'quickStats', 'serviceDescription', 'serviceFeatures', 'featuresList', 'requirementsSection', 'requirementsContent',
-            'sellerCard', 'orderCard', 'reviewsHeader', 'reviewsList', 'reviewsCountBadge',
+            'sellerCard', 'orderCard', 'mobileOrderCard', 'reviewsHeader', 'reviewsList', 'reviewsCountBadge',
             'faqContent', 'relatedSection', 'relatedServicesGrid', 'mobileOrderBar', 'mobilePrice', 'mobileOrderBtn',
             'tabAbout', 'tabSeller', 'tabReviews', 'tabFaq', 'ratingBadge', 'ordersBadge', 'deliveryBadge'];
         ids.forEach(id => elements[id] = document.getElementById(id));
@@ -40,10 +40,10 @@
         document.querySelectorAll('.service-tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.service-tab-btn').forEach(b => {
-                    b.classList.remove('active', 'text-emerald-600', 'border-emerald-600');
+                    b.classList.remove('active', 'text-orange-600', 'border-orange-600');
                     b.classList.add('text-gray-500', 'border-transparent');
                 });
-                btn.classList.add('active', 'text-emerald-600', 'border-emerald-600');
+                btn.classList.add('active', 'text-orange-600', 'border-orange-600');
                 btn.classList.remove('text-gray-500', 'border-transparent');
                 
                 document.querySelectorAll('.service-tab-content').forEach(c => c.classList.add('hidden'));
@@ -95,7 +95,7 @@
                     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">${images.map((_, i) => `<button class="thumb-dot w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'}" data-i="${i}"></button>`).join('')}</div>
                 ` : ''}
             </div>
-            ${images.length > 1 ? `<div class="flex gap-2 p-3 overflow-x-auto">${images.map((img, i) => `<button class="thumb flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 ${i === 0 ? 'border-emerald-500' : 'border-transparent'}" data-i="${i}"><img src="${img}" class="w-full h-full object-cover"></button>`).join('')}</div>` : ''}
+            ${images.length > 1 ? `<div class="flex gap-2 p-3 overflow-x-auto">${images.map((img, i) => `<button class="thumb flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 ${i === 0 ? 'border-orange-500' : 'border-transparent'}" data-i="${i}"><img src="${img}" class="w-full h-full object-cover"></button>`).join('')}</div>` : ''}
         `;
         
         if (images.length > 1) {
@@ -103,7 +103,7 @@
             const update = (i) => {
                 state.currentImageIndex = i;
                 mainImg.src = images[i];
-                document.querySelectorAll('.thumb').forEach((t, ti) => t.classList.toggle('border-emerald-500', ti === i));
+                document.querySelectorAll('.thumb').forEach((t, ti) => t.classList.toggle('border-orange-500', ti === i));
                 document.querySelectorAll('.thumb-dot').forEach((d, di) => { d.classList.toggle('bg-white', di === i); d.classList.toggle('bg-white/50', di !== i); });
             };
             document.getElementById('prevBtn')?.addEventListener('click', () => update(state.currentImageIndex > 0 ? state.currentImageIndex - 1 : images.length - 1));
@@ -125,8 +125,8 @@
                 <div class="flex-1">
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">${Utils.escapeHtml(title)}</h1>
                     <div class="flex flex-wrap items-center gap-3 text-sm">
-                        <button onclick="document.querySelector('[data-tab=seller]').click()" class="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors">
-                            ${seller.avatarUrl ? `<img src="${seller.avatarUrl}" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white flex items-center justify-center font-bold text-sm">${(seller.fullName || seller.username || 'ب').charAt(0)}</div>`}
+                        <button onclick="document.querySelector('[data-tab=seller]').click()" class="flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
+                            ${seller.avatarUrl ? `<img src="${seller.avatarUrl}" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center font-bold text-sm">${(seller.fullName || seller.username || 'ب').charAt(0)}</div>`}
                             <span class="font-medium">${Utils.escapeHtml(seller.fullName || seller.username || 'بائع')}</span>
                         </button>
                         <span class="text-gray-300">|</span>
@@ -183,9 +183,9 @@
         if (state.service.features?.length && elements.serviceFeatures && elements.featuresList) {
             elements.serviceFeatures.classList.remove('hidden');
             elements.featuresList.innerHTML = state.service.features.map(f => `
-                <div class="flex items-start gap-3 p-3 bg-emerald-50/50 rounded-lg hover:bg-emerald-50 transition-colors">
-                    <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <div class="flex items-start gap-3 p-3 bg-orange-50/50 rounded-lg hover:bg-orange-50 transition-colors">
+                    <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     </div>
                     <span class="text-gray-700 font-medium">${Utils.escapeHtml(f)}</span>
                 </div>
@@ -210,14 +210,14 @@
                 <div class="flex items-start gap-4 mb-6">
                     <div class="relative">
                         ${avatar 
-                            ? `<img src="${avatar}" class="w-20 h-20 rounded-2xl object-cover shadow-lg ring-2 ring-emerald-100" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white flex items-center justify-center font-bold text-2xl shadow-lg\'>${name.substring(0,2)}</div>'">`
-                            : `<div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white flex items-center justify-center font-bold text-2xl shadow-lg">${name.substring(0,2)}</div>`
+                            ? `<img src="${avatar}" class="w-20 h-20 rounded-2xl object-cover shadow-lg ring-2 ring-orange-100" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center font-bold text-2xl shadow-lg\'>${name.substring(0,2)}</div>'">`
+                            : `<div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center font-bold text-2xl shadow-lg">${name.substring(0,2)}</div>`
                         }
                         <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full" title="متصل الآن"></div>
                     </div>
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-gray-900 mb-2">${Utils.escapeHtml(name)}</h3>
-                        <span class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
+                        <span class="inline-flex items-center gap-1.5 text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                             ${level.label}
                         </span>
@@ -240,8 +240,8 @@
                         <div class="text-2xl font-bold text-blue-600">${s.responseTime || '<1'}</div>
                         <div class="text-xs text-gray-500 mt-1">ساعة للرد</div>
                     </div>
-                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4 text-center">
-                        <div class="text-2xl font-bold text-emerald-600">${s.completedOrders || 0}</div>
+                    <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-bold text-orange-600">${s.completedOrders || 0}</div>
                         <div class="text-xs text-gray-500 mt-1">طلب مكتمل</div>
                     </div>
                     <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 text-center">
@@ -267,11 +267,11 @@
         
         elements.orderCard.innerHTML = `
             <!-- Price Header -->
-            <div class="bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 p-6 text-center rounded-t-2xl relative overflow-hidden">
+            <div class="bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 p-6 text-center rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #d97706 100%);">
                 <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
                 <div class="relative">
-                    <div class="text-4xl font-extrabold text-white drop-shadow-lg">${Utils.formatPrice(p)}</div>
-                    <div class="text-sm text-white/80 mt-1 font-medium">السعر الأساسي</div>
+                    <div class="text-4xl font-extrabold text-white drop-shadow-lg" style="color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${Utils.formatPrice(p)}</div>
+                    <div class="text-sm text-white/80 mt-1 font-medium" style="color: rgba(255,255,255,0.9);">السعر الأساسي</div>
                 </div>
             </div>
             
@@ -280,8 +280,8 @@
                 <div class="space-y-4 mb-6">
                     <div class="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         <div class="flex items-center gap-3 text-gray-600">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center shadow-sm">
-                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center shadow-sm">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <circle cx="12" cy="12" r="10"/>
                                     <path d="M12 6v6l4 2"/>
                                 </svg>
@@ -311,7 +311,7 @@
                             تعديل الخدمة
                         </span>
                     </a>` 
-                    : `<a href="/app/checkout.html?service=${sId}" class="block w-full py-4 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 hover:from-emerald-600 hover:via-emerald-700 hover:to-teal-600 text-white font-bold rounded-xl text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    : `<a href="/app/checkout.html?service=${sId}" class="block w-full py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:from-orange-600 hover:via-orange-700 hover:to-amber-600 text-white font-bold rounded-xl text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff !important;">
                         <span class="flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             اطلب الخدمة الآن

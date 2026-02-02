@@ -37,6 +37,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
 const aiRoutes = require('./routes/aiRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 const Favorite = require('./models/Favorite');
 
 const app = express();
@@ -299,6 +300,7 @@ app.post('/api/auth/login', async (req, res) => {
           username: user.username,
           email: user.email,
           avatarUrl: user.avatarUrl,
+          bannerUrl: user.bannerUrl,
           bio: user.bio,
           role: user.role
       },
@@ -323,6 +325,7 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
             email: user.email,
             bio: user.bio,
             avatarUrl: user.avatarUrl,
+            bannerUrl: user.bannerUrl,
             role: user.role,
             isEmailVerified: user.isEmailVerified,
             createdAt: user.createdAt
@@ -333,7 +336,7 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
 // Update User Profile
 app.put('/api/auth/profile', authenticateToken, async (req, res) => {
   try {
-    const { fullName, bio, avatarUrl } = req.body;
+    const { fullName, bio, avatarUrl, bannerUrl } = req.body;
     const user = await User.findById(req.user.id);
     
     if (!user) {
@@ -343,6 +346,7 @@ app.put('/api/auth/profile', authenticateToken, async (req, res) => {
     if (fullName) user.fullName = fullName;
     if (bio !== undefined) user.bio = bio;
     if (avatarUrl !== undefined) user.avatarUrl = avatarUrl;
+    if (bannerUrl !== undefined) user.bannerUrl = bannerUrl;
     
     await user.save();
     
@@ -354,6 +358,7 @@ app.put('/api/auth/profile', authenticateToken, async (req, res) => {
           email: user.email,
           bio: user.bio,
           avatarUrl: user.avatarUrl,
+          bannerUrl: user.bannerUrl,
           role: user.role
       }
     });
@@ -864,6 +869,9 @@ app.get('/api/my-stats', authenticateToken, async (req, res) => {
         return error(res, 'Server Error', 'MY_STATS_ERROR', 500);
     }
 });
+
+// ============ UPLOAD ROUTES ============
+app.use('/api/upload', uploadRoutes);
 
 // ============ ERROR HANDLING & CATCH-ALL ============
 
