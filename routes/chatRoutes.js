@@ -37,6 +37,15 @@ const ChatController = require('../controllers/ChatController');
 router.get('/', ChatController.getMyChats.bind(ChatController));
 
 /**
+ * @route   GET /api/chats/unread-count
+ * @desc    Get total unread message count for authenticated user
+ * @access  Private
+ * 
+ * NOTE: This route MUST be before /:chatId to avoid collision
+ */
+router.get('/unread-count', ChatController.getUnreadCount.bind(ChatController));
+
+/**
  * @route   GET /api/chats/order/:orderId
  * @desc    Get chat for a specific order
  * @access  Private (Buyer/Seller)
@@ -66,4 +75,13 @@ router.get('/:chatId/messages', ChatController.getMessages.bind(ChatController))
  */
 router.post('/:chatId/messages', ChatController.sendMessage.bind(ChatController));
 
+/**
+ * @route   PUT /api/chats/:chatId/read
+ * @desc    Mark all messages in a chat as read
+ * @access  Private (Buyer/Seller)
+ */
+router.put('/:chatId/read', ChatController.markAsRead.bind(ChatController));
+
 module.exports = router;
+
+

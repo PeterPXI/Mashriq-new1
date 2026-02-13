@@ -115,6 +115,25 @@ const messageSchema = new mongoose.Schema({
         immutable: true
     },
     
+    /**
+     * Whether this message has been read by the recipient.
+     * Unlike other fields, this CAN be updated (mutable).
+     * Used for read receipts and unread count tracking.
+     */
+    isRead: {
+        type: Boolean,
+        default: false
+    },
+    
+    /**
+     * Timestamp when the message was read.
+     * Set when isRead changes to true.
+     */
+    readAt: {
+        type: Date,
+        default: null
+    },
+    
     // ============================================================
     // TIMESTAMP
     // ============================================================
@@ -149,6 +168,9 @@ messageSchema.index({ senderId: 1 });
 
 // System messages filter
 messageSchema.index({ isSystemMessage: 1 });
+
+// Unread messages per chat (for unread count queries)
+messageSchema.index({ chatId: 1, isRead: 1 });
 
 // Recent messages
 messageSchema.index({ createdAt: -1 });

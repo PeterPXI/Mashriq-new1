@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جاري تسجيل الدخول... | مشرق</title>
+    <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
+
+    <div class="text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-orange-100 flex items-center justify-center animate-pulse">
+            <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">جاري تسجيل الدخول...</h1>
+        <p class="text-gray-500">يرجى الانتظار</p>
+    </div>
+
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script>
+        // Handle OAuth callback
+        (function () {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const token = params.get('token');
+                const userEncoded = params.get('user');
+                const error = params.get('error');
+
+                if (error) {
+                    let message = 'حدث خطأ في تسجيل الدخول';
+                    switch (error) {
+                        case 'google_not_configured':
+                            message = 'تسجيل الدخول بـ Google غير مُفعّل';
+                            break;
+                        case 'google_auth_failed':
+                            message = 'فشل في تسجيل الدخول بـ Google';
+                            break;
+                        case 'token_generation_failed':
+                            message = 'حدث خطأ في إنشاء جلسة الدخول';
+                            break;
+                    }
+                    alert(message);
+                    window.location.href = '/app/login.html';
+                    return;
+                }
+
+                if (token && userEncoded) {
+                    const user = JSON.parse(decodeURIComponent(userEncoded));
+
+                    // Store in localStorage
+                    localStorage.setItem('mashriq_token', token);
+                    localStorage.setItem('mashriq_user', JSON.stringify(user));
+
+                    console.log('✅ Google login successful:', user.email);
+
+                    // Redirect to home or intended destination
+                    const redirectTo = localStorage.getItem('oauth_redirect') || '/app/';
+                    localStorage.removeItem('oauth_redirect');
+                    window.location.href = redirectTo;
+                } else {
+                    throw new Error('Missing token or user data');
+                }
+
+            } catch (err) {
+                console.error('OAuth callback error:', err);
+                alert('حدث خطأ في تسجيل الدخول');
+                window.location.href = '/app/login.html';
+            }
+        })();
+    </script>
+</body>
+
+</html>

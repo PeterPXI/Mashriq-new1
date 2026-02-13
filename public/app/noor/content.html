@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كاتب المحتوى - نور AI | مشرق</title>
+    <link rel="icon" href="/app/assets/images/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f97316',
+                        dark: { 950: '#0a0a0a', 900: '#0d0d0d', 800: '#171717', 700: '#262626', 600: '#404040' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-white min-h-screen">
+
+    <!-- Container -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar Container -->
+        <div id="noor-sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:mr-72 flex flex-col h-screen bg-dark-900">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-dark-700 sticky top-0 z-30"
+                style="background-color: #000000;">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu -->
+                    <button id="openSidebar"
+                        class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a href="/app/noor/" class="flex items-center gap-3 group">
+                        <img src="/app/assets/images/logo2.png" alt="مشرق"
+                            class="h-8 sm:h-10 group-hover:scale-105 transition-all">
+                        <div class="hidden sm:block">
+                            <h2 class="font-bold text-white text-lg">كاتب المحتوى</h2>
+                            <p class="text-xs text-gray-500">محتوى احترافي</p>
+                        </div>
+                    </a>
+                </div>
+
+                <span class="text-sm text-gray-400" id="usageDisplay">
+                    <i class="fas fa-pen ml-1"></i>
+                    <span id="usageText">-- محتوى</span>
+                </span>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin p-4 lg:p-6">
+                <div class="max-w-3xl mx-auto">
+
+                    <!-- Intro -->
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-orange-500/30">
+                            <i class="fas fa-pen-fancy text-3xl text-white"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold mb-2 text-white">اكتب محتوى جذاب</h1>
+                        <p class="text-gray-400">اختر نوع المحتوى والمنصة وسأكتب لك محتوى احترافي</p>
+                    </div>
+
+                    <!-- Content Types -->
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-500 mb-3">
+                            <i class="fas fa-layer-group text-orange-400 ml-1"></i>
+                            نوع المحتوى
+                        </p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                            <button onclick="selectType('social-post')" data-type="social-post"
+                                class="type-btn p-4 bg-dark-800 hover:bg-dark-700 border-2 border-dark-600 rounded-xl text-center transition-all">
+                                <i class="fab fa-instagram text-2xl text-pink-400 mb-2"></i>
+                                <p class="text-sm text-white">منشور</p>
+                            </button>
+                            <button onclick="selectType('thread')" data-type="thread"
+                                class="type-btn p-4 bg-dark-800 hover:bg-dark-700 border-2 border-dark-600 rounded-xl text-center transition-all">
+                                <i class="fab fa-x-twitter text-2xl text-white mb-2"></i>
+                                <p class="text-sm text-white">ثريد</p>
+                            </button>
+                            <button onclick="selectType('article')" data-type="article"
+                                class="type-btn p-4 bg-dark-800 hover:bg-dark-700 border-2 border-dark-600 rounded-xl text-center transition-all">
+                                <i class="fas fa-newspaper text-2xl text-blue-400 mb-2"></i>
+                                <p class="text-sm text-white">مقال</p>
+                            </button>
+                            <button onclick="selectType('ad')" data-type="ad"
+                                class="type-btn p-4 bg-dark-800 hover:bg-dark-700 border-2 border-dark-600 rounded-xl text-center transition-all">
+                                <i class="fas fa-bullhorn text-2xl text-yellow-400 mb-2"></i>
+                                <p class="text-sm text-white">إعلان</p>
+                            </button>
+                            <button onclick="selectType('bio')" data-type="bio"
+                                class="type-btn p-4 bg-dark-800 hover:bg-dark-700 border-2 border-dark-600 rounded-xl text-center transition-all">
+                                <i class="fas fa-user text-2xl text-green-400 mb-2"></i>
+                                <p class="text-sm text-white">بايو</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="contentForm" class="space-y-5">
+
+                        <input type="hidden" id="contentType" value="social-post">
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-globe text-orange-400 ml-1"></i>
+                                    المنصة
+                                </label>
+                                <select id="platform"
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none transition-all text-white">
+                                    <option value="instagram">
+                                        إنستغرام
+                                    </option>
+                                    <option value="twitter">تويتر / X</option>
+                                    <option value="linkedin">لينكد إن</option>
+                                    <option value="facebook">فيسبوك</option>
+                                    <option value="tiktok">تيك توك</option>
+                                    <option value="general">عام</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-theater-masks text-orange-400 ml-1"></i>
+                                    الأسلوب
+                                </label>
+                                <select id="tone"
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none transition-all text-white">
+                                    <option value="professional">احترافي</option>
+                                    <option value="casual">ودي</option>
+                                    <option value="funny">مرح</option>
+                                    <option value="inspiring">ملهم</option>
+                                    <option value="educational">تعليمي</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                <i class="fas fa-lightbulb text-orange-400 ml-1"></i>
+                                الموضوع *
+                            </label>
+                            <textarea id="topic" required rows="3"
+                                class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500 resize-none"
+                                placeholder="عن ماذا تريد أن أكتب؟ مثال: نصائح للمبتدئين في العمل الحر"></textarea>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-xs text-gray-500">كن محدداً للحصول على نتائج أفضل</span>
+                                <span id="charCount" class="text-xs text-gray-500">0 حرف</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                <i class="fas fa-text-height text-orange-400 ml-1"></i>
+                                الطول
+                            </label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="length" value="short" class="hidden peer">
+                                    <div
+                                        class="p-3 bg-dark-800 border-2 border-dark-600 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 rounded-xl text-center transition-all">
+                                        <i class="fas fa-compress text-gray-400 peer-checked:text-orange-400 mb-1"></i>
+                                        <p class="text-sm text-white">قصير</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="length" value="medium" class="hidden peer" checked>
+                                    <div
+                                        class="p-3 bg-dark-800 border-2 border-dark-600 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 rounded-xl text-center transition-all">
+                                        <i
+                                            class="fas fa-grip-lines text-gray-400 peer-checked:text-orange-400 mb-1"></i>
+                                        <p class="text-sm text-white">متوسط</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="length" value="long" class="hidden peer">
+                                    <div
+                                        class="p-3 bg-dark-800 border-2 border-dark-600 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 rounded-xl text-center transition-all">
+                                        <i class="fas fa-expand text-gray-400 peer-checked:text-orange-400 mb-1"></i>
+                                        <p class="text-sm text-white">طويل</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="generateBtn"
+                            class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-orange-500/20">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <span>إنشاء المحتوى</span>
+                        </button>
+                    </form>
+
+                    <!-- Result -->
+                    <div id="result" class="hidden mt-8">
+                        <!-- Platform Preview -->
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">
+                                <i class="fas fa-check-circle text-green-400 ml-2"></i>
+                                المحتوى
+                            </h3>
+                            <div class="flex gap-2">
+                                <button onclick="copyResult()"
+                                    class="px-4 py-2 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm transition-all flex items-center gap-2 text-gray-300 hover:text-white">
+                                    <i class="fas fa-copy"></i>
+                                    نسخ
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Character Limit Warning -->
+                        <div id="charWarning"
+                            class="hidden mb-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-400 text-sm">
+                            <i class="fas fa-exclamation-triangle ml-2"></i>
+                            <span id="charWarningText"></span>
+                        </div>
+
+                        <div
+                            class="bg-gradient-to-br from-dark-800 to-dark-700 border border-orange-500/30 rounded-2xl p-6 shadow-xl">
+                            <pre id="resultText"
+                                class="whitespace-pre-wrap text-gray-100 leading-relaxed font-sans"></pre>
+                            <div class="mt-4 pt-4 border-t border-dark-600 flex items-center justify-between text-sm">
+                                <span id="resultCharCount" class="text-gray-500">0 حرف</span>
+                                <span id="platformLimit" class="text-gray-500"></span>
+                            </div>
+                        </div>
+
+                        <!-- Hashtag Suggestions -->
+                        <div id="hashtagSection" class="mt-4 p-4 bg-dark-800 rounded-xl border border-dark-600">
+                            <p class="text-sm text-gray-400 mb-3">
+                                <i class="fas fa-hashtag text-orange-400 ml-1"></i>
+                                هاشتاقات مقترحة
+                            </p>
+                            <div id="hashtags" class="flex flex-wrap gap-2">
+                                <!-- Will be filled dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/noor-sidebar.js"></script>
+    <script src="/app/js/components/noor-dropdown.js"></script>
+    <script>
+        // Platform limits
+        const PLATFORM_LIMITS = {
+            twitter: { limit: 280, name: 'تويتر' },
+            instagram: { limit: 2200, name: 'إنستغرام' },
+            linkedin: { limit: 3000, name: 'لينكد إن' },
+            facebook: { limit: 63206, name: 'فيسبوك' },
+            tiktok: { limit: 2200, name: 'تيك توك' },
+            general: { limit: 999999, name: 'عام' }
+        };
+
+        // Select type
+        function selectType(type) {
+            document.getElementById('contentType').value = type;
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('border-orange-500', 'bg-dark-700');
+                btn.classList.add('border-dark-600');
+            });
+            document.querySelector(`[data-type="${type}"]`)?.classList.add('border-orange-500', 'bg-dark-700');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Require login to access Noor AI
+            if (!Auth.requireAuth()) return;
+
+            NoorSidebar.init('content');
+            selectType('social-post');
+
+            // Character counter
+            document.getElementById('topic').addEventListener('input', function () {
+                document.getElementById('charCount').textContent = this.value.length + ' حرف';
+            });
+
+            // Load usage
+            try {
+                const result = await API.request('/noor/usage', { method: 'GET' });
+                if (result.success && result.remaining) {
+                    document.getElementById('usageText').textContent =
+                        result.remaining.content === -1 ? 'غير محدود' : `${result.remaining.content} محتوى متبقي`;
+                }
+            } catch (e) { }
+
+            // Mobile sidebar
+            document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+        });
+
+        // Form submit
+        document.getElementById('contentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('generateBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>جاري الإنشاء...</span>';
+            btn.disabled = true;
+
+            try {
+                const platform = document.getElementById('platform').value;
+                const result = await API.request('/noor/content', {
+                    method: 'POST',
+                    body: {
+                        type: document.getElementById('contentType').value,
+                        topic: document.getElementById('topic').value,
+                        platform: platform,
+                        tone: document.getElementById('tone').value,
+                        length: document.querySelector('input[name="length"]:checked').value
+                    }
+                });
+
+                if (result.limitReached) {
+                    alert(result.message);
+                } else if (result.success) {
+                    const content = result.content;
+                    document.getElementById('resultText').textContent = content;
+                    document.getElementById('result').classList.remove('hidden');
+
+                    // Character count
+                    const charCount = content.length;
+                    const platformInfo = PLATFORM_LIMITS[platform];
+                    document.getElementById('resultCharCount').textContent = charCount + ' حرف';
+                    document.getElementById('platformLimit').textContent = `حد ${platformInfo.name}: ${platformInfo.limit}`;
+
+                    // Warning
+                    const warning = document.getElementById('charWarning');
+                    if (charCount > platformInfo.limit) {
+                        warning.classList.remove('hidden');
+                        document.getElementById('charWarningText').textContent =
+                            `المحتوى يتجاوز حد ${platformInfo.name} بـ ${charCount - platformInfo.limit} حرف`;
+                    } else {
+                        warning.classList.add('hidden');
+                    }
+
+                    // Generate hashtags
+                    generateHashtags(document.getElementById('topic').value);
+
+                    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+                    NoorSidebar.loadUsage();
+                }
+
+            } catch (error) {
+                alert('حدث خطأ، حاول مرة أخرى');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Generate hashtags
+        function generateHashtags(topic) {
+            const words = topic.split(' ').filter(w => w.length > 3);
+            const hashtags = [
+                '#' + words[0]?.replace(/[^\u0621-\u064Aa-zA-Z]/g, '') || 'نصائح',
+                '#العمل_الحر',
+                '#فريلانسر',
+                '#مستقل',
+                '#نجاح'
+            ].slice(0, 5);
+
+            document.getElementById('hashtags').innerHTML = hashtags.map(tag => `
+                <button onclick="copyHashtag('${tag}')" class="px-3 py-1.5 bg-dark-700 hover:bg-dark-600 text-orange-400 rounded-lg text-sm transition-all">
+                    ${tag}
+                </button>
+            `).join('');
+        }
+
+        // Copy hashtag
+        function copyHashtag(tag) {
+            navigator.clipboard.writeText(tag);
+        }
+
+        // Copy result
+        function copyResult() {
+            const text = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('تم النسخ بنجاح!');
+            });
+        }
+        // Init
+        NoorSidebar.init('content');
+        NoorDropdown.init();
+        document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+    </script>
+</body>
+
+</html>

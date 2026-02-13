@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نور AI - مساعدتك الذكية | مشرق</title>
+    <link rel="icon" href="/app/assets/images/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f97316',
+                        dark: { 950: '#0a0a0a', 900: '#0d0d0d', 800: '#171717', 700: '#262626', 600: '#404040' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-white min-h-screen">
+
+    <!-- Container -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar Container -->
+        <div id="noor-sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:mr-72 flex flex-col h-screen bg-dark-900">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-dark-700 sticky top-0 z-30"
+                style="background-color: #000000;">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu -->
+                    <button id="openSidebar"
+                        class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a href="/app/noor/" class="flex items-center gap-3 group">
+                        <img src="/app/assets/images/logo2.png" alt="مشرق"
+                            class="h-8 sm:h-10 group-hover:scale-105 transition-all">
+                        <div class="hidden sm:block">
+                            <h2 class="font-bold text-white text-lg">نور AI</h2>
+                            <p class="text-xs text-gray-500">مساعدتك الذكية</p>
+                        </div>
+                    </a>
+                </div>
+
+                <a href="/app/"
+                    class="flex items-center gap-2 px-4 py-2 bg-gradient-to-l from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all text-sm font-medium shadow-lg shadow-orange-500/20">
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="hidden sm:inline">العودة للمنصة</span>
+                    <span class="sm:hidden">المنصة</span>
+                </a>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin p-4 lg:p-6">
+                <div class="max-w-5xl mx-auto">
+
+                    <!-- Welcome Section -->
+                    <div
+                        class="bg-gradient-to-br from-orange-500/20 to-amber-500/10 rounded-2xl p-6 lg:p-8 border border-orange-500/20 mb-8">
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div
+                                class="w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-400 rounded-2xl flex items-center justify-center shadow-2xl shadow-orange-500/30">
+                                <i class="fas fa-sun text-4xl text-white"></i>
+                            </div>
+                            <div class="text-center md:text-right flex-1">
+                                <h1 class="text-2xl lg:text-3xl font-bold mb-2">
+                                    مرحباً، <span id="welcomeName" class="text-orange-400">مستخدم</span>! 👋
+                                </h1>
+                                <p class="text-gray-400 text-lg">أنا نور، مساعدتك الذكية للعمل الحر. كيف يمكنني مساعدتك
+                                    اليوم؟</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <span id="planBadge" class="px-4 py-2 bg-dark-800 rounded-full text-sm font-medium">
+                                    <i class="fas fa-gift text-green-400 ml-1"></i>
+                                    خطة مجانية
+                                </span>
+                                <a href="/app/noor/social.html" class="text-xs text-orange-400 hover:underline">
+                                    ترقية للـ Pro <i class="fas fa-arrow-left text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Usage Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="bg-dark-800 rounded-xl p-5 border border-dark-600">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-gray-400 text-sm">رسائل اليوم</span>
+                                <i class="fas fa-comments text-orange-400"></i>
+                            </div>
+                            <p class="text-2xl font-bold text-white" id="chatUsage">--</p>
+                            <div class="h-1.5 bg-dark-600 rounded-full mt-3 overflow-hidden">
+                                <div id="chatBar"
+                                    class="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full transition-all"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-dark-800 rounded-xl p-5 border border-dark-600">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-gray-400 text-sm">عروض الشهر</span>
+                                <i class="fas fa-file-signature text-blue-400"></i>
+                            </div>
+                            <p class="text-2xl font-bold text-white" id="proposalUsage">--</p>
+                            <div class="h-1.5 bg-dark-600 rounded-full mt-3 overflow-hidden">
+                                <div id="proposalBar"
+                                    class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-dark-800 rounded-xl p-5 border border-dark-600">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-gray-400 text-sm">محتوى الشهر</span>
+                                <i class="fas fa-pen-fancy text-green-400"></i>
+                            </div>
+                            <p class="text-2xl font-bold text-white" id="contentUsage">--</p>
+                            <div class="h-1.5 bg-dark-600 rounded-full mt-3 overflow-hidden">
+                                <div id="contentBar"
+                                    class="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <h3 class="text-lg font-bold text-white mb-4">
+                        <i class="fas fa-bolt text-orange-400 ml-2"></i>
+                        ابدأ الآن
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <a href="/app/noor/chat.html"
+                            class="feature-card bg-dark-800 rounded-xl p-6 border border-dark-600 hover:border-orange-500/50 group">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-comments text-xl text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">الشات العام</h4>
+                            <p class="text-sm text-gray-400">تحدث مع نور واحصل على إجابات فورية</p>
+                        </a>
+                        <a href="/app/noor/proposals.html"
+                            class="feature-card bg-dark-800 rounded-xl p-6 border border-dark-600 hover:border-blue-500/50 group">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-file-signature text-xl text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">كاتب العروض</h4>
+                            <p class="text-sm text-gray-400">اكتب عروض احترافية تفوز بالمشاريع</p>
+                        </a>
+                        <a href="/app/noor/content.html"
+                            class="feature-card bg-dark-800 rounded-xl p-6 border border-dark-600 hover:border-green-500/50 group">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-pen-fancy text-xl text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">كاتب المحتوى</h4>
+                            <p class="text-sm text-gray-400">أنشئ محتوى جذاب للسوشيال ميديا</p>
+                        </a>
+                        <a href="/app/noor/social.html"
+                            class="feature-card bg-dark-800 rounded-xl p-6 border border-dark-600 hover:border-purple-500/50 group relative">
+                            <span
+                                class="absolute top-3 left-3 px-2 py-0.5 bg-orange-500/20 text-orange-400 text-xs rounded-full">Pro</span>
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-share-alt text-xl text-white"></i>
+                            </div>
+                            <h4 class="font-bold text-white mb-2">إدارة السوشيال</h4>
+                            <p class="text-sm text-gray-400">جدول وحلل محتواك</p>
+                        </a>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <h3 class="text-lg font-bold text-white mb-4">
+                        <i class="fas fa-lightbulb text-yellow-400 ml-2"></i>
+                        نصائح سريعة
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-dark-800 rounded-xl p-5 border border-dark-600">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-white mb-1">اكتب عروض مخصصة</h4>
+                                    <p class="text-sm text-gray-400">العروض المخصصة لكل مشروع تحصل على استجابة أعلى بـ 3
+                                        أضعاف</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-dark-800 rounded-xl p-5 border border-dark-600">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-clock text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-white mb-1">انشر في الوقت المناسب</h4>
+                                    <p class="text-sm text-gray-400">أفضل أوقات النشر: 9 صباحاً و 9 مساءً بتوقيت جمهورك
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/noor-sidebar.js"></script>
+    <script src="/app/js/components/noor-dropdown.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Require login to access Noor AI
+            if (!Auth.requireAuth()) return;
+
+            NoorSidebar.init('dashboard');
+            NoorDropdown.init();
+
+            // User info
+            const user = Auth.getUser();
+            if (user) {
+                document.getElementById('welcomeName').textContent = user.fullName || user.username;
+
+                const planNames = { free: 'خطة مجانية', pro: 'Pro ⭐', business: 'Business 🚀' };
+                const planColors = { free: 'text-green-400', pro: 'text-orange-400', business: 'text-purple-400' };
+                const badge = document.getElementById('planBadge');
+                badge.innerHTML = `<i class="fas fa-crown ${planColors[user.aiPlan] || planColors.free} ml-1"></i> ${planNames[user.aiPlan] || planNames.free}`;
+            }
+
+            // Load usage
+            try {
+                const result = await API.request('/noor/usage', { method: 'GET' });
+                if (result.success) {
+                    const limits = result.limits || { dailyChat: 10, monthlyProposals: 3, monthlyContent: 5 };
+                    const usage = result.usage || {};
+                    const remaining = result.remaining || {};
+
+                    // Chat
+                    const chatUsed = usage.chatToday || 0;
+                    const chatLimit = limits.dailyChat;
+                    document.getElementById('chatUsage').textContent = chatLimit === -1 ? '∞' : `${remaining.chat}/${chatLimit}`;
+                    document.getElementById('chatBar').style.width = chatLimit === -1 ? '0%' : `${(chatUsed / chatLimit) * 100}%`;
+
+                    // Proposals
+                    const proposalUsed = usage.proposalsMonth || 0;
+                    const proposalLimit = limits.monthlyProposals;
+                    document.getElementById('proposalUsage').textContent = proposalLimit === -1 ? '∞' : `${remaining.proposals}/${proposalLimit}`;
+                    document.getElementById('proposalBar').style.width = proposalLimit === -1 ? '0%' : `${(proposalUsed / proposalLimit) * 100}%`;
+
+                    // Content
+                    const contentUsed = usage.contentMonth || 0;
+                    const contentLimit = limits.monthlyContent;
+                    document.getElementById('contentUsage').textContent = contentLimit === -1 ? '∞' : `${remaining.content}/${contentLimit}`;
+                    document.getElementById('contentBar').style.width = contentLimit === -1 ? '0%' : `${(contentUsed / contentLimit) * 100}%`;
+                }
+            } catch (e) {
+                console.error('Load usage error:', e);
+            }
+
+            // Mobile sidebar
+            document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+        });
+    </script>
+</body>
+
+</html>

@@ -1,201 +1,110 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="محفظتي - شحن الرصيد وإدارة الأموال على منصة مشرق">
-    
+
     <title>المحفظة | مشرق</title>
-    
-    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
-    
+
+    <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
+
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    
-    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="/app/assets/css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
+
 <body class="min-h-screen bg-gray-50 font-sans">
     <header id="navbar"></header>
-    
-    <main class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="mb-10">
-                <h1 class="text-4xl font-extrabold text-gray-900 mb-3">المحفظة</h1>
-                <p class="text-gray-500 text-lg">إدارة رصيدك وشحن محفظتك للشراء والبيع على مشرق</p>
-            </div>
-            
-            <div id="paymentStatus" class="hidden mb-6 p-4 rounded-xl"></div>
-            
-            <div class="grid lg:grid-cols-3 gap-6">
-                
-                <div class="lg:col-span-2 space-y-6">
-                    
-                    <div class="bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
-                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-2xl"></div>
-                        <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-orange-300/20 rounded-full blur-2xl"></div>
-                        <div class="flex items-center justify-between mb-6 relative">
-                            <div class="flex items-center gap-3">
-                                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
-                                        <polyline points="1,10 23,10"/>
-                                    </svg>
-                                </div>
-                                <span class="text-xl font-semibold">رصيدك الحالي</span>
-                            </div>
-                        </div>
-                        <div class="mb-6 relative">
-                            <div class="text-5xl font-extrabold mb-2" id="availableBalance">
-                                <span class="inline-block h-12 w-36 bg-white/20 rounded-lg animate-pulse"></span>
-                            </div>
-                            <div class="text-white/80 text-base">دولار أمريكي متاح للاستخدام</div>
-                        </div>
-                        <div class="flex gap-4 text-sm relative">
-                            <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <span class="text-white/80">معلق:</span>
-                                <span class="font-bold mr-1" id="pendingBalance">$0</span>
-                            </div>
-                            <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <span class="text-white/80">إجمالي الأرباح:</span>
-                                <span class="font-bold mr-1" id="totalEarned">$0</span>
-                            </div>
-                        </div>
+
+    <main class="py-8 sm:py-16 lg:py-24">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+            <!-- Suspension Notice -->
+            <div class="bg-white rounded-3xl shadow-xl p-8 sm:p-12 relative overflow-hidden">
+                <!-- Decorative background -->
+                <div class="absolute -top-16 -right-16 w-48 h-48 bg-orange-100 rounded-full blur-3xl opacity-60"></div>
+                <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-amber-100 rounded-full blur-3xl opacity-60"></div>
+
+                <div class="relative">
+                    <!-- Icon -->
+                    <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center"
+                        style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="10" y1="15" x2="10" y2="9" />
+                            <line x1="14" y1="15" x2="14" y2="9" />
+                        </svg>
                     </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-sm p-6">
-                        <h2 class="flex items-center gap-2 text-xl font-bold text-gray-900 mb-6">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="16"/>
-                                <line x1="8" y1="12" x2="16" y2="12"/>
-                            </svg>
-                            شحن الرصيد
-                        </h2>
-                        
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">اختر المبلغ</label>
-                            <div class="grid grid-cols-3 sm:grid-cols-5 gap-3" id="amountOptions">
-                                <button type="button" class="amount-btn px-4 py-3 border-2 border-gray-200 hover:border-primary-400 rounded-xl font-semibold text-gray-700 transition-colors" data-amount="10">$10</button>
-                                <button type="button" class="amount-btn px-4 py-3 border-2 border-gray-200 hover:border-primary-400 rounded-xl font-semibold text-gray-700 transition-colors" data-amount="25">$25</button>
-                                <button type="button" class="amount-btn px-4 py-3 border-2 border-primary-500 bg-primary-50 rounded-xl font-semibold text-primary-600 transition-colors" data-amount="50">$50</button>
-                                <button type="button" class="amount-btn px-4 py-3 border-2 border-gray-200 hover:border-primary-400 rounded-xl font-semibold text-gray-700 transition-colors" data-amount="100">$100</button>
-                                <button type="button" class="amount-btn px-4 py-3 border-2 border-gray-200 hover:border-primary-400 rounded-xl font-semibold text-gray-700 transition-colors" data-amount="200">$200</button>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label for="customAmount" class="block text-sm font-medium text-gray-700 mb-2">أو أدخل مبلغ مخصص</label>
-                            <div class="relative">
-                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-                                <input type="number" id="customAmount" min="5" max="1000" step="1" placeholder="أدخل المبلغ (5-1000)" class="w-full pr-10 pl-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-left" dir="ltr">
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">الحد الأدنى $5 - الحد الأقصى $1000</p>
-                        </div>
-                        
-                        <div class="bg-gray-50 rounded-xl p-4 mb-6">
-                            <div class="flex justify-between items-center text-sm mb-2">
-                                <span class="text-gray-600">المبلغ المحدد</span>
-                                <span class="font-semibold text-gray-900" id="selectedAmountDisplay">$50</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600">سيُضاف إلى رصيدك</span>
-                                <span class="font-bold text-lg text-primary-600" id="finalAmountDisplay">$50</span>
-                            </div>
-                        </div>
-                        
-                        <button type="button" id="checkoutBtn" class="w-full flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-4 rounded-xl font-bold text-lg transition-colors">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                                <line x1="1" y1="10" x2="23" y2="10"/>
-                            </svg>
-                            الدفع عبر Stripe
-                        </button>
-                        
-                        <div class="flex items-center justify-center gap-4 mt-4 text-xs text-gray-400">
-                            <span class="flex items-center gap-1">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+
+                    <!-- Title -->
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">المحفظة موقوفة مؤقتاً</h1>
+
+                    <!-- Description -->
+                    <p class="text-gray-500 text-lg sm:text-xl leading-relaxed mb-8 max-w-md mx-auto">
+                        نعمل حالياً على تحسين نظام المحفظة والدفع لتقديم تجربة أفضل وأكثر أماناً. سيتم إعادة تفعيلها
+                        قريباً.
+                    </p>
+
+                    <!-- Info Cards -->
+                    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-orange-50 border border-orange-100 rounded-2xl p-5">
+                            <div
+                                class="w-10 h-10 mx-auto mb-3 rounded-xl bg-orange-100 flex items-center justify-center">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                                 </svg>
-                                دفع آمن 100%
-                            </span>
-                            <span>|</span>
-                            <span>Stripe Secure Checkout</span>
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                <div class="space-y-6">
-                    
-                    <div class="bg-white rounded-2xl shadow-sm p-6">
-                        <h3 class="flex items-center gap-2 font-bold text-gray-900 mb-4">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary-500">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12,6 12,12 16,14"/>
-                            </svg>
-                            آخر المعاملات
-                        </h3>
-                        <div id="recentTransactions" class="space-y-3">
-                            <div class="text-center py-8 text-gray-400">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-2 opacity-50">
-                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                                    <polyline points="14,2 14,8 20,8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
-                                </svg>
-                                <p class="text-sm">لا توجد معاملات بعد</p>
                             </div>
+                            <h3 class="font-bold text-gray-900 text-sm mb-1">تحسينات أمنية</h3>
+                            <p class="text-xs text-gray-500">نُطوّر نظام دفع أكثر أماناً</p>
                         </div>
-                        <a href="#" class="block text-center text-sm text-primary-600 hover:text-primary-700 font-medium mt-4" id="viewAllTransactions">عرض كل المعاملات</a>
+                        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                            <div class="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-100 flex items-center justify-center">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12,6 12,12 16,14" />
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-sm mb-1">عودة قريبة</h3>
+                            <p class="text-xs text-gray-500">سنُعلمك فور إعادة التفعيل</p>
+                        </div>
                     </div>
-                    
-                    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
-                        <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 16v-4"/>
-                                <path d="M12 8h.01"/>
-                            </svg>
-                            كيف يعمل الرصيد؟
-                        </h4>
-                        <ul class="text-sm text-blue-800 space-y-2">
-                            <li class="flex items-start gap-2">
-                                <span class="text-blue-500 mt-0.5">•</span>
-                                اشحن رصيدك لشراء الخدمات
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-blue-500 mt-0.5">•</span>
-                                عند الطلب، يُحجز المبلغ تلقائياً
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-blue-500 mt-0.5">•</span>
-                                يُحوّل للبائع بعد موافقتك
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-blue-500 mt-0.5">•</span>
-                                أرباحك كبائع تُضاف هنا
-                            </li>
-                        </ul>
-                    </div>
-                    
+
+                    <!-- CTA -->
+                    <a href="/app/"
+                        class="inline-flex items-center gap-2 text-white py-3 px-8 rounded-xl font-bold transition-all hover:opacity-90"
+                        style="background: linear-gradient(to left, #f97316, #ea580c);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M3 12h18" />
+                            <path d="M9 6l-6 6 6 6" />
+                        </svg>
+                        العودة للرئيسية
+                    </a>
                 </div>
-                
             </div>
-            
+
         </div>
     </main>
-    
+
     <div id="footer"></div>
-    
+
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
     <script src="/app/js/components/toast.js"></script>
     <script src="/app/js/components/loader.js"></script>
-    <script src="/app/js/auth.js"></script>
-    <script src="/app/js/api.js"></script>
     <script src="/app/js/components/navbar.js"></script>
     <script src="/app/js/components/footer.js"></script>
-    <script src="/app/js/pages/wallet.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة السوشيال - نور AI | مشرق</title>
+    <link rel="icon" href="/app/assets/images/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f97316',
+                        dark: { 950: '#0a0a0a', 900: '#0d0d0d', 800: '#171717', 700: '#262626', 600: '#404040' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-white min-h-screen">
+
+    <!-- Container -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar Container -->
+        <div id="noor-sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:mr-72 flex flex-col h-screen bg-dark-900">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-dark-700 sticky top-0 z-30"
+                style="background-color: #000000;">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu -->
+                    <button id="openSidebar"
+                        class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a href="/app/noor/" class="flex items-center gap-3 group">
+                        <img src="/app/assets/images/logo2.png" alt="مشرق"
+                            class="h-8 sm:h-10 group-hover:scale-105 transition-all">
+                        <div class="hidden sm:block">
+                            <h2 class="font-bold text-white text-lg">إدارة السوشيال</h2>
+                            <p class="text-xs text-gray-500">خطط وجدول محتواك</p>
+                        </div>
+                    </a>
+                </div>
+
+                <span class="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full text-xs font-bold">
+                    <i class="fas fa-crown ml-1"></i>
+                    Pro
+                </span>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin flex items-center justify-center p-4 lg:p-6">
+
+                <!-- Upgrade CTA (Free Users) -->
+                <div id="upgradeCTA" class="max-w-2xl text-center">
+
+                    <!-- Icon -->
+                    <div
+                        class="w-24 h-24 bg-gradient-to-br from-orange-500 to-amber-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-orange-500/30">
+                        <i class="fas fa-share-alt text-5xl text-white"></i>
+                    </div>
+
+                    <h1 class="text-3xl font-bold mb-4 text-white">إدارة السوشيال ميديا</h1>
+                    <p class="text-gray-400 text-lg mb-8">أدوات متقدمة لإدارة حساباتك، جدولة المنشورات، وتحليل الأداء
+                    </p>
+
+                    <!-- Features -->
+                    <div class="grid md:grid-cols-2 gap-4 mb-8 text-right">
+                        <div
+                            class="bg-dark-800 border border-dark-600 rounded-xl p-5 hover:border-orange-500/30 transition-all">
+                            <i class="fas fa-calendar-alt text-3xl text-orange-400 mb-3"></i>
+                            <h3 class="font-bold text-white mb-2">جدولة المنشورات</h3>
+                            <p class="text-sm text-gray-400">جدول منشوراتك لأسابيع مقدماً على جميع المنصات</p>
+                        </div>
+                        <div
+                            class="bg-dark-800 border border-dark-600 rounded-xl p-5 hover:border-orange-500/30 transition-all">
+                            <i class="fas fa-chart-bar text-3xl text-blue-400 mb-3"></i>
+                            <h3 class="font-bold text-white mb-2">تحليل الأداء</h3>
+                            <p class="text-sm text-gray-400">تقارير مفصلة عن أداء محتواك والتفاعل</p>
+                        </div>
+                        <div
+                            class="bg-dark-800 border border-dark-600 rounded-xl p-5 hover:border-orange-500/30 transition-all">
+                            <i class="fas fa-clock text-3xl text-green-400 mb-3"></i>
+                            <h3 class="font-bold text-white mb-2">أفضل أوقات النشر</h3>
+                            <p class="text-sm text-gray-400">اقتراحات ذكية لأفضل أوقات النشر لجمهورك</p>
+                        </div>
+                        <div
+                            class="bg-dark-800 border border-dark-600 rounded-xl p-5 hover:border-orange-500/30 transition-all">
+                            <i class="fas fa-infinity text-3xl text-purple-400 mb-3"></i>
+                            <h3 class="font-bold text-white mb-2">محتوى غير محدود</h3>
+                            <p class="text-sm text-gray-400">أنشئ محتوى بدون حدود يومية أو شهرية</p>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Comparison -->
+                    <div class="bg-dark-800 rounded-2xl p-6 border border-dark-600 mb-8">
+                        <h3 class="font-bold text-lg text-white mb-6">
+                            <i class="fas fa-tags text-orange-400 ml-2"></i>
+                            اختر خطتك
+                        </h3>
+
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <!-- Free -->
+                            <div class="bg-dark-700 rounded-xl p-5 border border-dark-600">
+                                <p class="text-gray-400 text-sm mb-2">مجاني</p>
+                                <p class="text-3xl font-bold text-white mb-4">$0<span
+                                        class="text-sm text-gray-500">/شهر</span></p>
+                                <ul class="space-y-2 text-sm text-gray-400 mb-4">
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> 10 رسائل/يوم</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> 3 عروض/شهر</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> 5 محتوى/شهر</li>
+                                    <li><i class="fas fa-times text-red-400 ml-2"></i> إدارة السوشيال</li>
+                                </ul>
+                                <button class="w-full py-2 bg-dark-600 text-gray-400 rounded-lg cursor-not-allowed">
+                                    الخطة الحالية
+                                </button>
+                            </div>
+
+                            <!-- Pro -->
+                            <div
+                                class="bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-xl p-5 border-2 border-orange-500 relative">
+                                <span
+                                    class="absolute -top-3 right-4 px-3 py-1 bg-orange-500 text-xs font-bold rounded-full">الأكثر
+                                    شعبية</span>
+                                <p class="text-orange-400 text-sm mb-2">Pro</p>
+                                <p class="text-3xl font-bold text-white mb-4">$9.99<span
+                                        class="text-sm text-gray-500">/شهر</span></p>
+                                <ul class="space-y-2 text-sm text-gray-300 mb-4">
+                                    <li><i class="fas fa-infinity text-orange-400 ml-2"></i> رسائل غير محدودة</li>
+                                    <li><i class="fas fa-infinity text-orange-400 ml-2"></i> عروض غير محدودة</li>
+                                    <li><i class="fas fa-infinity text-orange-400 ml-2"></i> محتوى غير محدود</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> إدارة السوشيال</li>
+                                </ul>
+                                <button
+                                    class="w-full py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-lg transition-all">
+                                    ترقية الآن
+                                </button>
+                            </div>
+
+                            <!-- Business -->
+                            <div class="bg-dark-700 rounded-xl p-5 border border-dark-600">
+                                <p class="text-purple-400 text-sm mb-2">Business</p>
+                                <p class="text-3xl font-bold text-white mb-4">$29.99<span
+                                        class="text-sm text-gray-500">/شهر</span></p>
+                                <ul class="space-y-2 text-sm text-gray-400 mb-4">
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> كل ميزات Pro</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> API Access</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> دعم أولوية</li>
+                                    <li><i class="fas fa-check text-green-400 ml-2"></i> تقارير متقدمة</li>
+                                </ul>
+                                <button
+                                    class="w-full py-2 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-lg transition-all">
+                                    تواصل معنا
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="text-right">
+                        <h3 class="font-bold text-lg text-white mb-4">
+                            <i class="fas fa-question-circle text-orange-400 ml-2"></i>
+                            أسئلة شائعة
+                        </h3>
+                        <div class="space-y-3">
+                            <details class="bg-dark-800 rounded-xl border border-dark-600 group">
+                                <summary class="p-4 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-white">هل يمكنني الإلغاء في أي وقت؟</span>
+                                    <i
+                                        class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="px-4 pb-4 text-gray-400 text-sm">
+                                    نعم، يمكنك إلغاء اشتراكك في أي وقت. ستظل تستمتع بالميزات حتى نهاية فترة الفوترة.
+                                </div>
+                            </details>
+                            <details class="bg-dark-800 rounded-xl border border-dark-600 group">
+                                <summary class="p-4 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-white">ما هي طرق الدفع المتاحة؟</span>
+                                    <i
+                                        class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="px-4 pb-4 text-gray-400 text-sm">
+                                    نقبل البطاقات الائتمانية (Visa, Mastercard)، PayPal، وبطاقات مدى.
+                                </div>
+                            </details>
+                            <details class="bg-dark-800 rounded-xl border border-dark-600 group">
+                                <summary class="p-4 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-white">هل هناك ضمان استرداد الأموال؟</span>
+                                    <i
+                                        class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="px-4 pb-4 text-gray-400 text-sm">
+                                    نعم، نقدم ضمان استرداد الأموال لمدة 7 أيام إذا لم تكن راضياً عن الخدمة.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Content (Hidden for free users) -->
+                <div id="proContent" class="hidden w-full max-w-5xl">
+                    <div class="text-center py-12">
+                        <i class="fas fa-tools text-6xl text-orange-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">🚧 قريباً</h2>
+                        <p class="text-gray-400">ميزة إدارة السوشيال ميديا قيد التطوير وستكون متاحة قريباً!</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/noor-sidebar.js"></script>
+    <script src="/app/js/components/noor-dropdown.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Require login to access Noor AI
+            if (!Auth.requireAuth()) return;
+
+            NoorSidebar.init('social');
+            NoorDropdown.init();
+
+            const user = Auth.getUser();
+            if (user && (user.aiPlan === 'pro' || user.aiPlan === 'business')) {
+                document.getElementById('upgradeCTA').classList.add('hidden');
+                document.getElementById('proContent').classList.remove('hidden');
+            }
+
+            // Mobile sidebar
+            document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+        });
+    </script>
+</body>
+
+</html>

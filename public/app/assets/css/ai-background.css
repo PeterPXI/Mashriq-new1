@@ -1,0 +1,108 @@
+/* 
+ * ═══════════════════════════════════════════════════════════════════════════
+ * AI BACKGROUND STYLES
+ * Custom animations and patterns for the "Professional AI" look.
+ * Created manually to strictly control performance and appearance.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/* ---------------------------------
+   1. ANIMATIONS
+   --------------------------------- */
+@keyframes gridMovement {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+}
+
+@keyframes floatSlow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes floatSlower {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(50px, 50px) rotate(180deg); }
+}
+
+@keyframes pulseSlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+}
+
+/* ---------------------------------
+   2. UTILITY CLASSES
+   --------------------------------- */
+.animate-grid-movement {
+    animation: gridMovement 20s linear infinite;
+}
+
+.animate-float-slow {
+    animation: floatSlow 8s ease-in-out infinite;
+}
+
+.animate-float-slower {
+    animation: floatSlower 12s ease-in-out infinite;
+}
+
+.animate-drift {
+    animation: drift 25s linear infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulseSlow 4s ease-in-out infinite;
+}
+
+/* ---------------------------------
+   3. BACKGROUND ELEMENTS
+   --------------------------------- */
+.ai-grid-pattern {
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    width: 100%;
+    height: 200%; /* Double height for scrolling animation */
+    position: absolute;
+    top: -50%;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ai-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px); /* Heavy blur for soft glow */
+    opacity: 0.6;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ai-orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+    top: -100px;
+    left: -100px;
+}
+
+.ai-orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, rgba(255, 255, 255, 0) 70%); /* Violet hint */
+    bottom: 10%;
+    right: -50px;
+}
+
+.ai-orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, rgba(255, 255, 255, 0) 70%); /* Sky hint */
+    top: 40%;
+    left: 20%;
+}

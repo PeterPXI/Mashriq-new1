@@ -6,14 +6,18 @@
    ======================================== */
 
 const express = require('express');
+const http = require('http');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const rateLimit = require('express-rate-limit');
 
 // Utilities
 const { success, error } = require('./utils/apiResponse');
@@ -36,21 +40,95 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
-const aiRoutes = require('./routes/aiRoutes');
+const aiRoutes = require('./routes/ai');
+const noorRoutes = require('./routes/noorRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const referralRoutes = require('./routes/referralRoutes');
 const Favorite = require('./models/Favorite');
 
 const app = express();
-const JWT_SECRET = process.env.JWT_SECRET || 'mashriq_simple_secret';
+const server = http.createServer(app);
+const emailService = require('./services/EmailService');
+
+// CRITICAL: JWT_SECRET must be set and strong
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET || JWT_SECRET === 'CHANGE_THIS_TO_A_LONG_RANDOM_SECRET' || JWT_SECRET.length < 32) {
+    console.error('❌ CRITICAL: JWT_SECRET is not set or too weak! Set a strong secret (32+ chars) in .env');
+    if (process.env.NODE_ENV === 'production') {
+        process.exit(1); // Do not start in production with weak secret
+    }
+}
+
+// ============ RATE LIMITING ============
+
+// General API rate limit
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: { success: false, message: 'تم تجاوز عدد الطلبات المسموحة. يرجى المحاولة لاحقاً.', code: 'RATE_LIMIT_EXCEEDED' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Strict rate limit for auth endpoints (login, register)
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 20,
+    message: { success: false, message: 'محاولات كثيرة جداً. يرجى الانتظار 15 دقيقة.', code: 'AUTH_RATE_LIMIT' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Very strict rate limit for password reset (prevent abuse)
+const forgotPasswordLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5,
+    message: { success: false, message: 'تم تجاوز عدد محاولات إعادة تعيين كلمة المرور. يرجى الانتظار.', code: 'RESET_RATE_LIMIT' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Initialize Socket.IO
+const SocketService = require('./services/SocketService');
+SocketService.initialize(server);
+
+// Initialize Passport (Google OAuth)
+const initializePassport = require('./config/passport');
+initializePassport(app);
 
 // ============ MIDDLEWARE ============
 
 // Trust proxy for Railway/production environments
 app.set('trust proxy', 1);
 
-// CORS configuration for production
+// Force HTTPS in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            return res.redirect(301, `https://${req.hostname}${req.url}`);
+        }
+        next();
+    });
+}
+
+// Security headers via Helmet
+app.use(helmet({
+    contentSecurityPolicy: false, // Disabled for now (inline scripts in HTML)
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' } // Allow Cloudinary images
+}));
+
+// CORS configuration - whitelist-based
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: function(origin, callback) {
+      const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',').map(s => s.trim()).filter(Boolean);
+      // Allow requests with no origin (mobile apps, curl, same-origin)
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -127,13 +205,20 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), strip
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Security headers
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  next();
-});
+// Sanitize user input against NoSQL injection
+app.use(mongoSanitize());
+
+// Apply general rate limiting to all API routes
+app.use('/api/', apiLimiter);
+
+// Apply strict rate limiting to auth endpoints
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+app.use('/api/auth/forgot-password', forgotPasswordLimiter);
+app.use('/api/auth/reset-password', forgotPasswordLimiter);
+app.use('/api/auth/verify-reset-code', forgotPasswordLimiter);
+app.use('/api/auth/send-verification', forgotPasswordLimiter);
+app.use('/api/auth/verify-email', forgotPasswordLimiter);
 
 // Request logging
 app.use((req, res, next) => {
@@ -144,9 +229,38 @@ app.use((req, res, next) => {
 
 // ============ DATABASE CONNECTION ============
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+const connectDB = async (retries = 5) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await mongoose.connect(process.env.MONGO_URI, {
+        serverSelectionTimeoutMS: 15000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 15000,
+        maxPoolSize: 10,
+      });
+      console.log('✅ MongoDB Connected Successfully');
+      return;
+    } catch (err) {
+      console.error(`❌ MongoDB Connection Attempt ${i + 1}/${retries} Failed:`, err.message);
+      if (i < retries - 1) {
+        const wait = Math.min(1000 * Math.pow(2, i), 10000);
+        console.log(`⏳ Retrying in ${wait / 1000}s...`);
+        await new Promise(r => setTimeout(r, wait));
+      }
+    }
+  }
+  console.error('❌ MongoDB: All connection attempts failed. Server running without DB.');
+};
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️ MongoDB disconnected. Attempting reconnection...');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ MongoDB connection error:', err.message);
+});
+
+connectDB();
 
 const { authenticateToken } = require('./middlewares/authMiddleware');
 
@@ -177,10 +291,37 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
+// ============ OPTIONAL AUTH MIDDLEWARE ============
+// Reads token if present but doesn't require it
+const optionalAuth = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) {
+    return next(); // No token, continue without user
+  }
+  
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+  } catch (err) {
+    // Invalid token, continue without user
+  }
+  
+  next();
+};
+
 // ============ HEALTH CHECK ENDPOINT ============
 app.get('/api/health', (req, res) => {
   return success(res, 'API is healthy', { status: 'ok' });
 });
+
+// ============ AI ROUTES ============
+// AI routes are mounted below after authentication setup
+app.use('/api/noor', noorRoutes);
+
+// ============ REFERRAL ROUTES ============
+app.use('/api/referral', referralRoutes);
 
 // ============ STATS ROUTES (Public) ============
 
@@ -212,14 +353,19 @@ app.get('/api/stats/overview', async (req, res) => {
 // Register
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { fullName, username, email, password, role } = req.body;
+    const { fullName, username, email, password, role, referralCode } = req.body;
     
     if (!fullName || !username || !email || !password) {
       return error(res, 'جميع الحقول المطلوبة يجب ملؤها', 'MISSING_FIELDS', 400);
     }
     
-    if (password.length < 6) {
-      return error(res, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'INVALID_PASSWORD', 400);
+    if (password.length < 8) {
+      return error(res, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل', 'INVALID_PASSWORD', 400);
+    }
+    
+    // Require at least one letter and one number
+    if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+      return error(res, 'كلمة المرور يجب أن تحتوي على أحرف وأرقام', 'WEAK_PASSWORD', 400);
     }
 
     const userExists = await User.findOne({ 
@@ -241,9 +387,38 @@ app.post('/api/auth/register', async (req, res) => {
         role: userRole
     });
 
+    // Process referral if code provided
+    if (referralCode) {
+        try {
+            const ReferralController = require('./controllers/ReferralController');
+            await ReferralController.processReferral(user._id, referralCode);
+        } catch (refErr) {
+            console.error('Referral processing error (non-blocking):', refErr.message);
+        }
+    }
+
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
     
-    console.log(`🎉 New user registered: ${user.fullName} (${user.email})`);
+    console.log(`🎉 New user registered: ${user.username}${referralCode ? ' via referral' : ''}`);
+
+    // Auto-send verification code after registration (non-blocking)
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    user.emailVerificationCode = verificationCode;
+    user.emailVerificationExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    user.emailVerificationAttempts = 0;
+    user.emailVerificationLastSent = new Date();
+    user.save().then(() => {
+        // Send verification code email
+        emailService.sendVerificationCode(user.email, verificationCode, user.fullName).catch(err => {
+            console.error('Verification email error (non-blocking):', err.message);
+        });
+        // Send welcome email
+        emailService.sendWelcomeEmail(user.email, user.fullName).catch(err => {
+            console.error('Welcome email error (non-blocking):', err.message);
+        });
+    }).catch(err => {
+        console.error('Save verification code error (non-blocking):', err.message);
+    });
 
     return success(res, 'تم إنشاء الحساب بنجاح! مرحباً بك 🎉', {
       user: {
@@ -252,7 +427,8 @@ app.post('/api/auth/register', async (req, res) => {
           username: user.username,
           email: user.email,
           avatarUrl: user.avatarUrl,
-          role: user.role
+          role: user.role,
+          isEmailVerified: user.isEmailVerified
       },
       token
     }, 201);
@@ -282,6 +458,11 @@ app.post('/api/auth/login', async (req, res) => {
         return error(res, 'هذا الحساب معطّل', 'ACCOUNT_DISABLED', 401);
     }
     
+    // Check if this is a Google-only account (no password set)
+    if (user.googleId && !user.passwordHash) {
+        return error(res, 'هذا الحساب مسجل عبر Google. يرجى تسجيل الدخول بـ Google.', 'GOOGLE_ACCOUNT', 401);
+    }
+    
     const isMatch = await user.matchPassword(password);
     
     if (!isMatch) {
@@ -302,7 +483,8 @@ app.post('/api/auth/login', async (req, res) => {
           avatarUrl: user.avatarUrl,
           bannerUrl: user.bannerUrl,
           bio: user.bio,
-          role: user.role
+          role: user.role,
+          isEmailVerified: user.isEmailVerified
       },
       token
     });
@@ -378,8 +560,13 @@ app.put('/api/auth/password', authenticateToken, async (req, res) => {
       return error(res, 'يرجى إدخال كلمة المرور الحالية والجديدة', 'MISSING_FIELDS', 400);
     }
     
-    if (newPassword.length < 6) {
-      return error(res, 'كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', 'INVALID_PASSWORD', 400);
+    if (newPassword.length < 8) {
+      return error(res, 'كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل', 'INVALID_PASSWORD', 400);
+    }
+    
+    // Require at least one letter and one number
+    if (!/[a-zA-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      return error(res, 'كلمة المرور يجب أن تحتوي على أحرف وأرقام', 'WEAK_PASSWORD', 400);
     }
     
     const user = await User.findById(req.user.id);
@@ -420,7 +607,7 @@ app.post('/api/auth/activate-seller', authenticateToken, async (req, res) => {
     user.role = USER_ROLES.SELLER;
     await user.save();
     
-    console.log(`🎉 New seller activated: ${user.fullName} (${user.email})`);
+    console.log(`🎉 New seller activated: ${user.username}`);
     
     return success(res, 'تم تفعيل وضع البائع بنجاح! يمكنك الآن إضافة خدماتك 🎉', {
       user: {
@@ -631,7 +818,7 @@ app.get('/api/services', async (req, res) => {
 });
 
 // Get single service (public)
-app.get('/api/services/:id', async (req, res) => {
+app.get('/api/services/:id', optionalAuth, async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     
@@ -640,6 +827,12 @@ app.get('/api/services/:id', async (req, res) => {
     }
     
     const seller = await User.findById(service.sellerId).select('fullName username avatarUrl bio');
+    
+    // Track service view for referral anti-spam (if user is authenticated)
+    if (req.user && req.user.id) {
+      const ReferralController = require('./controllers/ReferralController');
+      ReferralController.trackServiceView(req.user.id);
+    }
     
     return success(res, 'تم جلب تفاصيل الخدمة بنجاح', { 
       service: service.toObject({ getters: true }),
@@ -684,7 +877,11 @@ app.post('/api/services', authenticateToken, requireSeller, upload.array('images
       sellerId: req.user.id,
     });
     
-    console.log(`✅ New service added: "${service.title}" by ${req.user.fullName}`);
+    console.log(`✅ New service added: "${service.title}" by ${req.user.username}`);
+    
+    // Track service publish for referral anti-spam
+    const ReferralController = require('./controllers/ReferralController');
+    ReferralController.trackServicePublish(req.user.id);
     
     return success(res, 'تم إضافة الخدمة بنجاح! 🎉', {
       service: service.toObject({ getters: true })
@@ -911,6 +1108,7 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🔌 WebSocket ready for connections`);
 });

@@ -21,6 +21,7 @@
 @import url('./design-system.css');
 @import url('./components.css');
 @import url('./layout.css');
+@import url('./components/skeleton.css');
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CUSTOM OVERRIDES (if needed)

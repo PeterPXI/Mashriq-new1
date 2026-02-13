@@ -42,6 +42,14 @@
             elements.userEmail.textContent = user?.email || '';
         }
         
+        // If user just registered, code was already sent → show code input directly
+        const cameFromRegistration = document.referrer.includes('register');
+        if (cameFromRegistration || sessionStorage.getItem('verification_code_sent')) {
+            elements.sendCodeSection?.classList.add('hidden');
+            elements.enterCodeSection?.classList.remove('hidden');
+            sessionStorage.setItem('verification_code_sent', 'true');
+        }
+        
         // Bind events
         elements.sendCodeBtn?.addEventListener('click', handleSendCode);
         elements.codeForm?.addEventListener('submit', handleVerify);
@@ -54,10 +62,13 @@
     }
     
     async function handleSendCode() {
-        Loader.buttonStart(elements.sendCodeBtn);
+        const btn = elements.sendCodeBtn;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'جاري الإرسال...';
         
         try {
-            const response = await API.post('/api/auth/send-verification');
+            const response = await API.post('/auth/send-verification');
             
             if (!response.success) {
                 throw new Error(response.message);
@@ -66,13 +77,15 @@
             // Show code input
             elements.sendCodeSection.classList.add('hidden');
             elements.enterCodeSection.classList.remove('hidden');
+            sessionStorage.setItem('verification_code_sent', 'true');
             
             Toast.success('تم الإرسال', 'تحقق من بريدك الإلكتروني');
             
         } catch (err) {
             showAlert('error', err.message || 'حدث خطأ في إرسال الرمز');
         } finally {
-            Loader.buttonStop(elements.sendCodeBtn);
+            btn.disabled = false;
+            btn.textContent = originalText;
         }
     }
     
@@ -86,10 +99,13 @@
             return;
         }
         
-        Loader.buttonStart(elements.verifyBtn);
+        const btn = elements.verifyBtn;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'جاري التحقق...';
         
         try {
-            const response = await API.post('/api/auth/verify-email', { code });
+            const response = await API.post('/auth/verify-email', { code });
             
             if (!response.success) {
                 throw new Error(response.message);
@@ -109,7 +125,8 @@
         } catch (err) {
             showError('codeError', err.message || 'الرمز غير صحيح');
         } finally {
-            Loader.buttonStop(elements.verifyBtn);
+            btn.disabled = false;
+            btn.textContent = originalText;
         }
     }
     

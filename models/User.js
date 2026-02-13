@@ -70,13 +70,24 @@ const userSchema = new mongoose.Schema({
     },
     
     /**
+     * Google OAuth ID.
+     * Present if user signed up/logged in via Google.
+     */
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows missing values while maintaining uniqueness
+    },
+    
+    /**
      * Hashed password.
      * NEVER stored in plain text.
      * Hashing is performed in pre-save hook.
+     * Not required for Google OAuth users.
      */
     passwordHash: {
         type: String,
-        required: [true, 'كلمة المرور مطلوبة']
+        required: false // Not required for Google OAuth users
     },
     
     /**
@@ -107,6 +118,26 @@ const userSchema = new mongoose.Schema({
     },
     
     /**
+     * Email verification attempt counter.
+     * Tracks failed verification attempts for brute-force protection.
+     * Code is invalidated after 5 failed attempts.
+     */
+    emailVerificationAttempts: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    
+    /**
+     * Last time a verification code was sent.
+     * Used to enforce cooldown between resends (2 minutes).
+     */
+    emailVerificationLastSent: {
+        type: Date,
+        default: null
+    },
+    
+    /**
      * Password reset token.
      * Used for password recovery flow.
      */
@@ -122,6 +153,17 @@ const userSchema = new mongoose.Schema({
     passwordResetExpiry: {
         type: Date,
         default: null
+    },
+    
+    /**
+     * Password reset attempt counter.
+     * Tracks failed verification attempts for brute-force protection.
+     * Code is invalidated after 5 failed attempts.
+     */
+    passwordResetAttempts: {
+        type: Number,
+        default: 0,
+        min: 0
     },
     
     // ============================================================
@@ -284,6 +326,144 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: null,
         min: 0
+    },
+    
+    // ============================================================
+    // AI USAGE & SUBSCRIPTION
+    // Tracks AI feature usage for Noor AI Hub.
+    // ============================================================
+    
+    /**
+     * User's AI subscription plan.
+     * free = limited usage, pro = unlimited, business = API access
+     */
+    aiPlan: {
+        type: String,
+        enum: ['free', 'pro', 'business'],
+        default: 'free'
+    },
+    
+    /**
+     * AI subscription expiry date.
+     * Null for free plan.
+     */
+    aiPlanExpiry: {
+        type: Date,
+        default: null
+    },
+    
+    /**
+     * Daily AI chat messages used.
+     * Resets at midnight.
+     */
+    aiChatUsageToday: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    
+    /**
+     * Last AI chat usage reset date.
+     */
+    aiChatLastReset: {
+        type: Date,
+        default: Date.now
+    },
+    
+    /**
+     * Monthly proposals generated.
+     * Resets monthly.
+     */
+    aiProposalsThisMonth: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    
+    /**
+     * Monthly content generation count.
+     * Resets monthly.
+     */
+    aiContentThisMonth: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    
+    /**
+     * Last monthly AI usage reset date.
+     */
+    aiMonthlyLastReset: {
+        type: Date,
+        default: Date.now
+    },
+    
+    // ============================================================
+    // REFERRAL SYSTEM
+    // Viral marketing - invite friends, earn Pro rewards
+    // ============================================================
+    
+    /**
+     * Unique referral code for this user.
+     * Format: 8 character alphanumeric.
+     * Used in invite links: mashriq.com/join/CODE
+     */
+    referralCode: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    
+    /**
+     * User ID who referred this user.
+     * Set at registration if referral code was used.
+     */
+    referredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
+    
+    /**
+     * Count of successful referrals.
+     * Incremented when referred user completes registration.
+     */
+    referralCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    
+    /**
+     * Referral rewards claimed.
+     * Tracks which milestones have been claimed.
+     */
+    referralRewardsClaimed: {
+        type: [Number], // [5, 10, 25, 50] - milestones claimed
+        default: []
+    },
+    
+    /**
+     * Referral status for this user (if referred by someone).
+     * 'pending' = registered but hasn't completed requirements
+     * 'active' = completed requirements, counts toward referrer's total
+     */
+    referralStatus: {
+        type: String,
+        enum: ['pending', 'active', null],
+        default: null // null if not referred
+    },
+    
+    /**
+     * Activity tracking for referred users.
+     * Both conditions must be met for referral to become 'active'.
+     */
+    referralActivities: {
+        hasViewedService: { type: Boolean, default: false },
+        hasPublishedService: { type: Boolean, default: false },
+        viewedServiceAt: { type: Date, default: null },
+        publishedServiceAt: { type: Date, default: null },
+        activatedAt: { type: Date, default: null }
     },
     
     // ============================================================

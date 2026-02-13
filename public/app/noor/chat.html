@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نور AI - شات | مشرق</title>
+    <link rel="icon" href="/app/assets/images/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f97316',
+                        dark: { 950: '#0a0a0a', 900: '#0d0d0d', 800: '#171717', 700: '#262626', 600: '#404040' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-dot {
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #525252;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-white min-h-screen">
+
+    <!-- Container -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar Container -->
+        <div id="noor-sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:mr-72 flex flex-col h-screen bg-dark-900">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-dark-700 sticky top-0 z-30"
+                style="background-color: #000000;">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu -->
+                    <button id="openSidebar"
+                        class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a href="/app/noor/" class="flex items-center gap-3 group">
+                        <img src="/app/assets/images/logo2.png" alt="مشرق"
+                            class="h-8 sm:h-10 group-hover:scale-105 transition-all">
+                        <div class="hidden sm:block">
+                            <h2 class="font-bold text-white text-lg">الشات العام</h2>
+                            <p class="text-xs text-gray-500">تحدث مع نور</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="clearChat"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all"
+                        title="محادثة جديدة">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Area -->
+            <div id="chatArea" class="flex-1 overflow-y-auto scrollbar-thin">
+
+                <!-- Welcome State -->
+                <div id="welcomeState" class="h-full flex flex-col items-center justify-center text-center p-6">
+                    <div
+                        class="w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-400 rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-2xl shadow-orange-500/30">
+                        <i class="fas fa-sun text-white"></i>
+                    </div>
+                    <h2 class="text-2xl lg:text-3xl font-bold mb-3 text-white">كيف يمكنني مساعدتك؟</h2>
+                    <p class="text-gray-400 mb-8 max-w-md">مرحباً! أنا نور، مساعدتك الذكية للعمل الحر. اسألني أي شيء!
+                    </p>
+
+                    <!-- Quick Actions -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl w-full">
+                        <button onclick="quickPrompt('اكتب لي عرض احترافي لمشروع تصميم شعار')"
+                            class="quick-action p-4 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-xl text-right transition-all group">
+                            <i class="fas fa-file-signature text-orange-400 text-lg mb-2"></i>
+                            <p class="font-medium text-white">اكتب لي عرض</p>
+                            <p class="text-sm text-gray-500">عرض احترافي لمشروع</p>
+                        </button>
+                        <button onclick="quickPrompt('أعطني نصائح لزيادة مبيعاتي كفريلانسر')"
+                            class="quick-action p-4 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-xl text-right transition-all group">
+                            <i class="fas fa-chart-line text-orange-400 text-lg mb-2"></i>
+                            <p class="font-medium text-white">نصائح للمبيعات</p>
+                            <p class="text-sm text-gray-500">كيف أزيد أرباحي</p>
+                        </button>
+                        <button onclick="quickPrompt('اكتب لي بوست لإنستغرام عن خدماتي في التصميم')"
+                            class="quick-action p-4 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-xl text-right transition-all group">
+                            <i class="fab fa-instagram text-orange-400 text-lg mb-2"></i>
+                            <p class="font-medium text-white">محتوى سوشيال</p>
+                            <p class="text-sm text-gray-500">بوست لإنستغرام</p>
+                        </button>
+                        <button onclick="quickPrompt('كيف أحسن ملفي الشخصي ليجذب المزيد من العملاء؟')"
+                            class="quick-action p-4 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-xl text-right transition-all group">
+                            <i class="fas fa-user-check text-orange-400 text-lg mb-2"></i>
+                            <p class="font-medium text-white">تحسين البروفايل</p>
+                            <p class="text-sm text-gray-500">نصائح للملف الشخصي</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="hidden p-4 lg:p-6 space-y-4 max-w-4xl mx-auto pb-24">
+                    <!-- Messages will be added here -->
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="sticky bottom-0 p-4 bg-gradient-to-t from-dark-900 via-dark-900 to-transparent">
+                <div class="max-w-3xl mx-auto">
+                    <div
+                        class="flex items-end gap-3 bg-dark-800 rounded-full p-3 border border-dark-600 focus-within:border-orange-500/50 transition-all shadow-lg">
+                        <!-- Attachment button hidden - not supported yet -->
+                        <textarea id="messageInput" rows="1" placeholder="اكتب رسالتك هنا..."
+                            class="flex-1 bg-transparent resize-none outline-none text-white placeholder-gray-500 max-h-36 min-h-[24px]"
+                            onkeydown="handleKeyDown(event)"></textarea>
+                        <button id="sendBtn" onclick="sendMessage()"
+                            class="p-3 px-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/20">
+                            <i class="fas fa-paper-plane text-white"></i>
+                        </button>
+                    </div>
+                    <p class="text-center text-xs text-gray-600 mt-3">
+                        <i class="fas fa-info-circle ml-1"></i>
+                        نور قد تُخطئ. تحقق من المعلومات المهمة.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/noor-sidebar.js"></script>
+    <script src="/app/js/components/noor-dropdown.js"></script>
+    <script>
+        // State
+        const state = {
+            conversationId: null,
+            conversationHistory: [],
+            isTyping: false
+        };
+
+        // Elements
+        const elements = {
+            chatArea: document.getElementById('chatArea'),
+            welcomeState: document.getElementById('welcomeState'),
+            messagesContainer: document.getElementById('messagesContainer'),
+            messageInput: document.getElementById('messageInput'),
+            sendBtn: document.getElementById('sendBtn')
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            // Require login to access Noor AI
+            if (!Auth.requireAuth()) return;
+
+            NoorSidebar.init('chat');
+            NoorDropdown.init();
+            autoResizeTextarea();
+
+            // Generate conversation ID
+            state.conversationId = 'conv_' + Date.now();
+
+            // Clear chat button
+            document.getElementById('clearChat')?.addEventListener('click', newChat);
+
+            // Mobile sidebar toggle
+            document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+        });
+
+        // Auto-resize textarea
+        function autoResizeTextarea() {
+            elements.messageInput.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 144) + 'px';
+            });
+        }
+
+        // Handle keyboard
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Quick prompt
+        function quickPrompt(text) {
+            elements.messageInput.value = text;
+            sendMessage();
+        }
+
+        // New Chat
+        function newChat() {
+            state.conversationHistory = [];
+            state.conversationId = 'conv_' + Date.now();
+            elements.messagesContainer.innerHTML = '';
+            elements.messagesContainer.classList.add('hidden');
+            elements.welcomeState.classList.remove('hidden');
+            elements.messageInput.value = '';
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const message = elements.messageInput.value.trim();
+            if (!message || state.isTyping) return;
+
+            // Hide welcome, show messages
+            elements.welcomeState.classList.add('hidden');
+            elements.messagesContainer.classList.remove('hidden');
+
+            // Add user message
+            addMessage(message, 'user');
+            elements.messageInput.value = '';
+            elements.messageInput.style.height = 'auto';
+
+            // Show typing
+            state.isTyping = true;
+            elements.sendBtn.disabled = true;
+            const typingEl = addTypingIndicator();
+
+            try {
+                const result = await API.request('/noor/chat', {
+                    method: 'POST',
+                    body: {
+                        message,
+                        conversationHistory: state.conversationHistory
+                    }
+                });
+
+                typingEl.remove();
+
+                if (result.limitReached) {
+                    addMessage(result.message, 'noor', true);
+                } else if (result.success) {
+                    addMessage(result.response, 'noor');
+
+                    state.conversationHistory.push(
+                        { role: 'user', content: message },
+                        { role: 'assistant', content: result.response }
+                    );
+
+                    // Save conversation
+                    const title = state.conversationHistory[0]?.content.substring(0, 30) + '...' || 'محادثة جديدة';
+                    NoorSidebar.saveConversation(state.conversationId, title, state.conversationHistory);
+
+                    // Refresh usage
+                    NoorSidebar.loadUsage();
+                }
+
+            } catch (error) {
+                typingEl.remove();
+                addMessage('عذراً، حدث خطأ. حاول مرة أخرى.', 'noor', true);
+            } finally {
+                state.isTyping = false;
+                elements.sendBtn.disabled = false;
+            }
+        }
+
+        // Add Message
+        function addMessage(content, type, isError = false) {
+            const div = document.createElement('div');
+            div.className = `chat-message flex gap-3 ${type === 'user' ? 'flex-row-reverse' : ''}`;
+
+            // Get user data for avatar
+            const userData = window.Auth?.user;
+            const avatarClass = type === 'user'
+                ? 'bg-gradient-to-br from-orange-500 to-amber-500'
+                : 'bg-gradient-to-br from-orange-500 to-amber-400';
+
+            const avatarIcon = type === 'user' ? 'fa-user' : 'fa-sun';
+            const bgClass = type === 'user'
+                ? 'bg-dark-700'
+                : isError ? 'bg-red-500/10 border border-red-500/30' : 'bg-dark-800 border border-dark-600';
+
+            // Create avatar HTML based on user type
+            let avatarHtml = '';
+            if (type === 'user' && userData?.profileImage) {
+                avatarHtml = `<img src="${userData.profileImage}" alt="" class="w-8 h-8 rounded-lg object-cover">`;
+            } else {
+                const initial = type === 'user' && userData?.name ? userData.name.charAt(0).toUpperCase() : '';
+                avatarHtml = type === 'user' && initial
+                    ? `<span class="text-white font-bold text-sm">${initial}</span>`
+                    : `<i class="fas ${avatarIcon} text-white"></i>`;
+            }
+
+            div.innerHTML = `
+                <div class="w-8 h-8 ${avatarClass} rounded-lg flex items-center justify-center text-sm flex-shrink-0 shadow-lg">
+                    ${avatarHtml}
+                </div>
+                <div class="${bgClass} rounded-2xl p-4 max-w-[85%] lg:max-w-[75%]">
+                    <p class="text-gray-100 leading-relaxed whitespace-pre-wrap">${escapeHtml(content)}</p>
+                    ${type === 'noor' && !isError ? `
+                        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-dark-600">
+                            <button onclick="copyText(this)" class="text-xs text-gray-500 hover:text-orange-400 transition-colors" data-content="${escapeHtml(content)}">
+                                <i class="fas fa-copy ml-1"></i> نسخ
+                            </button>
+                            <button onclick="regenerate()" class="text-xs text-gray-500 hover:text-orange-400 transition-colors">
+                                <i class="fas fa-redo ml-1"></i> إعادة
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            elements.messagesContainer.appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        // Typing Indicator
+        function addTypingIndicator() {
+            const div = document.createElement('div');
+            div.className = 'chat-message flex gap-4';
+            div.id = 'typingIndicator';
+            div.innerHTML = `
+                <div class="w-9 h-9 bg-gradient-to-br from-orange-500 to-amber-400 rounded-xl flex items-center justify-center text-sm flex-shrink-0 shadow-lg">
+                    <i class="fas fa-sun text-white"></i>
+                </div>
+                <div class="bg-dark-800 border border-dark-600 rounded-2xl p-4">
+                    <div class="flex gap-1.5">
+                        <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
+                        <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
+                        <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
+                    </div>
+                </div>
+            `;
+            elements.messagesContainer.appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            return div;
+        }
+
+        // Copy text
+        function copyText(btn) {
+            const content = btn.dataset.content;
+            navigator.clipboard.writeText(content).then(() => {
+                btn.innerHTML = '<i class="fas fa-check ml-1"></i> تم النسخ';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy ml-1"></i> نسخ';
+                }, 2000);
+            });
+        }
+
+        // Regenerate last response
+        async function regenerate() {
+            if (state.conversationHistory.length >= 2) {
+                // Get last user message
+                const lastUserMessage = state.conversationHistory[state.conversationHistory.length - 2].content;
+
+                // Remove last exchange
+                state.conversationHistory.pop();
+                state.conversationHistory.pop();
+
+                // Remove last 2 messages from UI
+                const messages = elements.messagesContainer.querySelectorAll('.chat-message');
+                if (messages.length >= 2) {
+                    messages[messages.length - 1].remove();
+                    messages[messages.length - 2].remove();
+                }
+
+                // Resend
+                elements.messageInput.value = lastUserMessage;
+                sendMessage();
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>

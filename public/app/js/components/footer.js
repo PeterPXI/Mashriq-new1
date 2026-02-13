@@ -18,25 +18,13 @@ const Footer = {
         const currentYear = new Date().getFullYear();
         
         container.innerHTML = `
-            <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-auto">
+            <footer class="text-gray-300 pt-12 pb-6 mt-auto" style="background-color: #000000;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-gray-800">
                         <!-- Brand -->
                         <div>
                             <div class="flex items-center gap-2 mb-4">
-                                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-                                    <rect width="40" height="40" rx="10" fill="url(#footer-logo-gradient)"/>
-                                    <path d="M12 28V15L20 10L28 15V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M20 28V20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                                    <circle cx="20" cy="15" r="2" fill="white"/>
-                                    <defs>
-                                        <linearGradient id="footer-logo-gradient" x1="0" y1="0" x2="40" y2="40">
-                                            <stop stop-color="#F97316"/>
-                                            <stop offset="1" stop-color="#EA580C"/>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <span class="text-white text-xl font-bold">مشرق</span>
+                                <img src="/app/assets/images/logo2.png" alt="مشرق" class="h-10">
                             </div>
                             <p class="text-gray-400 text-sm leading-relaxed">
                                 منصة عربية موثوقة لبيع وشراء الخدمات الرقمية. نربط بين أصحاب المواهب والباحثين عن خدمات احترافية.

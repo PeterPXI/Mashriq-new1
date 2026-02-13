@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'mashriq_simple_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error('❌ CRITICAL: JWT_SECRET is not set in environment variables!');
+}
 
 const { error } = require('../utils/apiResponse');
 
@@ -40,4 +43,25 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticateToken };
+/**
+ * Optional Authentication Middleware
+ * Tries to authenticate but doesn't require it
+ */
+const optionalAuth = async (req, res, next) => {
+  let token;
+  
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-passwordHash');
+    } catch (err) {
+      // Silently fail - user is just not authenticated
+      req.user = null;
+    }
+  }
+  
+  next();
+};
+
+module.exports = { authenticateToken, optionalAuth };

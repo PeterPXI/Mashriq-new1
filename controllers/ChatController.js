@@ -258,7 +258,62 @@ class ChatController {
             return error(res, 'حدث خطأ في جلب المحادثات', 'GET_CHATS_ERROR', 500);
         }
     }
+    
+    /**
+     * Mark all messages in a chat as read.
+     * 
+     * @route PUT /api/chats/:chatId/read
+     * @access Private (Buyer/Seller)
+     */
+    async markAsRead(req, res) {
+        try {
+            const { chatId } = req.params;
+            
+            if (!chatId) {
+                return error(res, 'معرّف المحادثة مطلوب', 'CHAT_ID_REQUIRED', 400);
+            }
+            
+            const markedCount = await ChatService.markMessagesAsRead(chatId, req.user._id);
+            
+            return success(res, 'تم تحديث حالة القراءة', {
+                markedCount
+            });
+            
+        } catch (err) {
+            console.error('Mark as read error:', err);
+            
+            if (err.message.includes('صلاحية')) {
+                return error(res, err.message, 'FORBIDDEN', 403);
+            }
+            if (err.message.includes('غير موجود')) {
+                return error(res, err.message, 'NOT_FOUND', 404);
+            }
+            
+            return error(res, 'حدث خطأ في تحديث حالة القراءة', 'MARK_READ_ERROR', 500);
+        }
+    }
+    
+    /**
+     * Get total unread message count for authenticated user.
+     * 
+     * @route GET /api/chats/unread-count
+     * @access Private
+     */
+    async getUnreadCount(req, res) {
+        try {
+            const count = await ChatService.getUnreadCountForUser(req.user._id);
+            
+            return success(res, 'تم جلب عدد الرسائل غير المقروءة', {
+                unreadCount: count
+            });
+            
+        } catch (err) {
+            console.error('Get unread count error:', err);
+            return error(res, 'حدث خطأ في جلب عدد الرسائل', 'GET_UNREAD_ERROR', 500);
+        }
+    }
 }
 
 // Export singleton instance
 module.exports = new ChatController();
+

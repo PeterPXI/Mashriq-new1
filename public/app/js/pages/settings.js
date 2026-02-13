@@ -59,11 +59,13 @@
         
         updateAvatarPreview(user.avatar, user.fullName);
         
-        elements.sellerSection.classList.remove('hidden');
-        if (user.isSeller || user.role === 'seller') {
+        // Handle seller section visibility
+        if (user.isSeller || user.role === 'seller' || user.role === 'admin') {
+            // User is already a seller - hide activation, show activated state
             elements.sellerNotActivated.classList.add('hidden');
             elements.sellerActivated.classList.remove('hidden');
         } else {
+            // User is a buyer - show activation button
             elements.sellerNotActivated.classList.remove('hidden');
             elements.sellerActivated.classList.add('hidden');
         }

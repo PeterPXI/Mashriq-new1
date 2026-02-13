@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كاتب العروض - نور AI | مشرق</title>
+    <link rel="icon" href="/app/assets/images/favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f97316',
+                        dark: { 950: '#0a0a0a', 900: '#0d0d0d', 800: '#171717', 700: '#262626', 600: '#404040' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-white min-h-screen">
+
+    <!-- Container -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar Container -->
+        <div id="noor-sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:mr-72 flex flex-col h-screen bg-dark-900">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-dark-700 sticky top-0 z-30"
+                style="background-color: #000000;">
+                <div class="flex items-center gap-4">
+                    <!-- Mobile Menu -->
+                    <button id="openSidebar"
+                        class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-dark-700 rounded-lg transition-all">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- Logo -->
+                    <a href="/app/noor/" class="flex items-center gap-3 group">
+                        <img src="/app/assets/images/logo2.png" alt="مشرق"
+                            class="h-8 sm:h-10 group-hover:scale-105 transition-all">
+                        <div class="hidden sm:block">
+                            <h2 class="font-bold text-white text-lg">كاتب العروض</h2>
+                            <p class="text-xs text-gray-500">عروض احترافية</p>
+                        </div>
+                    </a>
+                </div>
+
+                <span class="text-sm text-gray-400" id="usageDisplay">
+                    <i class="fas fa-file-alt ml-1"></i>
+                    <span id="usageText">-- عروض</span>
+                </span>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin p-4 lg:p-6">
+                <div class="max-w-3xl mx-auto">
+
+                    <!-- Intro -->
+                    <div class="text-center mb-8">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-orange-500/30">
+                            <i class="fas fa-file-signature text-3xl text-white"></i>
+                        </div>
+                        <h1 class="text-2xl font-bold mb-2 text-white">اكتب عرضاً يفوز</h1>
+                        <p class="text-gray-400">أدخل تفاصيل المشروع وسأكتب لك عرضاً احترافياً ومقنعاً</p>
+                    </div>
+
+                    <!-- Templates -->
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-500 mb-3">
+                            <i class="fas fa-bolt text-orange-400 ml-1"></i>
+                            قوالب سريعة
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="useTemplate('design')"
+                                class="template-btn px-4 py-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-lg text-sm text-gray-300 hover:text-white transition-all">
+                                <i class="fas fa-palette ml-1"></i> تصميم
+                            </button>
+                            <button onclick="useTemplate('web')"
+                                class="template-btn px-4 py-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-lg text-sm text-gray-300 hover:text-white transition-all">
+                                <i class="fas fa-code ml-1"></i> برمجة
+                            </button>
+                            <button onclick="useTemplate('writing')"
+                                class="template-btn px-4 py-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-lg text-sm text-gray-300 hover:text-white transition-all">
+                                <i class="fas fa-pen ml-1"></i> كتابة
+                            </button>
+                            <button onclick="useTemplate('marketing')"
+                                class="template-btn px-4 py-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-lg text-sm text-gray-300 hover:text-white transition-all">
+                                <i class="fas fa-bullhorn ml-1"></i> تسويق
+                            </button>
+                            <button onclick="useTemplate('translation')"
+                                class="template-btn px-4 py-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-orange-500/30 rounded-lg text-sm text-gray-300 hover:text-white transition-all">
+                                <i class="fas fa-language ml-1"></i> ترجمة
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="proposalForm" class="space-y-5">
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-heading text-orange-400 ml-1"></i>
+                                    عنوان المشروع *
+                                </label>
+                                <input type="text" id="projectTitle" required
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500"
+                                    placeholder="مثال: تصميم شعار لمطعم">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-dollar-sign text-orange-400 ml-1"></i>
+                                    السعر المقترح ($)
+                                </label>
+                                <input type="number" id="price"
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500"
+                                    placeholder="50">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                <i class="fas fa-align-left text-orange-400 ml-1"></i>
+                                وصف المشروع *
+                            </label>
+                            <textarea id="projectDescription" required rows="4"
+                                class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500 resize-none"
+                                placeholder="صف المشروع الذي تريد التقدم له بالتفصيل..."></textarea>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-clock text-orange-400 ml-1"></i>
+                                    مدة التنفيذ (أيام)
+                                </label>
+                                <input type="number" id="deliveryDays"
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500"
+                                    placeholder="3">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    <i class="fas fa-star text-orange-400 ml-1"></i>
+                                    خبرتك (اختياري)
+                                </label>
+                                <input type="text" id="experience"
+                                    class="w-full px-4 py-3 bg-dark-800 border border-dark-600 rounded-xl focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all text-white placeholder-gray-500"
+                                    placeholder="5 سنوات في التصميم">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="generateBtn"
+                            class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-orange-500/20">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <span>إنشاء العرض</span>
+                        </button>
+                    </form>
+
+                    <!-- Result -->
+                    <div id="result" class="hidden mt-8 animate-fadeIn">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white">
+                                <i class="fas fa-check-circle text-green-400 ml-2"></i>
+                                العرض الاحترافي
+                            </h3>
+                            <div class="flex gap-2">
+                                <button onclick="copyResult()"
+                                    class="px-4 py-2 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm transition-all flex items-center gap-2 text-gray-300 hover:text-white">
+                                    <i class="fas fa-copy"></i>
+                                    <span>نسخ</span>
+                                </button>
+                                <button onclick="regenerateProposal()"
+                                    class="px-4 py-2 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm transition-all flex items-center gap-2 text-gray-300 hover:text-white">
+                                    <i class="fas fa-redo"></i>
+                                    <span>نسخة أخرى</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-gradient-to-br from-dark-800 to-dark-700 border border-orange-500/30 rounded-2xl p-6 shadow-xl">
+                            <pre id="resultText"
+                                class="whitespace-pre-wrap text-gray-100 leading-relaxed font-sans"></pre>
+                        </div>
+                    </div>
+
+                    <!-- Saved Proposals -->
+                    <div id="savedProposals" class="mt-8 hidden">
+                        <h3 class="text-lg font-bold text-white mb-4">
+                            <i class="fas fa-history text-orange-400 ml-2"></i>
+                            العروض السابقة
+                        </h3>
+                        <div id="proposalsList" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/noor-sidebar.js"></script>
+    <script src="/app/js/components/noor-dropdown.js"></script>
+    <script>
+        // Templates
+        const templates = {
+            design: { title: 'تصميم شعار', desc: 'تصميم شعار احترافي مع هوية بصرية' },
+            web: { title: 'تطوير موقع', desc: 'تطوير موقع ويب متجاوب باستخدام أحدث التقنيات' },
+            writing: { title: 'كتابة محتوى', desc: 'كتابة محتوى احترافي ومتوافق مع SEO' },
+            marketing: { title: 'حملة تسويقية', desc: 'إدارة حملة تسويقية على منصات السوشيال' },
+            translation: { title: 'ترجمة نص', desc: 'ترجمة نص من العربية للإنجليزية أو العكس' }
+        };
+
+        // Use template
+        function useTemplate(type) {
+            const template = templates[type];
+            if (template) {
+                document.getElementById('projectTitle').value = template.title;
+                document.getElementById('projectDescription').value = template.desc;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Require login to access Noor AI
+            if (!Auth.requireAuth()) return;
+
+            NoorSidebar.init('proposals');
+            NoorDropdown.init();
+            loadSavedProposals();
+
+            // Load usage
+            try {
+                const result = await API.request('/noor/usage', { method: 'GET' });
+                if (result.success && result.remaining) {
+                    document.getElementById('usageText').textContent =
+                        result.remaining.proposals === -1 ? 'غير محدود' : `${result.remaining.proposals} عروض متبقية`;
+                }
+            } catch (e) { }
+
+            // Mobile sidebar
+            document.getElementById('openSidebar')?.addEventListener('click', () => NoorSidebar.toggle(true));
+        });
+
+        // Form submit
+        document.getElementById('proposalForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            await generateProposal();
+        });
+
+        // Generate proposal
+        async function generateProposal() {
+            const btn = document.getElementById('generateBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>جاري الإنشاء...</span>';
+            btn.disabled = true;
+
+            try {
+                const data = {
+                    projectTitle: document.getElementById('projectTitle').value,
+                    projectDescription: document.getElementById('projectDescription').value,
+                    price: document.getElementById('price').value,
+                    deliveryDays: document.getElementById('deliveryDays').value,
+                    experience: document.getElementById('experience').value
+                };
+
+                const result = await API.request('/noor/proposal', {
+                    method: 'POST',
+                    body: data
+                });
+
+                if (result.limitReached) {
+                    alert(result.message);
+                } else if (result.success) {
+                    document.getElementById('resultText').textContent = result.proposal;
+                    document.getElementById('result').classList.remove('hidden');
+                    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+                    // Save proposal
+                    saveProposal(data.projectTitle, result.proposal);
+                    NoorSidebar.loadUsage();
+                }
+
+            } catch (error) {
+                alert('حدث خطأ، حاول مرة أخرى');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Regenerate
+        function regenerateProposal() {
+            generateProposal();
+        }
+
+        // Copy result
+        function copyResult() {
+            const text = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('تم النسخ بنجاح!');
+            });
+        }
+
+        // Save proposal to localStorage
+        function saveProposal(title, content) {
+            const proposals = JSON.parse(localStorage.getItem('noor_proposals') || '[]');
+            proposals.unshift({
+                id: Date.now(),
+                title,
+                content,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('noor_proposals', JSON.stringify(proposals.slice(0, 10)));
+            loadSavedProposals();
+        }
+
+        // Load saved proposals
+        function loadSavedProposals() {
+            const proposals = JSON.parse(localStorage.getItem('noor_proposals') || '[]');
+            const container = document.getElementById('savedProposals');
+            const list = document.getElementById('proposalsList');
+
+            if (proposals.length > 0) {
+                container.classList.remove('hidden');
+                list.innerHTML = proposals.map(p => `
+                    <div class="bg-dark-800 border border-dark-600 rounded-xl p-4 hover:border-orange-500/30 transition-all cursor-pointer" onclick="loadProposal('${p.content.replace(/'/g, "\\'")}')">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-white">${p.title}</span>
+                            <span class="text-xs text-gray-500">${new Date(p.createdAt).toLocaleDateString('ar')}</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2 line-clamp-2">${p.content.substring(0, 100)}...</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Load proposal
+        function loadProposal(content) {
+            document.getElementById('resultText').textContent = content;
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

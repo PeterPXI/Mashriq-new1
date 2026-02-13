@@ -156,39 +156,58 @@
                 const categories = CONFIG.CATEGORIES.map(c => c.name);
                 const result = await MashriqAI.smartSearch(query, categories);
                 
-                // Apply the search result
+                console.log('🤖 AI Search Result:', result);
+                
+                // استخدام كل الكلمات المفتاحية المستخرجة (مُحسّن)
                 if (result.searchTerms && result.searchTerms.length > 0) {
-                    const searchTerm = result.searchTerms[0];
+                    // اجمع الكلمات المفتاحية في نص بحث واحد
+                    const searchTerm = result.searchTerms.join(' ');
                     state.filters.search = searchTerm;
                     if (elements.searchInput) elements.searchInput.value = searchTerm;
                 }
                 
+                // مطابقة التخصص بالـ ID مباشرة (محسّن)
                 if (result.suggestedCategory) {
-                    // Find matching category
-                    const cat = CONFIG.CATEGORIES.find(c => 
-                        c.name.includes(result.suggestedCategory) || 
-                        result.suggestedCategory.includes(c.name)
-                    );
-                    if (cat) {
-                        state.filters.category = cat.id;
-                        if (elements.categoryFilter) elements.categoryFilter.value = cat.id;
+                    const categoryId = result.suggestedCategory;
+                    // تحقق إذا كان ID مباشر
+                    const catById = CONFIG.CATEGORIES.find(c => c.id === categoryId);
+                    if (catById) {
+                        state.filters.category = catById.id;
+                        if (elements.categoryFilter) elements.categoryFilter.value = catById.id;
+                    } else {
+                        // أو ابحث بالاسم
+                        const catByName = CONFIG.CATEGORIES.find(c => 
+                            c.name.includes(result.suggestedCategory) || 
+                            result.suggestedCategory.includes(c.name)
+                        );
+                        if (catByName) {
+                            state.filters.category = catByName.id;
+                            if (elements.categoryFilter) elements.categoryFilter.value = catByName.id;
+                        }
                     }
+                }
+                
+                // تطبيق نطاق السعر إذا وجد
+                if (result.priceRange) {
+                    state.filters.minPrice = result.priceRange.min || '';
+                    state.filters.maxPrice = result.priceRange.max || '';
                 }
                 
                 state.currentPage = 1;
                 await loadServices();
                 
-                // Show tips toast
+                // عرض نصيحة AI
                 if (result.tips && result.tips.length > 0) {
                     Toast.info('💡 نصيحة', result.tips[0]);
                 }
                 
-                // Hide AI section after search
+                // إخفاء قسم AI بعد البحث
                 aiSection?.classList.add('hidden');
                 toggleText.textContent = 'جرّب البحث الذكي';
                 isAISearchVisible = false;
                 
             } catch (error) {
+                console.error('AI Search Error:', error);
                 Toast.error('خطأ', error.message || 'فشل البحث الذكي');
             } finally {
                 MashriqAI.setButtonLoading(smartSearchBtn, false);

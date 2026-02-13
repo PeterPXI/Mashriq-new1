@@ -124,9 +124,19 @@ class ChatService {
         }
         
         // ============================================================
-        // STEP 2: Get chat
+        // STEP 2: Get chat with populated fields
         // ============================================================
-        const chat = await Chat.findById(chatId);
+        const chat = await Chat.findById(chatId)
+            .populate('buyerId', 'fullName username avatarUrl')
+            .populate('sellerId', 'fullName username avatarUrl')
+            .populate({
+                path: 'orderId',
+                select: 'snapshotTitle status serviceId',
+                populate: {
+                    path: 'serviceId',
+                    select: 'title'
+                }
+            });
         
         if (!chat) {
             throw new Error('المحادثة غير موجودة');
@@ -137,8 +147,10 @@ class ChatService {
         // Constitution: Only buyer and seller can access chat
         // ============================================================
         const userIdStr = userId.toString();
-        const isBuyer = chat.buyerId.toString() === userIdStr;
-        const isSeller = chat.sellerId.toString() === userIdStr;
+        const buyerIdStr = chat.buyerId?._id?.toString() || chat.buyerId?.toString();
+        const sellerIdStr = chat.sellerId?._id?.toString() || chat.sellerId?.toString();
+        const isBuyer = buyerIdStr === userIdStr;
+        const isSeller = sellerIdStr === userIdStr;
         
         if (!isBuyer && !isSeller) {
             throw new Error('ليس لديك صلاحية للوصول لهذه المحادثة');
@@ -183,9 +195,10 @@ class ChatService {
         }
         
         // ============================================================
-        // STEP 3: Get messages
+        // STEP 3: Get messages with sender info
         // ============================================================
         const messages = await Message.find(query)
+            .populate('senderId', 'fullName username avatarUrl')
             .sort({ createdAt: 1 })  // Oldest first (chronological)
             .limit(Math.min(limit, 200));  // Cap at 200
         
@@ -271,9 +284,40 @@ class ChatService {
         chat.updatedAt = new Date();
         await chat.save();
         
+        // ============================================================
+        // STEP 7: Populate sender info for the response
+        // ============================================================
+        const populatedMessage = await Message.findById(message._id)
+            .populate('senderId', 'fullName username avatarUrl');
+        
+        // ============================================================
+        // STEP 8: Emit via WebSocket for real-time delivery
+        // ============================================================
+        try {
+            const SocketService = require('./SocketService');
+            
+            // Emit to chat room
+            SocketService.emitNewMessage(chatId, populatedMessage);
+            
+            // Send notification to the other user
+            const recipientId = chat.buyerId.toString() === senderId.toString() 
+                ? chat.sellerId.toString() 
+                : chat.buyerId.toString();
+            
+            // Update unread count for recipient if they're online
+            if (!SocketService.isUserOnline(recipientId)) {
+                // User is offline, they'll get the message on next poll/load
+                console.log(`📭 Recipient ${recipientId} is offline, message saved for later`);
+            }
+            
+        } catch (socketErr) {
+            // Socket errors should not break message sending
+            console.error('Socket emit error (non-critical):', socketErr.message);
+        }
+        
         console.log(`💬 Message sent in chat ${chatId} by ${senderId}`);
         
-        return message;
+        return populatedMessage;
     }
     
     // ============================================================
@@ -303,7 +347,26 @@ class ChatService {
         .populate('sellerId', 'fullName username avatarUrl')
         .populate('orderId', 'snapshotTitle status')
         .sort({ updatedAt: -1 })  // Most recent first
-        .limit(Math.min(limit, 100));  // Cap at 100
+        .limit(Math.min(limit, 100))  // Cap at 100
+        .lean();  // Convert to plain objects for modification
+        
+        // Get last message for each chat
+        const Message = require('../models/Message');
+        for (const chat of chats) {
+            const lastMessage = await Message.findOne({ chatId: chat._id })
+                .sort({ createdAt: -1 })
+                .select('content createdAt senderId isSystemMessage')
+                .lean();
+            chat.lastMessage = lastMessage;
+            
+            // Count unread messages for this user
+            const unreadCount = await Message.countDocuments({
+                chatId: chat._id,
+                senderId: { $ne: userId },
+                isRead: false
+            });
+            chat.unreadCount = unreadCount;
+        }
         
         return chats;
     }
@@ -359,6 +422,109 @@ class ChatService {
         } catch {
             return false;
         }
+    }
+    
+    // ============================================================
+    // MARK MESSAGES AS READ
+    // ============================================================
+    
+    /**
+     * Mark all messages in a chat as read for a user.
+     * Only marks messages sent by the OTHER user (not your own messages).
+     * 
+     * @param {string} chatId - Chat ID
+     * @param {string} userId - User marking messages as read
+     * @returns {Promise<number>} Number of messages marked as read
+     */
+    async markMessagesAsRead(chatId, userId) {
+        if (!chatId || !userId) {
+            throw new Error('معرّف المحادثة والمستخدم مطلوبان');
+        }
+        
+        // Validate user has access
+        const chat = await this.getChatById(chatId, userId);
+        
+        // Mark messages NOT sent by this user as read
+        const result = await Message.updateMany(
+            {
+                chatId: chat._id,
+                senderId: { $ne: userId },  // Not sent by this user
+                isRead: false
+            },
+            {
+                $set: {
+                    isRead: true,
+                    readAt: new Date()
+                }
+            }
+        );
+        
+        return result.modifiedCount;
+    }
+    
+    // ============================================================
+    // GET UNREAD COUNT FOR CHAT
+    // ============================================================
+    
+    /**
+     * Get the count of unread messages in a chat for a user.
+     * 
+     * @param {string} chatId - Chat ID
+     * @param {string} userId - User to count unread for
+     * @returns {Promise<number>} Unread message count
+     */
+    async getUnreadCount(chatId, userId) {
+        if (!chatId || !userId) {
+            return 0;
+        }
+        
+        const count = await Message.countDocuments({
+            chatId,
+            senderId: { $ne: userId },  // Not sent by this user
+            isRead: false
+        });
+        
+        return count;
+    }
+    
+    // ============================================================
+    // GET TOTAL UNREAD COUNT FOR USER
+    // ============================================================
+    
+    /**
+     * Get total unread messages across all chats for a user.
+     * Used for notification badge in navbar.
+     * 
+     * @param {string} userId - User ID
+     * @returns {Promise<number>} Total unread message count
+     */
+    async getUnreadCountForUser(userId) {
+        if (!userId) {
+            return 0;
+        }
+        
+        // Get all chats for this user
+        const chats = await Chat.find({
+            $or: [
+                { buyerId: userId },
+                { sellerId: userId }
+            ]
+        }).select('_id');
+        
+        if (chats.length === 0) {
+            return 0;
+        }
+        
+        const chatIds = chats.map(c => c._id);
+        
+        // Count unread messages not sent by this user
+        const count = await Message.countDocuments({
+            chatId: { $in: chatIds },
+            senderId: { $ne: userId },
+            isRead: false
+        });
+        
+        return count;
     }
 }
 

@@ -9,7 +9,7 @@
     <title>تفاصيل الطلب | مشرق</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+    <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
@@ -120,40 +120,43 @@
                     </div>
 
                     <!-- Inline Chat Section -->
-                    <div class="bg-white rounded-2xl shadow-sm" id="chatSection">
-                        <div class="p-5 border-b border-gray-100 flex items-center justify-between">
-                            <h2 class="flex items-center gap-2 font-bold text-gray-900">
+                    <div class="chat-section" id="chatSection">
+                        <div class="chat-header">
+                            <h2 class="chat-header-title">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" class="text-primary-500">
                                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
                                 </svg>
                                 المحادثة
                             </h2>
-                            <span class="text-xs text-gray-400" id="chatStatus">جاري التحميل...</span>
-                        </div>
-                        <div class="p-5">
-                            <!-- Messages Container -->
-                            <div class="space-y-4 max-h-80 overflow-y-auto mb-4" id="messagesContainer">
-                                <div class="flex justify-center py-8">
-                                    <div
-                                        class="animate-spin w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full">
-                                    </div>
-                                </div>
+                            <div class="chat-status" id="chatStatus">
+                                <span class="chat-status-dot"></span>
+                                <span>جاري التحميل...</span>
                             </div>
-                            <!-- Message Input -->
-                            <form id="messageForm" class="flex gap-3">
-                                <input type="text" id="messageInput"
-                                    class="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="اكتب رسالتك..." autocomplete="off">
-                                <button type="submit"
-                                    class="flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-5 py-3 rounded-xl font-medium transition-colors"
-                                    id="sendBtn">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        </div>
+                        <!-- Messages Container -->
+                        <div class="messages-container" id="messagesContainer">
+                            <div class="chat-empty">
+                                <svg class="chat-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                                </svg>
+                                <div class="chat-empty-title">جاري تحميل المحادثة...</div>
+                            </div>
+                        </div>
+                        <!-- Chat Input Area -->
+                        <div class="chat-input-area">
+                            <form id="messageForm" class="chat-input-form">
+                                <div class="chat-input-wrapper">
+                                    <input type="text" id="messageInput" class="chat-input" placeholder="اكتب رسالتك..."
+                                        autocomplete="off">
+                                </div>
+                                <button type="submit" class="chat-send-btn" id="sendBtn" title="إرسال">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2">
                                         <line x1="22" y1="2" x2="11" y2="13" />
                                         <polygon points="22,2 15,22 11,13 2,9" />
                                     </svg>
-                                    إرسال
                                 </button>
                             </form>
                         </div>

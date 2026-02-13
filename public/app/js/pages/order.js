@@ -21,6 +21,13 @@
         isBuyer: false,
         isSeller: false,
         selectedRating: 5,
+        // Chat enhancements
+        chatPollingInterval: null,
+        typingTimeout: null,
+        isTyping: false,
+        otherUserTyping: false,
+        lastMessageId: null,
+        canSendMessages: true,
     };
     
     // ─────────────────────────────────────────────────────────────────────────
@@ -750,10 +757,13 @@
     }
     
     // ─────────────────────────────────────────────────────────────────────────
-    // Chat Functions
+    // Chat Functions (Enhanced with Auto-refresh)
     // ─────────────────────────────────────────────────────────────────────────
     
-    async function loadChat() {
+    const CHAT_POLL_INTERVAL = 5000; // Poll every 5 seconds
+    const TYPING_DEBOUNCE = 1000; // 1 second typing debounce
+    
+    async function loadChat(isPolling = false) {
         if (!elements.chatSection) return;
         
         try {
@@ -761,90 +771,295 @@
             const response = await API.get(`/chats/order/${state.orderId}`);
             const data = response.data || response;
             state.chat = data.chat || data;
-            state.messages = state.chat?.messages || [];
+            state.canSendMessages = data.canSendMessages !== false;
             
-            if (elements.chatStatus) {
-                elements.chatStatus.textContent = `${state.messages.length} رسالة`;
+            // Load messages
+            await loadMessages(isPolling);
+            
+            // Update chat status
+            updateChatStatus();
+            
+            // Start polling if not already started
+            if (!state.chatPollingInterval && state.canSendMessages) {
+                startChatPolling();
             }
-            
-            renderMessages();
             
         } catch (error) {
             console.error('Failed to load chat:', error);
             if (elements.chatStatus) {
                 elements.chatStatus.textContent = 'تعذر تحميل المحادثة';
             }
-            if (elements.messagesContainer) {
-                elements.messagesContainer.innerHTML = `
-                    <div class="text-center py-8 text-gray-400">
-                        <p>لا توجد رسائل بعد. ابدأ المحادثة!</p>
-                    </div>
-                `;
-            }
+            renderEmptyChat();
         }
     }
     
-    function renderMessages() {
+    async function loadMessages(isPolling = false) {
+        if (!state.chat) return;
+        
+        try {
+            const chatId = state.chat._id || state.chat.id;
+            const response = await API.get(`/chats/${chatId}/messages`);
+            const data = response.data || response;
+            const newMessages = data.messages || [];
+            
+            // Check if there are new messages
+            const hasNewMessages = newMessages.length > state.messages.length;
+            const lastNewMsgId = newMessages.length > 0 ? newMessages[newMessages.length - 1]._id : null;
+            
+            // Update messages
+            state.messages = newMessages;
+            
+            // Only re-render if there are new messages or not polling
+            if (!isPolling || hasNewMessages || state.lastMessageId !== lastNewMsgId) {
+                renderMessages(hasNewMessages && isPolling);
+                state.lastMessageId = lastNewMsgId;
+            }
+            
+            if (elements.chatStatus) {
+                const statusText = state.canSendMessages ? 'متصل' : 'المحادثة مغلقة';
+                elements.chatStatus.innerHTML = `
+                    ${state.canSendMessages ? '<span class="chat-status-dot"></span>' : ''}
+                    <span>${state.messages.length} رسالة - ${statusText}</span>
+                `;
+            }
+            
+        } catch (error) {
+            console.error('Failed to load messages:', error);
+        }
+    }
+    
+    function startChatPolling() {
+        // Clear existing interval
+        if (state.chatPollingInterval) {
+            clearInterval(state.chatPollingInterval);
+        }
+        
+        // Start new polling
+        state.chatPollingInterval = setInterval(() => {
+            if (document.visibilityState === 'visible' && state.canSendMessages) {
+                loadMessages(true);
+            }
+        }, CHAT_POLL_INTERVAL);
+        
+        console.log('📡 Chat polling started');
+    }
+    
+    function stopChatPolling() {
+        if (state.chatPollingInterval) {
+            clearInterval(state.chatPollingInterval);
+            state.chatPollingInterval = null;
+            console.log('📡 Chat polling stopped');
+        }
+    }
+    
+    function updateChatStatus() {
+        // Disable input if chat is read-only
+        if (!state.canSendMessages) {
+            if (elements.messageInput) {
+                elements.messageInput.disabled = true;
+                elements.messageInput.placeholder = 'المحادثة مغلقة';
+            }
+            if (elements.sendBtn) {
+                elements.sendBtn.disabled = true;
+            }
+            stopChatPolling();
+        }
+    }
+    
+    function renderEmptyChat() {
+        if (!elements.messagesContainer) return;
+        
+        elements.messagesContainer.innerHTML = `
+            <div class="chat-empty">
+                <svg class="chat-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+                <div class="chat-empty-title">لا توجد رسائل بعد</div>
+                <div class="chat-empty-text">ابدأ المحادثة مع ${state.isBuyer ? 'البائع' : 'العميل'}</div>
+            </div>
+        `;
+    }
+    
+    function renderMessages(scrollToBottom = true) {
         if (!elements.messagesContainer) return;
         
         if (state.messages.length === 0) {
-            elements.messagesContainer.innerHTML = `
-                <div class="text-center py-8 text-gray-400">
-                    <p>لا توجد رسائل بعد. ابدأ المحادثة!</p>
-                </div>
-            `;
+            renderEmptyChat();
             return;
         }
         
         const currentUserId = Auth.getUserId();
+        const wasScrolledToBottom = isScrolledToBottom();
         
-        elements.messagesContainer.innerHTML = state.messages.map(msg => {
+        let messagesHTML = state.messages.map((msg, index) => {
             const isOwn = (msg.senderId?._id || msg.senderId) === currentUserId;
             const senderName = msg.senderId?.fullName || msg.senderId?.username || (isOwn ? 'أنت' : 'الطرف الآخر');
-            const msgTime = msg.createdAt ? Utils.formatDate(msg.createdAt) : '';
+            const msgTime = formatMessageTime(msg.createdAt);
+            const isNewMessage = index === state.messages.length - 1 && scrollToBottom;
+            
+            // System message
+            if (msg.isSystemMessage) {
+                return `
+                    <div class="message-system">
+                        <span class="message-system-content">${Utils.escapeHtml(msg.content)}</span>
+                    </div>
+                `;
+            }
             
             return `
                 <div class="flex ${isOwn ? 'justify-end' : 'justify-start'}">
-                    <div class="max-w-[80%] ${isOwn ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-900'} rounded-2xl px-4 py-3 ${isOwn ? 'rounded-br-sm' : 'rounded-bl-sm'}">
-                        ${!isOwn ? `<div class="text-xs font-medium mb-1 ${isOwn ? 'text-primary-100' : 'text-gray-500'}">${Utils.escapeHtml(senderName)}</div>` : ''}
-                        <p class="break-words">${Utils.escapeHtml(msg.content)}</p>
-                        <div class="text-xs mt-1 ${isOwn ? 'text-primary-200' : 'text-gray-400'}">${msgTime}</div>
+                    <div class="message-bubble ${isOwn ? 'own' : 'other'} ${isNewMessage ? 'new' : ''}">
+                        ${!isOwn ? `<div class="message-sender">${Utils.escapeHtml(senderName)}</div>` : ''}
+                        <div class="message-content">${Utils.escapeHtml(msg.content)}</div>
+                        <div class="message-time">${msgTime}</div>
                     </div>
                 </div>
             `;
         }).join('');
         
-        // Scroll to bottom
+        // Add typing indicator if other user is typing
+        if (state.otherUserTyping) {
+            messagesHTML += renderTypingIndicator();
+        }
+        
+        elements.messagesContainer.innerHTML = messagesHTML;
+        
+        // Scroll to bottom if was at bottom or new message
+        if (wasScrolledToBottom || scrollToBottom) {
+            scrollChatToBottom();
+        }
+    }
+    
+    function renderTypingIndicator() {
+        const typingName = state.isBuyer ? 'البائع' : 'العميل';
+        return `
+            <div class="typing-indicator">
+                <div class="typing-indicator-dots">
+                    <span class="typing-indicator-dot"></span>
+                    <span class="typing-indicator-dot"></span>
+                    <span class="typing-indicator-dot"></span>
+                </div>
+                <span class="typing-indicator-text">${typingName} يكتب...</span>
+            </div>
+        `;
+    }
+    
+    function isScrolledToBottom() {
+        if (!elements.messagesContainer) return true;
+        const { scrollTop, scrollHeight, clientHeight } = elements.messagesContainer;
+        return scrollHeight - scrollTop - clientHeight < 50;
+    }
+    
+    function scrollChatToBottom() {
+        if (!elements.messagesContainer) return;
         elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
+    }
+    
+    function formatMessageTime(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        } else if (diffDays === 1) {
+            return 'أمس ' + date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        } else {
+            return date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }) + ' ' + 
+                   date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    
+    function handleTypingIndicator() {
+        // Clear previous timeout
+        if (state.typingTimeout) {
+            clearTimeout(state.typingTimeout);
+        }
+        
+        // Set typing to true
+        if (!state.isTyping) {
+            state.isTyping = true;
+            // Could send typing status to server here if needed
+        }
+        
+        // Reset typing after debounce
+        state.typingTimeout = setTimeout(() => {
+            state.isTyping = false;
+        }, TYPING_DEBOUNCE);
     }
     
     async function handleSendMessage(e) {
         e.preventDefault();
         
         const content = elements.messageInput?.value.trim();
-        if (!content || !state.chat) return;
+        if (!content || !state.chat || !state.canSendMessages) return;
         
         const sendBtn = elements.sendBtn;
+        const originalContent = content;
+        
+        // Disable button and clear input immediately for better UX
         if (sendBtn) sendBtn.disabled = true;
+        if (elements.messageInput) elements.messageInput.value = '';
+        
+        // Add optimistic message
+        const tempId = 'temp-' + Date.now();
+        const tempMessage = {
+            _id: tempId,
+            senderId: { _id: Auth.getUserId() },
+            content: originalContent,
+            createdAt: new Date().toISOString(),
+            isOptimistic: true
+        };
+        state.messages.push(tempMessage);
+        renderMessages(true);
         
         try {
             const chatId = state.chat._id || state.chat.id;
-            await API.post(`/chats/${chatId}/messages`, { content });
+            await API.post(`/chats/${chatId}/messages`, { content: originalContent });
             
-            // Clear input
-            if (elements.messageInput) elements.messageInput.value = '';
-            
-            // Reload chat
-            await loadChat();
-            
-            Toast.success('تم', 'تم إرسال الرسالة');
+            // Reload messages to get server version
+            await loadMessages(false);
             
         } catch (error) {
             console.error('Failed to send message:', error);
+            
+            // Remove optimistic message on error
+            state.messages = state.messages.filter(m => m._id !== tempId);
+            renderMessages(false);
+            
+            // Restore input content
+            if (elements.messageInput) elements.messageInput.value = originalContent;
+            
             Toast.error('خطأ', error.message || 'تعذر إرسال الرسالة');
         } finally {
-            if (sendBtn) sendBtn.disabled = false;
+            if (sendBtn) sendBtn.disabled = !state.canSendMessages;
+            if (elements.messageInput) elements.messageInput.focus();
         }
+    }
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        stopChatPolling();
+    });
+    
+    // Pause polling when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            console.log('📡 Tab hidden, polling paused');
+        } else {
+            console.log('📡 Tab visible, polling resumed');
+            // Immediately fetch new messages when tab becomes visible
+            if (state.chat && state.canSendMessages) {
+                loadMessages(true);
+            }
+        }
+    });
+    
+    // Bind typing indicator to input
+    if (elements.messageInput) {
+        elements.messageInput.addEventListener('input', handleTypingIndicator);
     }
     
     // ─────────────────────────────────────────────────────────────────────────

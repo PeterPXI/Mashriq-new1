@@ -41,9 +41,8 @@ const Navbar = {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-14 sm:h-16">
                         <!-- Logo -->
-                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center gap-2 sm:gap-3 font-bold text-xl text-gray-900 hover:text-primary-600 transition-all group">
-                            <img src="/app/assets/images/logo-icon.png" alt="مشرق" class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all">
-                            <span class="bg-gradient-to-l from-primary-600 to-primary-500 bg-clip-text text-transparent text-lg sm:text-2xl font-extrabold">مشرق</span>
+                        <a href="${CONFIG.ROUTES.HOME}" class="flex items-center font-bold text-xl text-gray-900 hover:text-primary-600 transition-all group">
+                            <img src="/app/assets/images/logo.png" alt="مشرق" class="h-10 sm:h-12 group-hover:scale-105 transition-all">
                         </a>
                         
                         <!-- Navigation Links (Hidden on mobile) -->
@@ -53,6 +52,13 @@ const Navbar = {
                                     استكشف الخدمات
                                 </a>
                             </li>
+                            ${isLoggedIn ? `<li>
+                                <a href="/app/noor/" class="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base text-gray-600 hover:text-orange-600 hover:bg-orange-50 font-medium transition-colors group ${this.isActive('/noor') ? 'text-orange-600 bg-orange-50' : ''}">
+                                    <i class="fa-solid fa-sun text-orange-500 group-hover:animate-pulse"></i>
+                                    <span>نور AI</span>
+                                    <span class="px-1.5 py-0.5 bg-orange-500 text-white text-[10px] font-bold rounded-full">جديد</span>
+                                </a>
+                            </li>` : ''}
                             ${isSeller ? `
                                 <li>
                                     <a href="${CONFIG.ROUTES.SELLER_SERVICES}" class="px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors ${this.isActive('/seller/services') ? 'text-primary-600 bg-primary-50' : ''}">
@@ -83,6 +89,13 @@ const Navbar = {
                                     استكشف الخدمات
                                 </a>
                             </li>
+                            ${isLoggedIn ? `<li>
+                                <a href="/app/noor/" class="flex items-center gap-2 px-4 py-3 rounded-lg text-gray-600 hover:text-orange-600 hover:bg-orange-50 font-medium transition-colors ${this.isActive('/noor') ? 'text-orange-600 bg-orange-50' : ''}">
+                                    <i class="fa-solid fa-sun text-orange-500"></i>
+                                    <span>نور AI</span>
+                                    <span class="px-1.5 py-0.5 bg-orange-500 text-white text-[10px] font-bold rounded-full">جديد</span>
+                                </a>
+                            </li>` : ''}
                             ${isSeller ? `
                                 <li>
                                     <a href="${CONFIG.ROUTES.SELLER_SERVICES}" class="block px-4 py-3 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50 font-medium transition-colors ${this.isActive('/seller/services') ? 'text-primary-600 bg-primary-50' : ''}">
@@ -120,6 +133,12 @@ const Navbar = {
         const avatar = Auth.getUserAvatar();
         
         return `
+            <a href="/app/chat.html" class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" id="messagesBell" title="الرسائل">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-600">
+                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                </svg>
+                <span id="messagesBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-primary-500 text-white text-xs font-bold rounded-full flex items-center justify-center">0</span>
+            </a>
             <a href="${CONFIG.ROUTES.NOTIFICATIONS}" class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" id="notificationBell" title="الإشعارات">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-600">
                     <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -178,9 +197,29 @@ const Navbar = {
                     <a href="/app/wallet.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
                             <path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
-                            <polyline points="1,10 23,10"/>
+                            <path d="M1 10h22"/>
                         </svg>
                         المحفظة
+                    </a>
+                    <a href="/app/referral.html" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors group">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-400">
+                            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
+                        </svg>
+                        <span class="text-orange-600 font-medium group-hover:text-orange-700">ادعُ واربح 🎁</span>
+                    </a>
+                    <a href="/app/noor/" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors group">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-400">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <span class="text-orange-600 font-medium group-hover:text-orange-700">نور AI ✨</span>
                     </a>
                     <a href="${CONFIG.ROUTES.SETTINGS}" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
@@ -286,6 +325,7 @@ const Navbar = {
         
         if (Auth.isAuthenticated()) {
             this.loadNotificationCount();
+            this.loadMessagesCount();
         }
     },
     
@@ -304,6 +344,24 @@ const Navbar = {
             }
         } catch (error) {
             console.error('Failed to load notification count:', error);
+        }
+    },
+    
+    async loadMessagesCount() {
+        try {
+            const response = await fetch('/api/chats/unread-count', {
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+            const data = await response.json();
+            if (data.success && data.data?.unreadCount > 0) {
+                const badge = document.getElementById('messagesBadge');
+                if (badge) {
+                    badge.textContent = data.data.unreadCount > 9 ? '9+' : data.data.unreadCount;
+                    badge.classList.remove('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load messages count:', error);
         }
     },
 };

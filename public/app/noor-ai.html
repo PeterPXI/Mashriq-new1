@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="نور - مساعدتك الذكية للعمل الحر | شات AI، كتابة العروض، المحتوى">
+    <title>🌟 نور AI - مشرق</title>
+
+    <link rel="icon" type="image/png" href="/app/assets/images/favicon.png">
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+
+    <style>
+        /* AI Hub Background */
+        .noor-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .noor-hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(251, 191, 36, 0.1) 0%, transparent 40%);
+            animation: pulse-bg 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Noor Avatar */
+        .noor-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f97316, #fbbf24);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(249, 115, 22, 0.4);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Tab Styles */
+        .tab-btn {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+            background: linear-gradient(to top, rgba(249, 115, 22, 0.1), transparent);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            height: 400px;
+            background: #f9fafb;
+            border-radius: 16px;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chat-message.user {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: white;
+            margin-right: auto;
+            border-radius: 16px 16px 4px 16px;
+        }
+
+        .chat-message.noor {
+            background: white;
+            border: 1px solid #e5e7eb;
+            margin-left: auto;
+            border-radius: 16px 16px 16px 4px;
+        }
+
+        /* Usage Badge */
+        .usage-badge {
+            background: linear-gradient(135deg, #f97316, #fbbf24);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Feature Card */
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+        .feature-card:hover {
+            border-color: #f97316;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
+        }
+
+        .feature-card.locked {
+            opacity: 0.7;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #f97316;
+            color: white;
+        }
+
+        /* Result Box */
+        .result-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fff7ed 100%);
+            border: 2px solid #f97316;
+            border-radius: 16px;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #f97316;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite both;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+    <!-- Hero Header -->
+    <section class="noor-hero py-12 px-4">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="noor-avatar mx-auto mb-6">🌟</div>
+
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-3">
+                مرحباً، أنا <span class="text-orange-400">نور</span>
+            </h1>
+
+            <p class="text-gray-300 text-lg mb-6">
+                مساعدتك الذكية للعمل الحر - شات AI، كتابة عروض احترافية، ومحتوى سوشيال ميديا
+            </p>
+
+            <!-- Usage Badge -->
+            <div id="usageBadge"
+                class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-5 py-2">
+                <span class="text-gray-300 text-sm">خطتك:</span>
+                <span class="usage-badge" id="planBadge">مجانية</span>
+                <span class="text-gray-400 text-sm" id="usageText">10 رسائل متبقية اليوم</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 -mt-8 relative z-10 pb-12">
+        <!-- Tabs Navigation -->
+        <div class="bg-white rounded-t-2xl shadow-lg border-b border-gray-200">
+            <div class="flex overflow-x-auto">
+                <button
+                    class="tab-btn active flex-1 py-4 px-6 text-center font-semibold text-gray-600 whitespace-nowrap"
+                    data-tab="chat">
+                    💬 الشات
+                </button>
+                <button class="tab-btn flex-1 py-4 px-6 text-center font-semibold text-gray-600 whitespace-nowrap"
+                    data-tab="proposal">
+                    ✍️ كاتب العروض
+                </button>
+                <button class="tab-btn flex-1 py-4 px-6 text-center font-semibold text-gray-600 whitespace-nowrap"
+                    data-tab="content">
+                    📝 كاتب المحتوى
+                </button>
+                <button class="tab-btn flex-1 py-4 px-6 text-center font-semibold text-gray-600 whitespace-nowrap"
+                    data-tab="features">
+                    ⚡ المزايا
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="bg-white rounded-b-2xl shadow-lg p-6 md:p-8">
+
+            <!-- Chat Tab -->
+            <div id="tab-chat" class="tab-content active">
+                <div class="chat-container overflow-y-auto p-4 mb-4" id="chatMessages">
+                    <!-- Welcome Message -->
+                    <div class="chat-message noor p-4 mb-3">
+                        <p>مرحباً! 🌟 أنا نور، مساعدتك الذكية. كيف يمكنني مساعدتك اليوم؟</p>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="flex gap-3">
+                    <input type="text" id="chatInput"
+                        class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all"
+                        placeholder="اكتب رسالتك هنا...">
+                    <button id="sendChatBtn"
+                        class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl transition-all">
+                        إرسال
+                    </button>
+                </div>
+
+                <!-- Quick Suggestions -->
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <button
+                        class="quick-suggestion px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full text-sm hover:bg-orange-100 transition-all">
+                        💡 نصائح للعمل الحر
+                    </button>
+                    <button
+                        class="quick-suggestion px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full text-sm hover:bg-orange-100 transition-all">
+                        📈 كيف أزيد مبيعاتي؟
+                    </button>
+                    <button
+                        class="quick-suggestion px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full text-sm hover:bg-orange-100 transition-all">
+                        🎯 كيف أكتب عرض ناجح؟
+                    </button>
+                </div>
+            </div>
+
+            <!-- Proposal Tab -->
+            <div id="tab-proposal" class="tab-content">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">✍️ كاتب العروض الاحترافي</h3>
+                <p class="text-gray-500 mb-6">أدخل بيانات المشروع وسأكتب لك عرضاً مقنعاً واحترافياً</p>
+
+                <form id="proposalForm" class="space-y-5">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">عنوان المشروع *</label>
+                            <input type="text" id="proposalTitle" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all"
+                                placeholder="مثال: تصميم شعار لمطعم">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">السعر المقترح</label>
+                            <input type="number" id="proposalPrice"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all"
+                                placeholder="50">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">وصف المشروع *</label>
+                        <textarea id="proposalDescription" required rows="3"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all resize-none"
+                            placeholder="صف المشروع الذي تريد التقدم له بالتفصيل..."></textarea>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">مدة التنفيذ (أيام)</label>
+                            <input type="number" id="proposalDays"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all"
+                                placeholder="3">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">خبرتك (اختياري)</label>
+                            <input type="text" id="proposalExperience"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all"
+                                placeholder="5 سنوات في التصميم">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="generateProposalBtn"
+                        class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2">
+                        <span>✨</span>
+                        <span>إنشاء العرض</span>
+                    </button>
+                </form>
+
+                <!-- Proposal Result -->
+                <div id="proposalResult" class="hidden mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-gray-900">العرض الاحترافي</h4>
+                        <button id="copyProposalBtn"
+                            class="copy-btn px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium flex items-center gap-2">
+                            📋 نسخ
+                        </button>
+                    </div>
+                    <div class="result-box p-5">
+                        <pre id="proposalText"
+                            class="whitespace-pre-wrap text-gray-800 font-sans leading-relaxed"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Tab -->
+            <div id="tab-content" class="tab-content">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">📝 كاتب المحتوى</h3>
+                <p class="text-gray-500 mb-6">اختر نوع المحتوى والمنصة وسأكتب لك محتوى جذاب</p>
+
+                <form id="contentForm" class="space-y-5">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">نوع المحتوى *</label>
+                            <select id="contentType" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all bg-white">
+                                <option value="">اختر...</option>
+                                <option value="social-post">📱 منشور سوشيال</option>
+                                <option value="article">📄 مقالة</option>
+                                <option value="ad">📢 إعلان</option>
+                                <option value="bio">👤 نبذة تعريفية</option>
+                                <option value="email">📧 بريد إلكتروني</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">المنصة</label>
+                            <select id="contentPlatform"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all bg-white">
+                                <option value="general">عام</option>
+                                <option value="instagram">إنستغرام</option>
+                                <option value="twitter">تويتر/X</option>
+                                <option value="linkedin">لينكد إن</option>
+                                <option value="facebook">فيسبوك</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">الموضوع *</label>
+                        <textarea id="contentTopic" required rows="2"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all resize-none"
+                            placeholder="عن ماذا تريد أن أكتب؟"></textarea>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">الأسلوب</label>
+                            <select id="contentTone"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all bg-white">
+                                <option value="professional">احترافي</option>
+                                <option value="casual">ودي</option>
+                                <option value="funny">مرح</option>
+                                <option value="inspiring">ملهم</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">الطول</label>
+                            <select id="contentLength"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 transition-all bg-white">
+                                <option value="short">قصير</option>
+                                <option value="medium">متوسط</option>
+                                <option value="long">طويل</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="generateContentBtn"
+                        class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-lg rounded-xl transition-all flex items-center justify-center gap-2">
+                        <span>✨</span>
+                        <span>إنشاء المحتوى</span>
+                    </button>
+                </form>
+
+                <!-- Content Result -->
+                <div id="contentResult" class="hidden mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-gray-900">المحتوى</h4>
+                        <button id="copyContentBtn"
+                            class="copy-btn px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium flex items-center gap-2">
+                            📋 نسخ
+                        </button>
+                    </div>
+                    <div class="result-box p-5">
+                        <pre id="contentText" class="whitespace-pre-wrap text-gray-800 font-sans leading-relaxed"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Tab -->
+            <div id="tab-features" class="tab-content">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">⚡ مزايا نور AI</h3>
+
+                <div id="featuresGrid" class="grid md:grid-cols-2 gap-4">
+                    <!-- Features will be loaded here -->
+                </div>
+
+                <!-- Upgrade CTA -->
+                <div class="mt-8 p-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl text-white text-center">
+                    <h4 class="text-xl font-bold mb-2">🚀 ترقية إلى Pro</h4>
+                    <p class="opacity-90 mb-4">احصل على رسائل غير محدودة، عروض غير محدودة، ومزايا حصرية!</p>
+                    <button
+                        class="px-8 py-3 bg-white text-orange-600 font-bold rounded-xl hover:bg-orange-50 transition-all">
+                        ترقية الآن - $9.99/شهر
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+    <script src="/app/js/pages/noor-ai.js"></script>
+</body>
+
+</html>

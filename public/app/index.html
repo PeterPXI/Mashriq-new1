@@ -1,57 +1,279 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="مشرق - منصة عربية موثوقة لبيع وشراء الخدمات الرقمية. اكتشف آلاف الخدمات الاحترافية من مصممين ومبرمجين وكتّاب محترفين.">
+    <meta name="description"
+        content="مشرق - منصة عربية موثوقة لبيع وشراء الخدمات الرقمية. اكتشف آلاف الخدمات الاحترافية من مصممين ومبرمجين وكتّاب محترفين.">
     <meta name="keywords" content="خدمات رقمية, فريلانس, تصميم, برمجة, كتابة محتوى, ترجمة, عربي">
     <meta name="author" content="Mashriq">
-    
+
     <meta property="og:title" content="مشرق - منصة الخدمات الرقمية">
     <meta property="og:description" content="منصة عربية موثوقة لبيع وشراء الخدمات الرقمية">
     <meta property="og:type" content="website">
-    
+    <meta property="og:image" content="/app/assets/images/logo.png">
+    <meta property="og:url" content="https://mashriq.com">
+    <meta property="og:locale" content="ar_AR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="مشرق - منصة الخدمات الرقمية العربية">
+    <meta name="twitter:description" content="منصة عربية موثوقة لبيع وشراء الخدمات الرقمية مدعومة بالذكاء الاصطناعي">
+    <meta name="twitter:image" content="/app/assets/images/logo.png">
+
     <title>مشرق | منصة الخدمات الرقمية العربية</title>
-    
-    <link rel="icon" type="image/png" href="/app/assets/images/logo-icon.png">
+
+    <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/app/assets/css/main.css">
-    
+    <link rel="stylesheet" href="/app/assets/css/ai-background.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "مشرق - Mashriq",
+        "description": "منصة عربية موثوقة لبيع وشراء الخدمات الرقمية مدعومة بالذكاء الاصطناعي",
+        "url": "https://mashriq.com",
+        "logo": "/app/assets/images/logo.png",
+        "sameAs": [],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "email": "support@mashriq.com",
+            "availableLanguage": ["Arabic", "English"]
+        }
+    }
+    </script>
+
     <style>
+        /* ═══════════════════════════════════════════════════════════════════
+           HERO SECTION - ANIMATIONS & EFFECTS
+        ═══════════════════════════════════════════════════════════════════ */
+
+        /* Base Animations */
         .animate-fade-up {
-            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
         }
+
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .animate-delay-1 { animation-delay: 0.1s; }
-        .animate-delay-2 { animation-delay: 0.2s; }
-        .animate-delay-3 { animation-delay: 0.3s; }
-        .animate-delay-4 { animation-delay: 0.4s; }
-        
-        .hero-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+        .animate-delay-1 {
+            animation-delay: 0.15s;
         }
-        
-        .trust-card {
-            transition: all 0.3s ease;
+
+        .animate-delay-2 {
+            animation-delay: 0.3s;
         }
-        .trust-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
+
+        .animate-delay-3 {
+            animation-delay: 0.45s;
         }
-        
-        .category-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        .animate-delay-4 {
+            animation-delay: 0.6s;
         }
-        .category-card:hover {
-            transform: translateY(-6px) scale(1.02);
+
+        /* Floating Animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
-        
+
+        .animate-float {
+            animation: float 8s ease-in-out infinite;
+        }
+
+        /* Pulse Slow */
+        @keyframes pulseSlow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
+        }
+
+        .animate-pulse-slow {
+            animation: pulseSlow 6s ease-in-out infinite;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           SEARCH TABS
+        ═══════════════════════════════════════════════════════════════════ */
+        .search-tab {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-tab.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e293b;
+            border-color: rgba(249, 115, 22, 0.3);
+            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.2);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           SEARCH CARD - GLASSMORPHISM
+        ═══════════════════════════════════════════════════════════════════ */
+        .search-card {
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* AI Spark Button */
+        .ai-spark-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-spark-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent 30%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    transparent 70%);
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        /* Quick Search Tags */
+        .quick-search-tag {
+            transform: translateY(0);
+            transition: all 0.2s ease;
+        }
+
+        .quick-search-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           AI SUGGESTIONS DROPDOWN
+        ═══════════════════════════════════════════════════════════════════ */
+        #aiSuggestionsDropdown {
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .ai-suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+
+        .ai-suggestion-item:hover {
+            background: linear-gradient(135deg, #fef3c7 0%, #ffedd5 100%);
+            transform: translateX(-4px);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           STAT ITEMS
+        ═══════════════════════════════════════════════════════════════════ */
         .stat-item {
             position: relative;
         }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .stat-item:last-child::after {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            .stat-item::after {
+                display: none;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           TRUST & CATEGORY CARDS
+        ═══════════════════════════════════════════════════════════════════ */
+        .trust-card {
+            transition: all 0.3s ease;
+        }
+
+        .trust-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
         .stat-item::after {
             content: '';
             position: absolute;
@@ -60,12 +282,13 @@
             transform: translateY(-50%);
             width: 1px;
             height: 40px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
+
         .stat-item:last-child::after {
             display: none;
         }
-        
+
         @media (max-width: 640px) {
             .stat-item::after {
                 display: none;
@@ -73,109 +296,261 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen bg-white font-sans">
     <header id="navbar"></header>
-    
+
     <main>
-        <!-- HERO SECTION -->
-        <section class="relative overflow-hidden hero-pattern" style="background: linear-gradient(to bottom right, #f97316, #fb923c, #fbbf24);">
-            <!-- Decorative Elements -->
-            <div class="absolute top-0 right-0 w-96 h-96 bg-yellow-300/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-600/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-            
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
-                <div class="text-center text-white max-w-4xl mx-auto">
-                    <!-- Badge -->
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-6 animate-fade-up">
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        <span>منصة موثوقة لآلاف المحترفين</span>
+        <!-- HERO SECTION - Liner Style -->
+        <section class="relative min-h-[80vh] flex items-center bg-gradient-to-b from-slate-50 via-gray-50/50 to-white">
+            <!-- Professional AI Background -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                <!-- Tech Grid Animation -->
+                <div class="ai-grid-pattern animate-grid-movement opacity-[0.4]"></div>
+
+                <!-- Floating Ambient Orbs -->
+                <div class="ai-orb ai-orb-1 animate-float-slow"></div>
+                <div class="ai-orb ai-orb-2 animate-float-slower"></div>
+                <div class="ai-orb ai-orb-3 animate-pulse-slow"></div>
+            </div>
+
+            <div class="relative w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center">
+
+                    <!-- AI Hint Badge -->
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 bg-violet-50 border border-violet-100 rounded-full mb-6">
+                        <span class="w-1.5 h-1.5 bg-violet-500 rounded-full animate-pulse"></span>
+                        <span class="text-xs font-medium text-violet-600">مدعوم بالذكاء الاصطناعي</span>
                     </div>
-                    
+
                     <!-- Headline -->
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 sm:mb-6 animate-fade-up animate-delay-1">
-                        وظّف أفضل المواهب العربية
-                        <br class="hidden sm:block">
-                        <span class="text-yellow-200">لمشروعك القادم</span>
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight tracking-tight mb-6">
+                        احصل على النتائج التي تريدها
                     </h1>
-                    
+
                     <!-- Subheadline -->
-                    <p class="text-base sm:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl mx-auto px-4 animate-fade-up animate-delay-2">
-                        منصة مشرق تربط بين أصحاب المشاريع والمحترفين العرب. خدمات عالية الجودة بأسعار مناسبة.
+                    <p class="text-lg text-gray-500 mb-16 max-w-xl mx-auto leading-relaxed">
+                        مشرق يربط مشاريعك بأفضل المحترفين العرب. ابحث بالطريقة التي تناسبك.
                     </p>
-                    
-                    <!-- SEARCH BAR -->
-                    <div class="max-w-3xl mx-auto mb-6 sm:mb-8 px-2 animate-fade-up animate-delay-3">
-                        <form class="bg-white rounded-2xl shadow-2xl p-1.5 sm:p-2 flex flex-col sm:flex-row items-stretch gap-2" id="heroSearchForm">
-                            <div class="flex-1 flex items-center gap-3 px-3 sm:px-4 bg-gray-50 rounded-xl">
-                                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <path d="M21 21l-4.35-4.35"/>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    class="flex-1 py-3 sm:py-4 text-gray-700 placeholder-gray-400 focus:outline-none text-base sm:text-lg bg-transparent"
-                                    id="heroSearchInput"
-                                    placeholder="ابحث عن خدمة... تصميم، برمجة، كتابة"
-                                    autocomplete="off"
-                                >
+
+                    <!-- Search Container -->
+                    <div class="max-w-xl mx-auto" id="heroSearchContainer">
+
+                        <!-- Search Mode Tabs (Liner Style) -->
+                        <div class="flex justify-center mb-8">
+                            <div class="inline-flex border border-gray-200 rounded-full p-1 bg-white" role="tablist">
+                                <button type="button"
+                                    class="search-mode-tab px-6 py-2 text-sm font-medium rounded-full transition-all duration-300"
+                                    data-mode="normal" id="tabNormal" role="tab" aria-selected="true">
+                                    <i class="fa-solid fa-magnifying-glass ml-2 text-xs"></i>
+                                    بحث عادي
+                                </button>
+                                <button type="button"
+                                    class="search-mode-tab px-6 py-2 text-sm font-medium rounded-full transition-all duration-300"
+                                    data-mode="smart" id="tabSmart" role="tab" aria-selected="false">
+                                    <i class="fa-solid fa-wand-magic-sparkles ml-2 text-xs"></i>
+                                    بحث ذكي
+                                </button>
                             </div>
-                            <button type="submit" class="bg-gradient-to-l from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <path d="M21 21l-4.35-4.35"/>
-                                </svg>
-                                <span>بحث</span>
-                            </button>
+                        </div>
+
+                        <!-- Search Form -->
+                        <form class="relative" id="heroSearchForm">
+                            <!-- Search Box (Enhanced with Glass & Glow Effects) -->
+                            <div class="group bg-white rounded-full border border-gray-200/80 shadow-xl shadow-gray-200/40 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:border-orange-300/50 focus-within:shadow-2xl focus-within:shadow-orange-500/20 focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-500/10"
+                                id="searchBox">
+                                <div class="flex items-center">
+                                    <!-- Input Area -->
+                                    <div class="flex-1 flex items-center rounded-full gap-3 px-6 py-5">
+                                        <!-- Normal Search Input -->
+                                        <input type="text"
+                                            class="search-input flex-1 w-full bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none text-base"
+                                            id="normalSearchInput" placeholder="تصميم شعار، برمجة موقع، كتابة محتوى..."
+                                            autocomplete="off" aria-label="بحث عن خدمة">
+
+                                        <!-- AI Smart Search Input (Hidden by default) -->
+                                        <input type="text"
+                                            class="search-input hidden flex-1 w-full bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none text-base"
+                                            id="heroSearchInput" placeholder="أريد تصميم شعار لمتجري الإلكتروني..."
+                                            autocomplete="off" role="combobox" aria-expanded="false"
+                                            aria-controls="smartSearchDropdown" aria-autocomplete="list"
+                                            aria-label="بحث ذكي بالذكاء الاصطناعي">
+
+                                        <!-- Input Actions -->
+                                        <div class="flex items-center gap-3 text-gray-400 min-w-fit">
+                                            <!-- Clear Button (Hidden initially) -->
+                                            <button type="button" id="clearSearchBtn"
+                                                class="hidden hover:text-gray-600 transition-colors p-1"
+                                                aria-label="مسح النص" title="مسح النص">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+
+                                            <!-- Divider -->
+                                            <span class="w-px h-5 bg-gray-200"></span>
+
+                                            <!-- Voice Search -->
+                                            <button type="button" id="voiceSearchBtn"
+                                                class="hover:text-orange-500 transition-colors p-1"
+                                                aria-label="بحث صوتي" title="بحث صوتي">
+                                                <i class="fa-solid fa-microphone"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTA Button - Enhanced with Shine Effect -->
+                                    <div class="pl-2 pr-3">
+                                        <button type="submit"
+                                            class="flex items-center gap-1 px-4 ml-1 py-4 bg-gradient-to-l from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:via-orange-600 hover:to-amber-600 text-white font-bold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 relative overflow-hidden group/btn">
+                                            <span
+                                                class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
+                                            <span class="hidden sm:inline relative z-10">ابدأ الآن</span>
+                                            <i
+                                                class="fa-solid fa-arrow-left relative z-10 transition-transform duration-300 group-hover/btn:-translate-x-1"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AI Badge & Loading (Enhanced) -->
+                            <div id="smartSearchHint" class="hidden flex items-center justify-center gap-4 mt-6">
+                                <span id="aiBadge"
+                                    class="inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 via-orange-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg shadow-violet-500/25 animate-pulse">
+
+                                    AI
+                                </span>
+                                <span class="text-sm text-orange-500 font-medium">جد افضل خدمه مناسبه لمشروعك</span>
+                                <span id="searchLoading" class="hidden">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-orange-500 text-lg"></i>
+                                </span>
+                            </div>
+
+                            <!-- AI Smart Search Dropdown (Enhanced) -->
+                            <div id="smartSearchDropdown"
+                                class="hidden absolute top-full left-0 right-0 mt-4 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/10 border border-gray-100 z-[100] flex flex-col overflow-hidden"
+                                style="max-height: min(420px, 60vh);" role="listbox">
+
+                                <!-- Sticky Header -->
+                                <div
+                                    class="sticky top-0 px-6 py-4 bg-gradient-to-l from-violet-50 to-indigo-50 border-b border-violet-100 flex items-center justify-between z-10">
+                                    <span class="text-sm text-gray-700 flex items-center gap-2 font-bold">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-violet-500"></i>
+                                        نتائج ذكية
+                                    </span>
+                                    <span id="searchMeta"
+                                        class="text-xs text-gray-400 bg-white px-2 py-1 rounded-full"></span>
+                                </div>
+
+                                <!-- Scrollable Results -->
+                                <div id="searchResults" class="flex-1 overflow-y-auto overscroll-contain p-2"></div>
+
+                                <!-- Sticky Footer -->
+                                <div
+                                    class="sticky bottom-0 px-6 py-3 bg-gray-50/80 backdrop-blur-sm border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                                    <div class="flex items-center gap-4">
+                                        <span class="flex items-center gap-1.5">
+                                            <kbd
+                                                class="px-2 py-1 bg-white rounded-lg border border-gray-200 font-mono text-gray-500 shadow-sm">↑↓</kbd>
+                                            تنقل
+                                        </span>
+                                        <span class="flex items-center gap-1.5">
+                                            <kbd
+                                                class="px-2 py-1 bg-white rounded-lg border border-gray-200 font-mono text-gray-500 shadow-sm">↵</kbd>
+                                            اختيار
+                                        </span>
+                                    </div>
+                                    <span class="flex items-center gap-1.5">
+                                        <kbd
+                                            class="px-2 py-1 bg-white rounded-lg border border-gray-200 font-mono text-gray-500 shadow-sm">Esc</kbd>
+                                        إغلاق
+                                    </span>
+                                </div>
+                            </div>
                         </form>
-                        
-                        <!-- Popular Searches -->
-                        <div class="flex flex-wrap items-center justify-center gap-2 mt-4 sm:mt-6 animate-fade-up animate-delay-4">
-                            <span class="text-white/70 text-xs sm:text-sm">الأكثر بحثاً:</span>
-                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="تصميم شعار">تصميم شعار</button>
-                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion hidden sm:inline-flex" data-search="تطوير موقع">تطوير موقع</button>
-                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="كتابة مقالات">كتابة مقالات</button>
-                            <button type="button" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 hover:bg-white/25 backdrop-blur rounded-full text-xs sm:text-sm text-white font-medium transition-all search-suggestion" data-search="ترجمة">ترجمة</button>
+
+                        <!-- Quick Tags (Normal Mode) -->
+                        <div id="quickTags" class="mt-8">
+                            <div class="flex flex-wrap justify-center items-center gap-3">
+                                <span class="text-sm text-gray-400">الأكثر بحثاً:</span>
+                                <button type="button"
+                                    class="quick-search-tag inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-600 hover:text-orange-600 text-sm rounded-full transition-all"
+                                    data-search="تصميم شعار">
+                                    <i class="fa-solid fa-palette text-xs"></i>
+                                    تصميم شعار
+                                </button>
+                                <button type="button"
+                                    class="quick-search-tag inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 hover:border-sky-300 hover:bg-sky-50 text-gray-600 hover:text-sky-600 text-sm rounded-full transition-all"
+                                    data-search="تطوير موقع">
+                                    <i class="fa-solid fa-code text-xs"></i>
+                                    تطوير موقع
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Example Prompts (AI Mode) -->
+                        <div id="examplePrompts" class="hidden mt-8">
+                            <p class="text-sm text-gray-400 mb-4">جرب مثلاً:</p>
+                            <div class="flex flex-wrap justify-center gap-2">
+                                <button type="button"
+                                    class="example-prompt px-4 py-2 bg-white border border-gray-200 hover:border-violet-300 hover:bg-violet-50 text-gray-600 hover:text-violet-600 text-sm rounded-full transition-all">
+                                    أحتاج مبرمج لتطبيق موبايل
+                                </button>
+                                <button type="button"
+                                    class="example-prompt px-4 py-2 bg-white border border-gray-200 hover:border-violet-300 hover:bg-violet-50 text-gray-600 hover:text-violet-600 text-sm rounded-full transition-all">
+                                    أريد ترجمة موقعي للإنجليزية
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Stats Row -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 pt-6 sm:pt-8 border-t border-white/20 max-w-3xl mx-auto">
-                        <div class="stat-item text-center px-2">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statServices">+500</div>
-                            <div class="text-white/70 text-xs sm:text-sm mt-1">خدمة متاحة</div>
-                        </div>
-                        <div class="stat-item text-center px-2">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statSellers">+200</div>
-                            <div class="text-white/70 text-xs sm:text-sm mt-1">محترف مسجل</div>
-                        </div>
-                        <div class="stat-item text-center px-2">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white" id="statOrders">+1000</div>
-                            <div class="text-white/70 text-xs sm:text-sm mt-1">مشروع مكتمل</div>
-                        </div>
-                        <div class="stat-item text-center px-2">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">4.9</div>
-                            <div class="text-white/70 text-xs sm:text-sm mt-1">متوسط التقييم</div>
+
+                    <!-- Trust Row -->
+                    <div class="mt-20">
+                        <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-10 text-gray-400 text-sm">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>خدمات متنوعة</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>محترفون موثوقون</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>ضمان استرداد 100%</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-star text-yellow-400"></i>
+                                <span>جودة مضمونة</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Wave -->
-            <div class="absolute bottom-0 left-0 right-0">
-                <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full" preserveAspectRatio="none">
-                    <path d="M0 80V50C360 10 720 0 1080 20C1260 30 1380 50 1440 60V80H0Z" fill="white"/>
-                </svg>
-            </div>
         </section>
-        
+
         <!-- TRUST BADGES -->
         <section class="py-6 sm:py-8 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                     <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -184,9 +559,11 @@
                         </div>
                     </div>
                     <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -195,9 +572,12 @@
                         </div>
                     </div>
                     <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -206,9 +586,12 @@
                         </div>
                     </div>
                     <div class="trust-card flex items-center gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl sm:rounded-2xl">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -219,167 +602,212 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- CATEGORIES SECTION -->
         <section class="py-10 sm:py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50/50" id="categories">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-10">
                     <div class="text-center sm:text-right">
-                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">تصفح حسب التخصص</h2>
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">تصفح حسب
+                            التخصص</h2>
                         <p class="text-gray-500 text-sm sm:text-base">اختر الفئة المناسبة لاحتياجاتك</p>
                     </div>
-                    <a href="/app/explore.html" class="hidden sm:flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold transition-colors flex-shrink-0">
+                    <a href="/app/explore.html"
+                        class="hidden sm:flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold transition-colors flex-shrink-0">
                         عرض الكل
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
-                
+
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5" id="categoriesGrid">
                 </div>
-                
+
                 <div class="text-center mt-6 sm:hidden">
-                    <a href="/app/explore.html" class="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
+                    <a href="/app/explore.html"
+                        class="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
                         عرض جميع التخصصات
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
             </div>
         </section>
-        
+
         <!-- FEATURED SERVICES SECTION -->
         <section class="py-10 sm:py-14 lg:py-20 bg-gray-50" id="featuredServices">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 sm:mb-10">
                     <div class="text-center sm:text-right">
-                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">خدمات مميزة</h2>
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-1 sm:mb-2">خدمات
+                            مميزة</h2>
                         <p class="text-gray-500 text-sm sm:text-base">أفضل الخدمات من بائعين موثوقين</p>
                     </div>
-                    <a href="/app/explore.html" class="hidden sm:flex items-center gap-2 text-orange-500 hover:text-orange-600 font-semibold transition-colors">
+                    <a href="/app/explore.html"
+                        class="hidden sm:flex items-center gap-2 text-orange-500 hover:text-orange-600 font-semibold transition-colors">
                         عرض الكل
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" id="featuredServicesGrid">
+
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"
+                    id="featuredServicesGrid">
                 </div>
-                
+
                 <div class="text-center mt-8 sm:hidden">
-                    <a href="/app/explore.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all">
+                    <a href="/app/explore.html"
+                        class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all">
                         عرض المزيد من الخدمات
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
             </div>
         </section>
-        
+
         <!-- HOW IT WORKS SECTION -->
         <section class="py-10 sm:py-14 lg:py-20 bg-white" id="howItWorks">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-8 sm:mb-14">
-                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-4">كيف تعمل منصة مشرق؟</h2>
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-4">كيف تعمل منصة
+                        مشرق؟</h2>
                     <p class="text-gray-500 text-sm sm:text-lg max-w-2xl mx-auto">ثلاث خطوات بسيطة للحصول على خدمتك</p>
                 </div>
-                
+
                 <div class="grid sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
                     <div class="text-center">
                         <div class="relative inline-flex mb-4 sm:mb-6">
-                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                            <div
+                                class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                            <span
+                                class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">ابحث عن الخدمة</h3>
-                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">تصفح آلاف الخدمات في مختلف التخصصات واختر ما يناسب مشروعك</p>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">تصفح آلاف الخدمات في مختلف
+                            التخصصات واختر ما يناسب مشروعك</p>
                     </div>
-                    
+
                     <div class="text-center">
                         <div class="relative inline-flex mb-4 sm:mb-6">
-                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/>
+                            <div
+                                class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                            <span
+                                class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">اطلب بأمان</h3>
-                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">ادفع بأمان عبر نظام الضمان - أموالك محفوظة حتى تستلم الخدمة</p>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">ادفع بأمان عبر نظام الضمان -
+                            أموالك محفوظة حتى تستلم الخدمة</p>
                     </div>
-                    
+
                     <div class="text-center">
                         <div class="relative inline-flex mb-4 sm:mb-6">
-                            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
-                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+                            <div
+                                class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center">
+                                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path
+                                        d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                                 </svg>
                             </div>
-                            <span class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                            <span
+                                class="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">استلم ووافق</h3>
-                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">استلم عملك، راجعه، وعند رضاك يتم تحويل المبلغ للبائع</p>
+                        <p class="text-gray-500 text-sm sm:text-base leading-relaxed">استلم عملك، راجعه، وعند رضاك يتم
+                            تحويل المبلغ للبائع</p>
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- BECOME A SELLER CTA -->
         <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-l from-gray-900 to-gray-800 overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     <div class="text-center lg:text-right">
-                        <span class="inline-block px-4 py-2 bg-orange-500/20 text-orange-400 rounded-full text-sm font-medium mb-4 sm:mb-6">للمحترفين</span>
+                        <span
+                            class="inline-block px-4 py-2 bg-orange-500/20 text-orange-400 rounded-full text-sm font-medium mb-4 sm:mb-6">للمحترفين
+                            والمبدعين</span>
                         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-4 sm:mb-6">
-                            ابدأ بتقديم خدماتك
+                            حوّل موهبتك إلى
                             <br>
-                            <span class="text-orange-400">واربح من مهاراتك</span>
+                            <span class="text-orange-400">مصدر دخل حقيقي</span>
                         </h2>
-                        <p class="text-gray-400 text-sm sm:text-lg mb-6 sm:mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                            انضم لمجتمع المحترفين على مشرق. أنشئ خدماتك، حدد أسعارك، واستقبل طلبات من عملاء حقيقيين.
+                        <p
+                            class="text-gray-400 text-sm sm:text-lg mb-6 sm:mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                            أنشئ خدماتك، حدد أسعارك، واستقبل طلبات من عملاء حقيقيين. مع نور AI تكتب عروضك باحترافية
+                            وتوصل أسرع.
                         </p>
                         <ul class="space-y-3 sm:space-y-4 mb-6 sm:mb-8 text-right max-w-sm mx-auto lg:mx-0">
                             <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
-                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
                                 </svg>
-                                تسجيل مجاني بالكامل
+                                تسجيل مجاني — بدون أي رسوم
                             </li>
                             <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
-                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
                                 </svg>
-                                ضمان استلام أموالك
+                                ضمان استلام أموالك بالكامل
                             </li>
                             <li class="flex items-center gap-3 text-gray-300 text-sm sm:text-base">
-                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
                                 </svg>
                                 دعم فني متكامل
                             </li>
                         </ul>
-                        <a href="/app/register.html" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl">
+                        <a href="/app/register.html"
+                            class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl">
                             ابدأ البيع الآن
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                         </a>
                     </div>
-                    
+
                     <!-- Earnings Card - Hidden on mobile -->
                     <div class="hidden lg:block">
                         <div class="relative">
-                            <div class="absolute -inset-4 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl blur-2xl opacity-30"></div>
+                            <div
+                                class="absolute -inset-4 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl blur-2xl opacity-30">
+                            </div>
                             <div class="relative bg-white rounded-2xl p-6 sm:p-8 shadow-2xl">
                                 <div class="flex items-center gap-4 mb-6">
-                                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-xl sm:text-2xl font-bold">
+                                    <div
+                                        class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-xl sm:text-2xl font-bold">
                                         $
                                     </div>
                                     <div>
@@ -392,7 +820,8 @@
                                         <span class="text-gray-600 text-sm sm:text-base">5 طلبات/شهر</span>
                                         <span class="font-bold text-gray-900">$150 - $250</span>
                                     </div>
-                                    <div class="flex items-center justify-between p-3 sm:p-4 bg-orange-50 rounded-xl border-2 border-orange-200">
+                                    <div
+                                        class="flex items-center justify-between p-3 sm:p-4 bg-orange-50 rounded-xl border-2 border-orange-200">
                                         <span class="text-gray-600 text-sm sm:text-base">15 طلب/شهر</span>
                                         <span class="font-bold text-orange-600">$450 - $750</span>
                                     </div>
@@ -407,32 +836,231 @@
                 </div>
             </div>
         </section>
-        
-        <!-- FINAL CTA SECTION -->
-        <section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-orange-50 to-white" id="cta">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-3 sm:mb-4">مستعد لبدء مشروعك؟</h2>
-                <p class="text-gray-600 text-sm sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
-                    انضم لآلاف العملاء الراضين واحصل على خدمات احترافية اليوم. التسجيل مجاني ويستغرق دقيقة واحدة.
-                </p>
-                <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-                    <a href="/app/register.html" class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl" id="ctaButton">
-                        أنشئ حسابك مجاناً
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                    <a href="/app/explore.html" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-gray-300 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all">
-                        تصفح الخدمات
-                    </a>
+        <!-- TESTIMONIALS SECTION -->
+        <section class="py-10 sm:py-14 lg:py-20 bg-white" id="testimonials">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8 sm:mb-14">
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 mb-2 sm:mb-4">ماذا يقول
+                        عملاؤنا؟</h2>
+                    <p class="text-gray-500 text-sm sm:text-lg max-w-2xl mx-auto">تجارب حقيقية من مستخدمين يثقون بمشرق
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 relative">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 p-1">
+                            "تجربة رائعة! حصلت على تصميم شعار احترافي بجودة عالية وبسعر مناسب جداً. المنصة سهلة
+                            الاستخدام ونظام الضمان يعطيك راحة بال."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                أ</div>
+                            <div>
+                                <div class="font-bold text-gray-900 text-sm">أحمد محمد</div>
+                                <div class="text-xs text-gray-400">صاحب متجر إلكتروني</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 relative">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 p-4">
+                            "كبائعة على المنصة، نور AI ساعدني أكتب عروض احترافية وأوصل لعملاء أكثر. الدخل تضاعف والدعم
+                            الفني ممتاز."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                س</div>
+                            <div>
+                                <div class="font-bold text-gray-900 text-sm">سارة عبدالله</div>
+                                <div class="text-xs text-gray-400">مصممة جرافيك</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 relative">
+                        <div class="flex items-center gap-1 mb-4">
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                            <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 p-1">
+                            "أفضل منصة عربية للخدمات الرقمية. البحث الذكي فهم بالظبط اللي كنت محتاجه ووصلني بالمحترف
+                            المناسب في دقائق."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                خ</div>
+                            <div>
+                                <div class="font-bold text-gray-900 text-sm">خالد العمري</div>
+                                <div class="text-xs text-gray-400">رائد أعمال</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-        
+
+        <!-- NOOR AI SECTION - Clean Mashriq Style -->
+        <section id="noor-ai" class="py-20 sm:py-20 bg-gradient-to-b from-gray-50 to-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+                <!-- Header -->
+                <div class="text-center mb-10 sm:mb-14">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">
+                        مساعدك الذكي <span class="text-orange-500">نور AI</span>
+                    </h2>
+                    <p class="text-gray-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                        أنشئ عروضًا احترافية ومحتوى جذابًا بسرعة وذكاء، بدون مجهود.
+                    </p>
+                </div>
+
+                <!-- Pricing Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+                    <!-- Free Plan -->
+                    <div
+                        class="group bg-white rounded-2xl border border-gray-200 p-6 transition-all hover:-translate-y-1 hover:shadow-xl">
+                        <div class="mb-5">
+                            <h3 class="text-xl font-bold text-gray-900">مجاني</h3>
+                            <p class="text-gray-400 text-sm">للبداية والتجربة</p>
+                        </div>
+
+                        <p class="text-orange-500 font-bold text-base mb-5">بدون رسوم</p>
+
+                        <p class="text-gray-600 text-sm font-semibold mb-4">يتضمن:</p>
+
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-400"></i>
+                                10 رسائل يوميًا
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-400"></i>
+                                3 عروض شهريًا
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-400"></i>
+                                5 محتويات شهريًا
+                            </li>
+                        </ul>
+
+                        <a href="/app/noor/" class="block w-full py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-full text-center text-sm
+                  transition-colors group-hover:border-orange-500 group-hover:text-orange-500">
+                            ابدأ مجانًا
+                        </a>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div class="relative bg-white rounded-2xl border-2 border-orange-500 p-6 shadow-xl scale-[1.02]">
+
+
+
+                        <div class="mb-5">
+                            <h3 class="text-xl font-bold text-gray-900">Pro</h3>
+                            <p class="text-gray-400 text-sm">للمحترفين وصناع المحتوى</p>
+                        </div>
+
+                        <p class="text-orange-500 font-extrabold text-lg mb-5">
+                            $9.99 <span class="text-sm font-medium text-gray-400">/ شهريًا</span>
+                        </p>
+
+                        <p class="text-gray-600 text-sm font-semibold mb-4">
+                            كل ميزات المجاني، بالإضافة إلى:
+                        </p>
+
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-500"></i>
+                                رسائل غير محدودة
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-500"></i>
+                                عروض غير محدودة
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600 text-sm">
+                                <i class="fa-solid fa-check text-orange-500"></i>
+                                إدارة السوشيال ميديا
+                            </li>
+                        </ul>
+
+                        <a href="/app/noor/"
+                            class="block w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full text-center text-sm transition-colors">
+                            ابدأ التجربة الآن
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Compare -->
+                <div class="text-center mt-10">
+                    <a href="#" class="text-orange-500 hover:text-orange-600 text-sm font-medium hover:underline">
+                        قارن جميع الميزات →
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- FINAL CTA SECTION -->
+        <section class="py-16 sm:py-20 bg-gradient-to-b from-white to-orange-50/50" id="cta">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium mb-6">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>ابدأ مجاناً — بدون بطاقة ائتمان</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">
+                    حوّل فكرتك لواقع
+                    <span class="text-orange-500">اليوم</span>
+                </h2>
+                <p class="text-gray-500 text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed">
+                    سواء كنت تبحث عن خدمة احترافية أو تريد بيع مهاراتك — مشرق هو المكان المناسب لك. انضم الآن وابدأ
+                    رحلتك.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="/app/register.html"
+                        class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full font-bold text-sm transition-all shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30"
+                        id="ctaButton">
+                        أنشئ حسابك مجاناً
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                    <a href="/app/explore.html"
+                        class="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-8 py-4 rounded-full font-semibold text-sm transition-all border border-gray-200 hover:border-gray-300">
+                        تصفح الخدمات
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                    </a>
+                </div>
+                <p class="mt-6 text-xs text-gray-400">خدمات متنوعة • تسليم سريع • ضمان استرداد الأموال</p>
+            </div>
+        </section>
+
     </main>
-    
+
     <div id="footer"></div>
-    
+
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
     <script src="/app/js/components/toast.js"></script>
@@ -442,6 +1070,10 @@
     <script src="/app/js/components/navbar.js"></script>
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/components/service-card.js"></script>
+    <script src="/app/js/ai-assistant.js"></script>
+    <script src="/app/js/smart-search.js"></script>
+    <script src="/app/js/components/noor-chatbot.js"></script>
     <script src="/app/js/pages/landing.js"></script>
 </body>
+
 </html>

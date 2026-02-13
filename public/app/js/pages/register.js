@@ -120,13 +120,13 @@
                 Auth.setUser(response.data.user);
                 
                 // Show success
-                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح');
-                showAlert('success', 'تم إنشاء الحساب بنجاح! جاري التحويل...');
+                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح - تحقق من بريدك الإلكتروني');
+                showAlert('success', 'تم إنشاء الحساب بنجاح! تم إرسال رمز التحقق لبريدك الإلكتروني...');
                 
-                // Redirect to home after short delay
+                // Redirect to verify-email page (verification code already sent)
                 setTimeout(() => {
-                    window.location.href = CONFIG.ROUTES.HOME;
-                }, 1000);
+                    window.location.href = '/app/verify-email.html';
+                }, 1500);
             } else {
                 // Fallback to login page if no token returned
                 showAlert('success', response.message || 'تم إنشاء الحساب بنجاح! جاري التحويل لصفحة تسجيل الدخول...');

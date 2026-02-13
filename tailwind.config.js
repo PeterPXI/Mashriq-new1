@@ -70,6 +70,35 @@ module.exports = {
         'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
         'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
       },
+      keyframes: {
+        'grid-movement': {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(40px)' },
+        },
+        'float-slow': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        'float-slower': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-15px)' },
+        },
+        'drift': {
+          '0%': { transform: 'translate(0, 0) rotate(0deg)' },
+          '100%': { transform: 'translate(50px, 50px) rotate(180deg)' },
+        },
+        'pulse-slow': {
+          '0%, 100%': { opacity: 0.4 },
+          '50%': { opacity: 0.7 },
+        },
+      },
+      animation: {
+        'grid-movement': 'grid-movement 20s linear infinite',
+        'float-slow': 'float-slow 8s ease-in-out infinite',
+        'float-slower': 'float-slower 12s ease-in-out infinite',
+        'drift': 'drift 25s linear infinite',
+        'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
+      },
     },
   },
   plugins: [],

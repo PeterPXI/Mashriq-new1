@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ادعُ أصدقاءك واربح اشتراك Pro مجاناً على منصة مشرق">
+
+    <title>ادعُ أصدقاءك واربح! | مشرق</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/app/assets/css/tailwind.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/app/assets/css/main.css">
+
+    <style>
+        .glow-orange {
+            box-shadow: 0 0 60px rgba(249, 115, 22, 0.25);
+        }
+
+        .tier-card {
+            transition: all 0.3s ease;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .tier-card.unlocked {
+            border-color: #22c55e !important;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .tier-card.claimed {
+            opacity: 0.6;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(249, 115, 22, 0.7);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        .progress-ring-bg {
+            stroke: #374151;
+        }
+
+        .progress-ring-fill {
+            stroke: url(#gradient);
+            transition: stroke-dashoffset 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gray-50 font-sans">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section
+            class="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 py-16 lg:py-20 overflow-hidden">
+            <!-- Background Effects -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-yellow-400/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+                <div
+                    class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4">ادعُ أصدقاءك واربح!</h1>
+                <p class="text-white/90 text-lg max-w-2xl mx-auto">شارك رابط الدعوة الخاص بك واحصل على اشتراك Pro مجاناً
+                    عند انضمام أصدقائك</p>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section class="py-12 lg:py-16">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Referral Link Card -->
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:p-8 mb-8 glow-orange">
+                    <div class="text-center mb-6">
+                        <h2 class="text-lg font-bold text-gray-800 mb-2">رابط الدعوة الخاص بك</h2>
+                        <div class="flex items-center justify-center gap-3 flex-wrap">
+                            <div class="flex-1 max-w-md bg-gray-100 rounded-xl px-5 py-4 border border-gray-200">
+                                <code id="referralLink"
+                                    class="text-orange-600 text-sm sm:text-base break-all font-medium">جاري التحميل...</code>
+                            </div>
+                            <button onclick="copyLink()"
+                                class="px-6 py-4 bg-gradient-to-l from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Share Buttons -->
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <button onclick="shareWhatsApp()"
+                            class="px-5 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-all flex items-center gap-2 font-medium">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                            واتساب
+                        </button>
+                        <button onclick="shareTelegram()"
+                            class="px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all flex items-center gap-2 font-medium">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                            </svg>
+                            تيليجرام
+                        </button>
+                        <button onclick="shareTwitter()"
+                            class="px-5 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-xl transition-all flex items-center gap-2 font-medium">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            تويتر
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 lg:p-8 mb-8">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="text-center sm:text-right">
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">تقدمك</h2>
+                            <p id="progressText" class="text-gray-500">أنت على بعد <span
+                                    class="text-orange-500 font-bold">5</span> إحالات من المكافأة الأولى!</p>
+                        </div>
+
+                        <!-- Progress Circle -->
+                        <div class="relative">
+                            <svg class="w-28 h-28 transform -rotate-90" viewBox="0 0 100 100">
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#f97316" />
+                                        <stop offset="100%" stop-color="#fbbf24" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="progress-ring-bg" cx="50" cy="50" r="42" fill="none" stroke-width="8" />
+                                <circle id="progressCircle" class="progress-ring-fill" cx="50" cy="50" r="42"
+                                    fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="264"
+                                    stroke-dashoffset="264" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <span id="referralCount" class="text-2xl font-bold text-orange-500">0</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span id="nextTarget" class="text-gray-400">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reward Tiers -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">مستويات المكافآت</h2>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="tiersGrid">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+
+                <!-- Claim Button -->
+                <div id="claimSection" class="hidden text-center mb-8">
+                    <button onclick="claimReward()" id="claimBtn"
+                        class="px-10 py-5 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-2xl font-bold text-xl transition-all animate-pulse-glow shadow-xl">
+                        <svg class="w-6 h-6 inline-block ml-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z" />
+                        </svg>
+                        احصل على مكافأتك!
+                    </button>
+                </div>
+
+                <!-- Referred Friends -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 lg:p-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                        </svg>
+                        الأصدقاء المنضمون
+                    </h2>
+                    <div id="friendsList" class="space-y-3">
+                        <div class="text-center text-gray-400 py-8">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <p class="font-medium">لم ينضم أي صديق بعد</p>
+                            <p class="text-sm">شارك رابطك الآن!</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Scripts -->
+    <script src="/app/js/config.js"></script>
+    <script src="/app/js/utils.js"></script>
+    <script src="/app/js/components/toast.js"></script>
+    <script src="/app/js/auth.js"></script>
+    <script src="/app/js/api.js"></script>
+    <script src="/app/js/components/navbar.js"></script>
+    <script src="/app/js/components/footer.js"></script>
+
+    <script>
+        let referralData = null;
+        let availableRewards = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Render Navbar and Footer first
+            if (typeof Navbar !== 'undefined') {
+                Navbar.render(document.getElementById('navbar'));
+            }
+            if (typeof Footer !== 'undefined') {
+                Footer.render(document.getElementById('footer'));
+            }
+
+            // Check auth
+            if (!Auth.isAuthenticated()) {
+                window.location.href = '/app/login.html?redirect=' + encodeURIComponent('/app/referral.html');
+                return;
+            }
+
+            // Show link immediately (will be updated if API works)
+            showInitialLink();
+
+            // Load data in background
+            loadReferralData();
+        });
+
+        function showInitialLink() {
+            const user = Auth.getUser();
+            const tempCode = user?.id?.slice(-8).toUpperCase() || Math.random().toString(36).substring(2, 10).toUpperCase();
+            const baseUrl = window.location.origin;
+            const link = `${baseUrl}/app/register.html?ref=${tempCode}`;
+            document.getElementById('referralLink').textContent = link;
+            // Also show default tiers
+            updateTiers();
+        }
+
+        async function loadReferralData() {
+            try {
+                const result = await API.request('/referral/stats', { method: 'GET' });
+
+                if (result.success) {
+                    referralData = result.stats;
+                    availableRewards = result.stats.availableRewards || [];
+                    updateUI();
+                } else {
+                    // Show fallback UI
+                    showFallbackUI();
+                }
+            } catch (error) {
+                console.error('Error loading referral data:', error);
+                // Show fallback UI with temporary code
+                showFallbackUI();
+            }
+        }
+
+        function showFallbackUI() {
+            // Generate temporary code based on user ID or random
+            const user = Auth.getUser();
+            const tempCode = user?.id?.slice(-8).toUpperCase() || 'XXXXXXXX';
+            const baseUrl = window.location.origin;
+            const link = `${baseUrl}/app/register.html?ref=${tempCode}`;
+            document.getElementById('referralLink').textContent = link;
+            document.getElementById('referralLink').classList.add('opacity-50');
+
+            // Show a hint that data is not fully loaded
+            const linkContainer = document.getElementById('referralLink').parentElement;
+            if (linkContainer) {
+                const hint = document.createElement('p');
+                hint.className = 'text-xs text-gray-400 mt-2 text-center';
+                hint.textContent = '⚠️ تعذر تحميل البيانات الكاملة - تحقق من الاتصال بالإنترنت';
+                linkContainer.appendChild(hint);
+            }
+
+            // Still show tiers
+            updateTiers();
+        }
+
+        function updateUI() {
+            const stats = referralData;
+
+            // Update link
+            const baseUrl = window.location.origin;
+            const link = `${baseUrl}/app/register.html?ref=${stats.referralCode}`;
+            document.getElementById('referralLink').textContent = link;
+
+            // Update count
+            const count = stats.totalReferrals || 0;
+            document.getElementById('referralCount').textContent = count;
+
+            // Update progress
+            const nextReward = stats.nextReward;
+            if (nextReward) {
+                document.getElementById('nextTarget').textContent = nextReward.target;
+                const progress = (count / nextReward.target) * 100;
+                const circumference = 264; // 2 * PI * 42
+                const offset = circumference - (progress / 100) * circumference;
+                document.getElementById('progressCircle').style.strokeDashoffset = Math.max(0, offset);
+                document.getElementById('progressText').innerHTML =
+                    `أنت على بعد <span class="text-orange-500 font-bold">${nextReward.remaining}</span> إحالات من ${nextReward.reward}`;
+            } else {
+                document.getElementById('progressCircle').style.strokeDashoffset = 0;
+                document.getElementById('progressText').textContent = '🎉 مبروك! حصلت على جميع المكافآت';
+            }
+
+            // Update tiers
+            updateTiers();
+
+            // Show claim button if rewards available
+            if (availableRewards.length > 0) {
+                document.getElementById('claimSection').classList.remove('hidden');
+            }
+
+            // Update friends list
+            updateFriendsList();
+        }
+
+        function updateTiers() {
+            const tiers = [
+                { count: 5, icon: '⭐', label: 'Pro شهر', color: 'orange' },
+                { count: 10, icon: '👑', label: 'Pro شهرين', color: 'blue' },
+                { count: 25, icon: '💎', label: 'Pro 6 أشهر', color: 'purple' },
+                { count: 50, icon: '🏆', label: 'Pro سنة', color: 'green' }
+            ];
+
+            const claimed = referralData?.claimedRewards || [];
+            const count = referralData?.totalReferrals || 0;
+
+            let html = tiers.map(tier => {
+                const isUnlocked = count >= tier.count;
+                const isClaimed = claimed.includes(tier.count);
+
+                return `
+                    <div class="tier-card bg-white rounded-2xl p-5 border-2 ${isUnlocked && !isClaimed ? 'unlocked border-green-400' : isClaimed ? 'claimed border-gray-200' : 'border-gray-200'} shadow-sm hover:shadow-md">
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">${tier.icon}</div>
+                            <p class="text-3xl font-bold ${isUnlocked ? 'text-orange-500' : 'text-gray-400'}">${tier.count}</p>
+                            <p class="text-sm text-gray-500 mb-2">إحالة</p>
+                            <p class="font-bold ${isUnlocked ? 'text-gray-800' : 'text-gray-400'}">${tier.label}</p>
+                            ${isClaimed ? '<span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-600 rounded-full text-xs font-medium">تم الاستلام ✓</span>' : ''}
+                            ${isUnlocked && !isClaimed ? '<span class="inline-block mt-2 px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-medium">متاح!</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('tiersGrid').innerHTML = html;
+        }
+
+        function updateFriendsList() {
+            const friends = referralData?.referredUsers || [];
+            const activeCount = referralData?.activeReferrals || 0;
+            const pendingCount = referralData?.pendingReferrals || 0;
+
+            if (friends.length === 0) return;
+
+            // Show stats header
+            let statsHtml = `
+                <div class="flex gap-4 mb-4">
+                    <div class="flex-1 bg-green-50 rounded-lg p-3 text-center border border-green-100">
+                        <div class="text-2xl font-bold text-green-600">${activeCount}</div>
+                        <div class="text-xs text-green-600">مُفعّلة ✓</div>
+                    </div>
+                    <div class="flex-1 bg-yellow-50 rounded-lg p-3 text-center border border-yellow-100">
+                        <div class="text-2xl font-bold text-yellow-600">${pendingCount}</div>
+                        <div class="text-xs text-yellow-600">قيد الانتظار ⏳</div>
+                    </div>
+                </div>
+            `;
+
+            let html = friends.map(friend => {
+                const isActive = friend.status === 'active';
+                const activities = friend.activities || {};
+
+                const statusBadge = isActive
+                    ? `<span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">مُفعّلة ✓</span>`
+                    : `<span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">قيد الانتظار</span>`;
+
+                const requirements = !isActive ? `
+                    <div class="flex gap-2 mt-2">
+                        <span class="${activities.hasViewedService ? 'text-green-500' : 'text-gray-400'} text-xs">
+                            ${activities.hasViewedService ? '✓' : '○'} تصفح خدمة
+                        </span>
+                        <span class="${activities.hasPublishedService ? 'text-green-500' : 'text-gray-400'} text-xs">
+                            ${activities.hasPublishedService ? '✓' : '○'} نشر خدمة
+                        </span>
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="flex items-center gap-4 ${isActive ? 'bg-green-50' : 'bg-yellow-50'} rounded-xl p-4 border ${isActive ? 'border-green-100' : 'border-yellow-100'}">
+                        <div class="w-12 h-12 rounded-full ${isActive ? 'bg-gradient-to-br from-green-400 to-emerald-400' : 'bg-gradient-to-br from-yellow-400 to-amber-400'} flex items-center justify-center text-white font-bold text-lg">
+                            ${friend.name?.charAt(0) || '؟'}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <p class="font-medium text-gray-800">${friend.name || 'مستخدم'}</p>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-sm text-gray-500">انضم ${new Date(friend.joinedAt).toLocaleDateString('ar')}</p>
+                            ${requirements}
+                        </div>
+                        ${isActive ? '<svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>' : '<svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>'}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('friendsList').innerHTML = statsHtml + html;
+        }
+
+        function copyLink() {
+            const link = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                if (window.Toast) {
+                    Toast.success('تم نسخ الرابط!');
+                } else {
+                    alert('✅ تم نسخ الرابط!');
+                }
+            });
+        }
+
+        function shareWhatsApp() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `🚀 انضم لمنصة مشرق للعمل الحر!\n\nسجّل الآن واحصل على مميزات رائعة:\n${link}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareTelegram() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `🚀 انضم لمنصة مشرق للعمل الحر!`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareTwitter() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `🚀 انضم لمنصة مشرق للعمل الحر واحصل على فرص رائعة!`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`, '_blank');
+        }
+
+        async function claimReward() {
+            if (availableRewards.length === 0) return;
+
+            const tier = availableRewards[0].count;
+            const btn = document.getElementById('claimBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="w-5 h-5 inline-block animate-spin ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> جاري الاستلام...';
+
+            try {
+                const result = await API.request('/referral/claim', {
+                    method: 'POST',
+                    body: { tier }
+                });
+
+                if (result.success) {
+                    if (window.Toast) {
+                        Toast.success(result.message);
+                    } else {
+                        alert(result.message);
+                    }
+                    await loadReferralData();
+                } else {
+                    if (window.Toast) {
+                        Toast.error(result.message || 'حدث خطأ');
+                    } else {
+                        alert(result.message || 'حدث خطأ');
+                    }
+                }
+            } catch (error) {
+                if (window.Toast) {
+                    Toast.error('حدث خطأ');
+                } else {
+                    alert('حدث خطأ');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<svg class="w-6 h-6 inline-block ml-2" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg> احصل على مكافأتك!';
+            }
+        }
+    </script>
+</body>
+
+</html>

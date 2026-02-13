@@ -230,7 +230,10 @@
             if (aiEnabled) {
                 // Show AI buttons
                 const improveBioBtn = document.getElementById('aiImproveBioBtn');
+                const analyzeProfileBtn = document.getElementById('aiAnalyzeProfileBtn');
+                
                 if (improveBioBtn) improveBioBtn.classList.remove('hidden');
+                if (analyzeProfileBtn) analyzeProfileBtn.classList.remove('hidden');
                 
                 // Bind AI events
                 bindAIEvents();
@@ -244,8 +247,46 @@
     
     function bindAIEvents() {
         const improveBioBtn = document.getElementById('aiImproveBioBtn');
+        const analyzeProfileBtn = document.getElementById('aiAnalyzeProfileBtn');
         const bioTextarea = elements.settingsBio;
         
+        // تحليل الملف الشخصي
+        analyzeProfileBtn?.addEventListener('click', async () => {
+            try {
+                MashriqAI.setButtonLoading(analyzeProfileBtn, true);
+                
+                // جمع بيانات الملف الشخصي
+                const user = state.user;
+                const profileData = {
+                    name: user?.fullName || '',
+                    bio: user?.bio || '',
+                    skills: [],
+                    servicesCount: state.services?.length || 0,
+                    completedOrders: user?.completedOrders || 0,
+                    rating: user?.rating || user?.averageRating || 0,
+                    hasAvatar: !!user?.avatarUrl
+                };
+                
+                // جمع المهارات من الخدمات
+                if (state.services.length > 0) {
+                    const categories = [...new Set(state.services.map(s => s.categoryId || s.category))].filter(Boolean);
+                    categories.forEach(catId => {
+                        const category = CONFIG.CATEGORIES.find(c => c.id === catId);
+                        if (category) profileData.skills.push(category.name);
+                    });
+                }
+                
+                const analysis = await MashriqAI.analyzeProfile(profileData);
+                MashriqAI.showProfileAnalysisModal(analysis);
+                
+            } catch (error) {
+                Toast.error('خطأ', error.message || 'فشل تحليل الملف الشخصي');
+            } finally {
+                MashriqAI.setButtonLoading(analyzeProfileBtn, false);
+            }
+        });
+        
+        // تحسين النبذة
         improveBioBtn?.addEventListener('click', async () => {
             try {
                 MashriqAI.setButtonLoading(improveBioBtn, true);

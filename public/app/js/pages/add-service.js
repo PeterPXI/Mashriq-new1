@@ -330,7 +330,7 @@
             case 1:
                 return validateStep1();
             case 2:
-                return true; // Images are optional
+                return validateStep2();
             case 3:
                 return validateStep3();
             default:
@@ -375,6 +375,17 @@
         if (deliveryTime < 1) {
             showError('deliveryTime', 'مدة التسليم يجب أن تكون يوم واحد على الأقل');
             elements.deliveryTime?.focus();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    function validateStep2() {
+        // التحقق من وجود صورة واحدة على الأقل
+        if (state.images.length === 0) {
+            showError('image', 'يجب إضافة صورة واحدة على الأقل للخدمة');
+            Toast.warning('تنبيه', 'يرجى إضافة صورة واحدة على الأقل');
             return false;
         }
         
