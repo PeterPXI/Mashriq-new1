@@ -19,7 +19,7 @@
 
 const express = require('express');
 const router = express.Router();
-const AIService = require('../services/AiService');
+const aiservice = require('../services/aiService');
 const { success, error } = require('../utils/apiResponse');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const Service = require('../models/Service');
@@ -65,7 +65,7 @@ function aiRateLimiter(req, res, next) {
  * Check if AI features are enabled
  */
 router.get('/status', (req, res) => {
-    const enabled = AIService.isEnabled();
+    const enabled = aiservice.isEnabled();
     return success(res, 'AI status', { 
         enabled,
         features: enabled ? [
@@ -96,7 +96,7 @@ router.post('/smart-search', aiRateLimiter, async (req, res) => {
             return error(res, 'يرجى كتابة وصف أطول للبحث', 'INVALID_QUERY', 400);
         }
         
-        const result = await AIService.smartSearch(query, categories || []);
+        const result = await aiservice.smartSearch(query, categories || []);
         
         return success(res, 'تم تحليل البحث', result);
         
@@ -123,7 +123,7 @@ router.post('/order-tips', authenticateToken, aiRateLimiter, async (req, res) =>
             return error(res, 'الخدمة غير موجودة', 'SERVICE_NOT_FOUND', 404);
         }
         
-        const tips = await AIService.getOrderTips(service);
+        const tips = await aiService.getOrderTips(service);
         
         return success(res, 'نصائح للطلب', { tips });
         
@@ -153,7 +153,7 @@ router.post('/generate-description', authenticateToken, aiRateLimiter, async (re
             return error(res, 'يرجى إضافة نقاط عن خدمتك', 'MISSING_POINTS', 400);
         }
         
-        const description = await AIService.generateServiceDescription({
+        const description = await aiService.generateServiceDescription({
             title,
             category,
             points
@@ -179,7 +179,7 @@ router.post('/suggest-titles', authenticateToken, aiRateLimiter, async (req, res
             return error(res, 'يرجى تحديد نوع الخدمة أو التخصص', 'MISSING_INFO', 400);
         }
         
-        const titles = await AIService.suggestServiceTitles({
+        const titles = await aiService.suggestServiceTitles({
             type,
             specialty,
             notes
@@ -201,7 +201,7 @@ router.post('/improve-profile', authenticateToken, aiRateLimiter, async (req, re
     try {
         const { bio, skills, specialty } = req.body;
         
-        const result = await AIService.improveProfile({
+        const result = await aiService.improveProfile({
             bio,
             skills,
             specialty
@@ -227,7 +227,7 @@ router.post('/generate-faqs', authenticateToken, aiRateLimiter, async (req, res)
             return error(res, 'عنوان الخدمة مطلوب', 'MISSING_TITLE', 400);
         }
         
-        const faqs = await AIService.generateFAQs({
+        const faqs = await aiService.generateFAQs({
             title,
             description,
             basePrice,
@@ -260,7 +260,7 @@ router.post('/analyze-pricing', authenticateToken, aiRateLimiter, async (req, re
             status: 'active'
         }).select('basePrice').limit(10);
         
-        const result = await AIService.analyzePricing(
+        const result = await aiService.analyzePricing(
             { title, category },
             similarServices
         );
