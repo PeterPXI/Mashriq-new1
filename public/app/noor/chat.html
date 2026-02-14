@@ -185,7 +185,7 @@
             <div class="sticky bottom-0 p-4 bg-gradient-to-t from-dark-900 via-dark-900 to-transparent">
                 <div class="max-w-3xl mx-auto">
                     <div
-                        class="flex items-end gap-3 bg-dark-800 rounded-full p-3 border border-dark-600 focus-within:border-orange-500/50 transition-all shadow-lg">
+                        class="flex items-center gap-3 bg-dark-800 rounded-full p-3 border border-dark-600 focus-within:border-orange-500/50 transition-all shadow-lg">
                         <!-- Attachment button hidden - not supported yet -->
                         <textarea id="messageInput" rows="1" placeholder="اكتب رسالتك هنا..."
                             class="flex-1 bg-transparent resize-none outline-none text-white placeholder-gray-500 max-h-36 min-h-[24px]"
@@ -297,15 +297,27 @@
             elements.sendBtn.disabled = true;
             const typingEl = addTypingIndicator();
 
+            // ⚡ Timeout handling — show slow message after 12s, abort after 25s
+            let slowTimer = setTimeout(() => {
+                const statusEl = typingEl.querySelector('.typing-status');
+                if (statusEl) statusEl.textContent = 'نور تفكر... لحظة 🤔';
+            }, 12000);
+
+            const controller = new AbortController();
+            let abortTimer = setTimeout(() => controller.abort(), 25000);
+
             try {
                 const result = await API.request('/noor/chat', {
                     method: 'POST',
                     body: {
                         message,
                         conversationHistory: state.conversationHistory
-                    }
+                    },
+                    signal: controller.signal
                 });
 
+                clearTimeout(slowTimer);
+                clearTimeout(abortTimer);
                 typingEl.remove();
 
                 if (result.limitReached) {
@@ -327,8 +339,13 @@
                 }
 
             } catch (error) {
+                clearTimeout(slowTimer);
+                clearTimeout(abortTimer);
                 typingEl.remove();
-                addMessage('عذراً، حدث خطأ. حاول مرة أخرى.', 'noor', true);
+                const errorMsg = error.name === 'AbortError'
+                    ? 'نور مشغولة حالياً. حاول مرة أخرى بعد قليل ⏳'
+                    : 'عذراً، حدث خطأ. حاول مرة أخرى.';
+                addMessage(errorMsg, 'noor', true);
             } finally {
                 state.isTyping = false;
                 elements.sendBtn.disabled = false;
@@ -395,11 +412,12 @@
                     <i class="fas fa-sun text-white"></i>
                 </div>
                 <div class="bg-dark-800 border border-dark-600 rounded-2xl p-4">
-                    <div class="flex gap-1.5">
+                    <div class="flex gap-1.5 mb-1">
                         <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
                         <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
                         <span class="typing-dot w-2 h-2 bg-orange-400 rounded-full"></span>
                     </div>
+                    <p class="typing-status text-xs text-gray-500 mt-1"></p>
                 </div>
             `;
             elements.messagesContainer.appendChild(div);
