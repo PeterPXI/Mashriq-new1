@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="تعديل خدمة على منصة مشرق">
-    
+
     <title>تعديل الخدمة | مشرق</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/app/assets/images/logo.png">
-    
+
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/app/assets/css/tailwind.css">
-    
+
     <!-- Keep main.css for navbar/footer components -->
     <link rel="stylesheet" href="/app/assets/css/main.css">
 </head>
+
 <body class="min-h-screen bg-gray-50 font-sans">
     <!-- Navbar -->
     <header id="navbar"></header>
-    
+
     <!-- Main Content -->
     <main class="py-6 lg:py-10">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             <!-- Page Header -->
             <div class="mb-8">
-                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-primary-600 text-sm mb-3 transition-colors">
+                <a href="/app/seller/services.html"
+                    class="inline-flex items-center gap-2 text-gray-500 hover:text-primary-600 text-sm mb-3 transition-colors">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6"/>
+                        <path d="M9 18l6-6-6-6" />
                     </svg>
                     العودة لخدماتي
                 </a>
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">تعديل الخدمة</h1>
             </div>
-            
+
             <!-- Loading State -->
             <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8" id="loadingState">
                 <div class="space-y-6">
@@ -46,196 +49,199 @@
                     <div class="h-32 bg-gray-200 rounded-xl animate-pulse"></div>
                 </div>
             </div>
-            
+
+            <!-- Stats Section (Added for JS Compatibility) -->
+            <div id="statsSection" class="grid grid-cols-3 gap-4 mb-6 hidden">
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <span class="block text-2xl font-bold text-gray-900" id="ordersCount">0</span>
+                    <span class="text-xs text-gray-500">طلب مكتمل</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <span class="block text-2xl font-bold text-yellow-500" id="ratingValue">0.0</span>
+                    <span class="text-xs text-gray-500">تقييم عام</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <span class="block text-2xl font-bold text-blue-600" id="viewsCount">0</span>
+                    <span class="text-xs text-gray-500">مشاهدة</span>
+                </div>
+            </div>
+
             <!-- Service Form -->
-            <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8 hidden" id="formContainer">
+            <div class="bg-white rounded-2xl shadow-sm p-6 lg:p-8 hidden" id="formSection">
                 <form id="serviceForm" class="space-y-8">
-                    
+
                     <!-- Basic Info -->
                     <div class="space-y-5 pb-8 border-b border-gray-100">
                         <h3 class="text-lg font-bold text-gray-900">المعلومات الأساسية</h3>
-                        
+
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">عنوان الخدمة <span class="text-red-500">*</span></label>
-                            <input 
-                                type="text" 
-                                id="title" 
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">عنوان الخدمة <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" id="title"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                placeholder="مثال: سأصمم لك شعار احترافي لعلامتك التجارية"
-                                required
-                                minlength="10"
-                                maxlength="100"
-                            >
+                                placeholder="مثال: سأصمم لك شعار احترافي لعلامتك التجارية" required minlength="10"
+                                maxlength="100">
                             <p class="text-xs text-gray-500 mt-1">اكتب عنواناً واضحاً وجذاباً (10-100 حرف)</p>
                             <p class="text-xs text-red-500 mt-1 hidden" id="titleError"></p>
                         </div>
-                        
+
                         <div>
-                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">التخصص <span class="text-red-500">*</span></label>
-                            <select id="category" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">التخصص <span
+                                    class="text-red-500">*</span></label>
+                            <select id="category"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                required>
                                 <option value="">اختر التخصص</option>
                             </select>
                             <p class="text-xs text-red-500 mt-1 hidden" id="categoryError"></p>
                         </div>
-                        
+
                         <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">وصف الخدمة <span class="text-red-500">*</span></label>
-                            <textarea 
-                                id="description" 
-                                rows="6"
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">وصف الخدمة
+                                <span class="text-red-500">*</span></label>
+                            <textarea id="description" rows="6"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                                 placeholder="اشرح خدمتك بالتفصيل: ماذا ستقدم؟ ما المميزات؟ لماذا يختارك العميل؟"
-                                required
-                                minlength="50"
-                                maxlength="2000"
-                            ></textarea>
+                                required minlength="50" maxlength="2000"></textarea>
                             <p class="text-xs text-gray-500 mt-1">وصف تفصيلي للخدمة (50-2000 حرف)</p>
                             <p class="text-xs text-red-500 mt-1 hidden" id="descriptionError"></p>
                         </div>
                     </div>
-                    
+
                     <!-- Pricing -->
                     <div class="space-y-5 pb-8 border-b border-gray-100">
                         <h3 class="text-lg font-bold text-gray-900">التسعير والتسليم</h3>
-                        
+
                         <div class="grid sm:grid-cols-3 gap-4">
                             <div>
-                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">السعر ($) <span class="text-red-500">*</span></label>
-                                <input 
-                                    type="number" 
-                                    id="price" 
+                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">السعر ($) <span
+                                        class="text-red-500">*</span></label>
+                                <input type="number" id="price"
                                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="25"
-                                    required
-                                    min="5"
-                                    max="10000"
-                                    step="1"
-                                >
+                                    placeholder="25" required min="5" max="10000" step="1">
                                 <p class="text-xs text-gray-500 mt-1">الحد الأدنى: $5</p>
                                 <p class="text-xs text-red-500 mt-1 hidden" id="priceError"></p>
                             </div>
-                            
+
                             <div>
-                                <label for="deliveryTime" class="block text-sm font-medium text-gray-700 mb-1">مدة التسليم (أيام) <span class="text-red-500">*</span></label>
-                                <input 
-                                    type="number" 
-                                    id="deliveryTime" 
+                                <label for="deliveryTime" class="block text-sm font-medium text-gray-700 mb-1">مدة
+                                    التسليم (أيام) <span class="text-red-500">*</span></label>
+                                <input type="number" id="deliveryTime"
                                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="3"
-                                    required
-                                    min="1"
-                                    max="90"
-                                >
+                                    placeholder="3" required min="1" max="90">
                                 <p class="text-xs text-red-500 mt-1 hidden" id="deliveryTimeError"></p>
                             </div>
-                            
+
                             <div>
-                                <label for="revisions" class="block text-sm font-medium text-gray-700 mb-1">عدد التعديلات</label>
-                                <input 
-                                    type="number" 
-                                    id="revisions" 
+                                <label for="revisions" class="block text-sm font-medium text-gray-700 mb-1">عدد
+                                    التعديلات</label>
+                                <input type="number" id="revisions"
                                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="2"
-                                    value="1"
-                                    min="0"
-                                    max="10"
-                                >
+                                    placeholder="2" value="1" min="0" max="10">
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Media -->
                     <div class="space-y-5 pb-8 border-b border-gray-100">
                         <h3 class="text-lg font-bold text-gray-900">الوسائط</h3>
-                        
+
                         <div>
-                            <label for="image" class="block text-sm font-medium text-gray-700 mb-1">رابط صورة الخدمة</label>
-                            <input 
-                                type="url" 
-                                id="image" 
+                            <label for="image" class="block text-sm font-medium text-gray-700 mb-1">رابط صورة
+                                الخدمة</label>
+                            <input type="url" id="image"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                placeholder="https://example.com/image.jpg"
-                            >
+                                placeholder="https://example.com/image.jpg">
                             <p class="text-xs text-gray-500 mt-1">استخدم رابط صورة مباشر (PNG, JPG, WEBP)</p>
                             <p class="text-xs text-red-500 mt-1 hidden" id="imageError"></p>
                         </div>
-                        
+
                         <div class="hidden" id="imagePreview">
                             <div class="relative inline-block">
                                 <img id="previewImg" alt="معاينة الصورة" class="w-48 h-36 object-cover rounded-xl">
-                                <button type="button" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-lg flex items-center justify-center hover:bg-red-600 transition-colors" id="removePreview">×</button>
+                                <button type="button"
+                                    class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-lg flex items-center justify-center hover:bg-red-600 transition-colors"
+                                    id="removePreview">×</button>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Requirements -->
                     <div class="space-y-5 pb-8 border-b border-gray-100">
                         <h3 class="text-lg font-bold text-gray-900">متطلبات العميل</h3>
-                        
+
                         <div>
-                            <label for="requirements" class="block text-sm font-medium text-gray-700 mb-1">ما الذي تحتاجه من العميل؟</label>
-                            <textarea 
-                                id="requirements" 
-                                rows="3"
+                            <label for="requirements" class="block text-sm font-medium text-gray-700 mb-1">ما الذي
+                                تحتاجه من العميل؟</label>
+                            <textarea id="requirements" rows="3"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                                 placeholder="مثال: الشعار القديم (إن وجد)، ألوان العلامة التجارية، أفكار أو إلهام..."
-                                maxlength="500"
-                            ></textarea>
+                                maxlength="500"></textarea>
                             <p class="text-xs text-gray-500 mt-1">اختياري - ساعد العميل على تقديم المعلومات المطلوبة</p>
                         </div>
                     </div>
-                    
+
                     <!-- Status -->
                     <div class="space-y-5">
                         <h3 class="text-lg font-bold text-gray-900">حالة الخدمة</h3>
-                        
+
                         <div class="flex items-center gap-4">
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="isActive" class="sr-only peer" checked>
-                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                <div
+                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                                </div>
                             </label>
                             <span class="text-sm font-medium text-gray-700">الخدمة نشطة ومتاحة للطلب</span>
                         </div>
                     </div>
-                    
+
                     <!-- Alert -->
                     <div class="hidden p-4 rounded-xl" id="formAlert"></div>
-                    
+
                     <!-- Submit -->
                     <div class="flex justify-end gap-3 pt-6">
-                        <button type="button" class="px-5 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors" onclick="history.back()">إلغاء</button>
-                        <button type="submit" class="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors" id="submitBtn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-                                <polyline points="17,21 17,13 7,13 7,21"/>
-                                <polyline points="7,3 7,8 15,8"/>
+                        <button type="button"
+                            class="px-5 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
+                            onclick="history.back()">إلغاء</button>
+                        <button type="submit"
+                            class="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors"
+                            id="submitBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                                <polyline points="17,21 17,13 7,13 7,21" />
+                                <polyline points="7,3 7,8 15,8" />
                             </svg>
                             حفظ التغييرات
                         </button>
                     </div>
-                    
+
                 </form>
             </div>
-            
+
             <!-- Error State -->
             <div class="bg-white rounded-2xl shadow-sm p-12 text-center hidden" id="errorState">
                 <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-red-500">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M15 9l-6 6M9 9l6 6"/>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        class="text-red-500">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M15 9l-6 6M9 9l6 6" />
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-2">تعذر تحميل الخدمة</h3>
                 <p class="text-gray-500 mb-6" id="errorMessage">الخدمة غير موجودة أو لا تملك صلاحية تعديلها</p>
-                <a href="/app/seller/services.html" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">العودة لخدماتي</a>
+                <a href="/app/seller/services.html"
+                    class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">العودة
+                    لخدماتي</a>
             </div>
-            
+
         </div>
     </main>
-    
+
     <!-- Footer -->
     <div id="footer"></div>
-    
+
     <!-- Scripts -->
     <script src="/app/js/config.js"></script>
     <script src="/app/js/utils.js"></script>
@@ -247,4 +253,5 @@
     <script src="/app/js/components/footer.js"></script>
     <script src="/app/js/pages/edit-service.js"></script>
 </body>
+
 </html>
