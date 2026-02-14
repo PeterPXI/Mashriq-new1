@@ -957,6 +957,8 @@ app.delete('/api/services/:id', authenticateToken, async (req, res) => {
     }
     
     service.status = 'deleted';
+    service.isActive = false;
+    service.isPaused = false;
     await service.save();
     
     console.log(`🗑️ Service deactivated: "${service.title}"`);
