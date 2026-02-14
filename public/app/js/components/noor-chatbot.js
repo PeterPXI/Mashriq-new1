@@ -412,7 +412,7 @@ const NoorChatbot = (function() {
             const data = await response.json();
             
             if (data.success) {
-                addMessage('bot', data.reply);
+                addMessage('bot', data.response);
             } else {
                 addMessage('bot', 'عذراً، حدث خطأ. حاول مرة أخرى.');
             }
