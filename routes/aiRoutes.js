@@ -19,7 +19,7 @@
 
 const express = require('express');
 const router = express.Router();
-const aiservice = require('../services/aiService');
+const aiservice = require('../services/ai.service.js');
 const { success, error } = require('../utils/apiResponse');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const Service = require('../models/Service');
