@@ -207,7 +207,7 @@ const Navbar = {
                         </svg>
                         <span class="text-orange-600 font-medium group-hover:text-orange-700">ادعُ واربح 🎁</span>
                     </a>
-                    <a href="/app/noor/" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors group">
+                    <a href="/app/noor/" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 bg-black transition-colors group">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-400">
                             <circle cx="12" cy="12" r="5"/>
                             <line x1="12" y1="1" x2="12" y2="3"/>
@@ -219,7 +219,7 @@ const Navbar = {
                             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
                             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                         </svg>
-                        <span class="text-orange-600 font-medium group-hover:text-orange-700">نور AI ✨</span>
+                        <span class="text-orange-600 font-medium group-hover:text-orange-700">نور AI </span>
                     </a>
                     <a href="${CONFIG.ROUTES.SETTINGS}" class="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400">
