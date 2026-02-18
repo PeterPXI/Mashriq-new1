@@ -217,8 +217,7 @@ app.use('/api/auth/register', authLimiter);
 app.use('/api/auth/forgot-password', forgotPasswordLimiter);
 app.use('/api/auth/reset-password', forgotPasswordLimiter);
 app.use('/api/auth/verify-reset-code', forgotPasswordLimiter);
-app.use('/api/auth/send-verification', forgotPasswordLimiter);
-app.use('/api/auth/verify-email', forgotPasswordLimiter);
+
 
 // Request logging
 app.use((req, res, next) => {
@@ -376,15 +375,16 @@ app.post('/api/auth/register', async (req, res) => {
         return error(res, 'البريد الإلكتروني أو اسم المستخدم مستخدم بالفعل', 'USER_ALREADY_EXISTS', 400);
     }
 
-    // Determine role (default to BUYER if invalid or not provided)
-    const userRole = role === USER_ROLES.SELLER ? USER_ROLES.SELLER : USER_ROLES.BUYER;
+    // All users register as SELLER by default
+    const userRole = USER_ROLES.SELLER;
 
     const user = await User.create({
         fullName,
         username: username.toLowerCase(),
         email: email.toLowerCase(),
         passwordHash: password,
-        role: userRole
+        role: userRole,
+        isEmailVerified: true
     });
 
     // Process referral if code provided
@@ -401,24 +401,8 @@ app.post('/api/auth/register', async (req, res) => {
     
     console.log(`🎉 New user registered: ${user.username}${referralCode ? ' via referral' : ''}`);
 
-    // Auto-send verification code after registration (non-blocking)
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    user.emailVerificationCode = verificationCode;
-    user.emailVerificationExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-    user.emailVerificationAttempts = 0;
-    user.emailVerificationLastSent = new Date();
-    user.save().then(() => {
-        // Send verification code email
-        emailService.sendVerificationCode(user.email, verificationCode, user.fullName).catch(err => {
-            console.error('Verification email error (non-blocking):', err.message);
-        });
-        // Send welcome email
-        emailService.sendWelcomeEmail(user.email, user.fullName).catch(err => {
-            console.error('Welcome email error (non-blocking):', err.message);
-        });
-    }).catch(err => {
-        console.error('Save verification code error (non-blocking):', err.message);
-    });
+    // Welcome log (no verification email sent)
+    console.log(`✅ User auto-verified as seller: ${user.username}`);
 
     return success(res, 'تم إنشاء الحساب بنجاح! مرحباً بك 🎉', {
       user: {

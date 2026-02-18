@@ -120,12 +120,12 @@
                 Auth.setUser(response.data.user);
                 
                 // Show success
-                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح - تحقق من بريدك الإلكتروني');
-                showAlert('success', 'تم إنشاء الحساب بنجاح! تم إرسال رمز التحقق لبريدك الإلكتروني...');
+                Toast.success('مبروك!', 'تم إنشاء حسابك بنجاح');
+                showAlert('success', 'تم إنشاء الحساب بنجاح! جاري التحويل...');
                 
-                // Redirect to verify-email page (verification code already sent)
+                // Redirect to dashboard directly (no verification needed)
                 setTimeout(() => {
-                    window.location.href = '/app/verify-email.html';
+                    window.location.href = '/app/';
                 }, 1500);
             } else {
                 // Fallback to login page if no token returned
