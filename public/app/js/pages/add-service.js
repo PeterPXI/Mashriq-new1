@@ -629,7 +629,27 @@
             formData.append('images', img.file);
         });
         
-        Loader.buttonStart(elements.submitBtn);
+        // Show loading overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'uploadOverlay';
+        overlay.innerHTML = `
+            <div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;">
+                <div style="background:white;border-radius:1.5rem;padding:2.5rem 3rem;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);max-width:360px;width:90%;">
+                    <div style="width:56px;height:56px;border:4px solid #fed7aa;border-top-color:#f97316;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1.25rem;"></div>
+                    <h3 style="font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:0.5rem;">جاري نشر خدمتك...</h3>
+                    <p id="uploadStatus" style="color:#6b7280;font-size:0.875rem;">يتم رفع الصور والبيانات</p>
+                </div>
+            </div>
+            <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+        `;
+        document.body.appendChild(overlay);
+        
+        // Disable submit button
+        if (elements.submitBtn) {
+            elements.submitBtn.disabled = true;
+            elements.submitBtn.style.opacity = '0.6';
+            elements.submitBtn.style.cursor = 'not-allowed';
+        }
         
         try {
             const token = Auth.getToken();
@@ -639,6 +659,10 @@
                 return;
             }
             
+            // Update status
+            const statusEl = document.getElementById('uploadStatus');
+            if (statusEl) statusEl.textContent = 'جاري رفع الصور...';
+            
             const response = await fetch('/api/services', {
                 method: 'POST',
                 headers: {
@@ -647,14 +671,27 @@
                 body: formData
             });
             
+            if (statusEl) statusEl.textContent = 'جاري حفظ البيانات...';
+            
             const result = await response.json();
             
             if (!response.ok) {
                 throw new Error(result.message || 'فشل نشر الخدمة');
             }
             
+            // Update overlay to success
+            const overlayContent = overlay.querySelector('div > div');
+            if (overlayContent) {
+                overlayContent.innerHTML = `
+                    <div style="width:56px;height:56px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <h3 style="font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:0.5rem;">تم نشر الخدمة بنجاح! 🎉</h3>
+                    <p style="color:#6b7280;font-size:0.875rem;">جاري التحويل لصفحة الخدمة...</p>
+                `;
+            }
+            
             Toast.success('تم بنجاح!', 'تم نشر خدمتك بنجاح');
-            showAlert('success', 'تم نشر الخدمة بنجاح! جاري التحويل...');
             
             const serviceId = result.data?.service?._id || result.data?.service?.id;
             setTimeout(() => {
@@ -667,10 +704,19 @@
             
         } catch (error) {
             console.error('Add service error:', error);
+            
+            // Remove overlay on error
+            overlay?.remove();
+            
+            // Re-enable submit button
+            if (elements.submitBtn) {
+                elements.submitBtn.disabled = false;
+                elements.submitBtn.style.opacity = '1';
+                elements.submitBtn.style.cursor = 'pointer';
+            }
+            
             showAlert('error', error.message || 'فشل نشر الخدمة. يرجى المحاولة مرة أخرى.');
             Toast.error('خطأ', error.message);
-        } finally {
-            Loader.buttonStop(elements.submitBtn);
         }
     }
     
