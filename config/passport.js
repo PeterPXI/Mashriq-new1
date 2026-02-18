@@ -87,7 +87,7 @@ module.exports = function(app) {
                 username: username,
                 avatarUrl: profile.photos?.[0]?.value || null,
                 isEmailVerified: true, // Google emails are verified
-                role: 'buyer', // Default role
+                role: 'seller', // Google users default to seller
                 referralCode: generateReferralCode(),
                 isActive: true
             });

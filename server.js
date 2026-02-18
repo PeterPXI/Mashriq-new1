@@ -375,8 +375,8 @@ app.post('/api/auth/register', async (req, res) => {
         return error(res, 'البريد الإلكتروني أو اسم المستخدم مستخدم بالفعل', 'USER_ALREADY_EXISTS', 400);
     }
 
-    // All users register as SELLER by default
-    const userRole = USER_ROLES.SELLER;
+    // Determine role (default to BUYER if invalid or not provided)
+    const userRole = role === USER_ROLES.SELLER ? USER_ROLES.SELLER : USER_ROLES.BUYER;
 
     const user = await User.create({
         fullName,
